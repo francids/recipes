@@ -46,7 +46,9 @@
     "deleting_cloud_recipes_description": "请稍候，我们正在从云端删除您的所有食谱。",
     "delete_cloud_recipes_error": "删除云端食谱错误：{0}",
     "shared_recipes": "分享的食谱",
-    "shared_recipes_description": "查看您公开分享的食谱"
+    "shared_recipes_description": "查看您公开分享的食谱",
+    "favorite_recipes": "收藏的食谱",
+    "favorite_recipes_description": "查看您收藏的食谱"
   },
   "profile_info_screen": {
     "title": "账户信息",
@@ -234,6 +236,10 @@
   "shared_recipes_screen": {
     "title": "我分享的食谱",
     "no_public_recipes": "您还没有分享任何食谱。将您的食谱设为公开以与其他人分享。"
+  },
+  "favorites_recipes_screen": {
+    "title": "收藏的食谱",
+    "no_favorites": "您没有收藏的食谱。通过点击心形图标来标记您的收藏食谱。"
   },
   "shared_recipe": {
     "title": "分享的食谱",

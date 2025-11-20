@@ -46,7 +46,9 @@
     "deleting_cloud_recipes_description": "클라우드에서 모든 레시피를 삭제하는 동안 잠시 기다려 주십시오.",
     "delete_cloud_recipes_error": "클라우드 레시피 삭제 오류: {0}",
     "shared_recipes": "공유 레시피",
-    "shared_recipes_description": "공개적으로 공유한 레시피 보기"
+    "shared_recipes_description": "공개적으로 공유한 레시피 보기",
+    "favorite_recipes": "즐겨찾기 레시피",
+    "favorite_recipes_description": "즐겨찾기 레시피 보기"
   },
   "profile_info_screen": {
     "title": "계정 정보",
@@ -234,6 +236,10 @@
   "shared_recipes_screen": {
     "title": "내가 공유한 레시피",
     "no_public_recipes": "아직 공유한 레시피가 없습니다. 레시피를 공개로 설정하여 다른 사람들과 공유해보세요."
+  },
+  "favorites_recipes_screen": {
+    "title": "즐겨찾기 레시피",
+    "no_favorites": "즐겨찾기 레시피가 없습니다. 하트를 탭하여 즐겨찾기 레시피를 표시하세요."
   },
   "shared_recipe": {
     "title": "공유된 레시피",

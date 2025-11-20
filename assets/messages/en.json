@@ -46,7 +46,9 @@
     "deleting_cloud_recipes_description": "Deleting recipes from cloud.",
     "delete_cloud_recipes_error": "Delete error: {0}",
     "shared_recipes": "Shared Recipes",
-    "shared_recipes_description": "View your public recipes"
+    "shared_recipes_description": "View your public recipes",
+    "favorite_recipes": "Favorite Recipes",
+    "favorite_recipes_description": "View your favorite recipes"
   },
   "profile_info_screen": {
     "title": "Account Information",
@@ -234,6 +236,10 @@
   "shared_recipes_screen": {
     "title": "My Shared Recipes",
     "no_public_recipes": "You haven't shared any recipes yet. Mark your recipes as public to share them with others."
+  },
+  "favorites_recipes_screen": {
+    "title": "Favorite Recipes",
+    "no_favorites": "You don't have any favorite recipes. Mark your favorite recipes by tapping the heart."
   },
   "shared_recipe": {
     "title": "Shared Recipe",

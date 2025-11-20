@@ -5,6 +5,7 @@ import "package:flutter_animate/flutter_animate.dart";
 import "package:the_recipes/controllers/recipe_controller.dart";
 import "package:the_recipes/controllers/favorites_controller.dart";
 import "package:the_recipes/controllers/view_option_controller.dart";
+import "package:the_recipes/controllers/auth_controller.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/views/widgets/recipe_card.dart";
 
@@ -27,6 +28,7 @@ class _RecipesPageState extends ConsumerState<RecipesPage> {
     final recipeState = ref.watch(recipeControllerProvider);
     final favoritesAsyncState = ref.watch(favoritesControllerProvider);
     final viewOption = ref.watch(viewOptionControllerProvider);
+    final authState = ref.watch(authControllerProvider);
 
     return favoritesAsyncState.when(
       data: (favoritesState) => Stack(
@@ -41,8 +43,8 @@ class _RecipesPageState extends ConsumerState<RecipesPage> {
                 if (recipeState.recipes.isEmpty)
                   const SizedBox.shrink()
                 else
-                  _buildFilterChip(
-                          ref, currentSortOption, viewOption, favoritesState)
+                  _buildFilterChip(ref, currentSortOption, viewOption,
+                          favoritesState, authState)
                       .animate()
                       .fadeIn(duration: 300.ms)
                       .slideY(begin: -0.2, curve: Curves.easeOutCubic),
@@ -250,6 +252,7 @@ class _RecipesPageState extends ConsumerState<RecipesPage> {
     SortOption currentSortOption,
     ViewOption viewOption,
     FavoritesState favoritesState,
+    AuthState authState,
   ) {
     return Padding(
       padding: const EdgeInsets.only(top: 8),
@@ -259,43 +262,30 @@ class _RecipesPageState extends ConsumerState<RecipesPage> {
         child: Row(
           spacing: 8,
           children: [
-            FilterChip(
-              showCheckmark: false,
-              label: Text("recipes_page.favorites_filter".tr),
-              selected: favoritesState.showFavoritesOnly,
-              onSelected: (selected) async {
-                await ref
-                    .read(favoritesControllerProvider.notifier)
-                    .setFilter(selected);
-              },
-              avatar: Icon(
-                favoritesState.showFavoritesOnly
-                    ? CupertinoIcons.heart_fill
-                    : CupertinoIcons.heart,
-                size: 18,
-              ),
-            ),
+            if (!authState.isLoggedIn) _buildFavoritesChip(ref, favoritesState),
             _buildSortChip(currentSortOption),
-            FilterChip(
-              showCheckmark: false,
-              label: Text(viewOption == ViewOption.list
-                  ? "recipes_page.view_list".tr
-                  : "recipes_page.view_grid".tr),
-              selected: true,
-              onSelected: (selected) {
-                ref
-                    .read(viewOptionControllerProvider.notifier)
-                    .toggleViewOption();
-              },
-              avatar: Icon(
-                viewOption == ViewOption.list
-                    ? CupertinoIcons.list_bullet
-                    : CupertinoIcons.square_grid_2x2_fill,
-                size: 18,
-              ),
-            ),
+            _buildViewChip(viewOption),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildViewChip(ViewOption viewOption) {
+    return FilterChip(
+      showCheckmark: false,
+      label: Text(viewOption == ViewOption.list
+          ? "recipes_page.view_list".tr
+          : "recipes_page.view_grid".tr),
+      selected: true,
+      onSelected: (selected) {
+        ref.read(viewOptionControllerProvider.notifier).toggleViewOption();
+      },
+      avatar: Icon(
+        viewOption == ViewOption.list
+            ? CupertinoIcons.list_bullet
+            : CupertinoIcons.square_grid_2x2_fill,
+        size: 18,
       ),
     );
   }
@@ -333,6 +323,28 @@ class _RecipesPageState extends ConsumerState<RecipesPage> {
           }
         });
       },
+    );
+  }
+
+  Widget _buildFavoritesChip(
+    WidgetRef ref,
+    FavoritesState favoritesState,
+  ) {
+    return FilterChip(
+      showCheckmark: false,
+      label: Text("recipes_page.favorites_filter".tr),
+      selected: favoritesState.showFavoritesOnly,
+      onSelected: (selected) async {
+        await ref
+            .read(favoritesControllerProvider.notifier)
+            .setFilter(selected);
+      },
+      avatar: Icon(
+        favoritesState.showFavoritesOnly
+            ? CupertinoIcons.heart_fill
+            : CupertinoIcons.heart,
+        size: 18,
+      ),
     );
   }
 }

@@ -46,7 +46,9 @@
     "deleting_cloud_recipes_description": "Bitte warten Sie, während wir alle Ihre Rezepte aus der Cloud löschen.",
     "delete_cloud_recipes_error": "Fehler beim Löschen der Cloud-Rezepte: {0}",
     "shared_recipes": "Geteilte Rezepte",
-    "shared_recipes_description": "Ihre öffentlich geteilten Rezepte anzeigen"
+    "shared_recipes_description": "Ihre öffentlich geteilten Rezepte anzeigen",
+    "favorite_recipes": "Lieblingsrezepte",
+    "favorite_recipes_description": "Ihre Lieblingsrezepte anzeigen"
   },
   "profile_info_screen": {
     "title": "Kontoinformationen",
@@ -234,6 +236,10 @@
   "shared_recipes_screen": {
     "title": "Meine Geteilten Rezepte",
     "no_public_recipes": "Sie haben noch keine Rezepte geteilt. Markieren Sie Ihre Rezepte als öffentlich, um sie mit anderen zu teilen."
+  },
+  "favorites_recipes_screen": {
+    "title": "Lieblingsrezepte",
+    "no_favorites": "Sie haben keine Lieblingsrezepte. Markieren Sie Ihre Lieblingsrezepte, indem Sie auf das Herz tippen."
   },
   "shared_recipe": {
     "title": "Geteiltes Rezept",

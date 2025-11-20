@@ -5,6 +5,7 @@ import "package:lottie/lottie.dart";
 import "package:the_recipes/controllers/auth_controller.dart";
 import "package:the_recipes/controllers/profile_controller.dart";
 import "package:the_recipes/messages.dart";
+import "package:the_recipes/views/screens/favorites_recipes_screen.dart";
 import "package:the_recipes/views/screens/profile_info_screen.dart";
 import "package:the_recipes/views/screens/shared_recipes_screen.dart";
 import "package:the_recipes/views/widgets/pressable_button.dart";
@@ -38,6 +39,10 @@ class ProfilePage extends ConsumerWidget {
                     .animate()
                     .fadeIn(duration: 300.ms)
                     .slideX(begin: -0.2, curve: Curves.easeOutCubic),
+                _buildFavoritesCard(context, ref)
+                    .animate()
+                    .fadeIn(delay: 50.ms, duration: 250.ms)
+                    .slideX(begin: -0.15, curve: Curves.easeOutCubic),
                 _buildRecipesManagementCard(context, ref)
                     .animate()
                     .fadeIn(delay: 100.ms, duration: 250.ms)
@@ -47,11 +52,11 @@ class ProfilePage extends ConsumerWidget {
                   endIndent: 16,
                 )
                     .animate()
-                    .fadeIn(delay: 200.ms, duration: 200.ms)
+                    .fadeIn(delay: 150.ms, duration: 200.ms)
                     .slideX(begin: -0.1, curve: Curves.easeOutCubic),
                 _buildSignOutCard(context, ref)
                     .animate()
-                    .fadeIn(delay: 300.ms, duration: 250.ms)
+                    .fadeIn(delay: 200.ms, duration: 250.ms)
                     .slideX(begin: -0.15, curve: Curves.easeOutCubic),
               ],
             ),
@@ -279,6 +284,45 @@ class ProfilePage extends ConsumerWidget {
             ),
           ]
         ],
+      ),
+    );
+  }
+
+  Widget _buildFavoritesCard(
+    BuildContext context,
+    WidgetRef ref,
+  ) {
+    return Card(
+      elevation: 0,
+      margin: EdgeInsets.zero,
+      clipBehavior: Clip.antiAlias,
+      child: ListTile(
+        title: Text(
+          "profile_page.favorite_recipes".tr,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+        ),
+        subtitle: Text(
+          "profile_page.favorite_recipes_description".tr,
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.outline,
+              ),
+        ),
+        leading: Icon(
+          CupertinoIcons.heart,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        trailing: Icon(
+          CupertinoIcons.chevron_forward,
+          color: Theme.of(context).colorScheme.outline,
+        ),
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const FavoritesRecipesScreen(),
+          ),
+        ),
       ),
     );
   }

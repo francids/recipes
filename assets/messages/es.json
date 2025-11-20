@@ -46,7 +46,9 @@
     "deleting_cloud_recipes_description": "Eliminando recetas de la nube.",
     "delete_cloud_recipes_error": "Error al eliminar recetas de la nube: {0}",
     "shared_recipes": "Recetas Compartidas",
-    "shared_recipes_description": "Ver tus recetas públicas"
+    "shared_recipes_description": "Ver tus recetas públicas",
+    "favorite_recipes": "Recetas favoritas",
+    "favorite_recipes_description": "Ver tus recetas favoritas"
   },
   "profile_info_screen": {
     "title": "Información de la cuenta",
@@ -234,6 +236,10 @@
   "shared_recipes_screen": {
     "title": "Recetas que compartes",
     "no_public_recipes": "Aún no has compartido recetas. Marca tus recetas como públicas para compartirlas."
+  },
+  "favorites_recipes_screen": {
+    "title": "Recetas favoritas",
+    "no_favorites": "No tienes recetas favoritas. Marca tus recetas favoritas tocando el corazón."
   },
   "shared_recipe": {
     "title": "Receta compartida",
