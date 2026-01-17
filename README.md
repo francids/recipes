@@ -26,9 +26,9 @@ El repositorio está organizado en tres carpetas principales:
 
 ## Tecnologías utilizadas
 
-- La aplicación móvil está desarrollada en [Flutter](https://flutter.dev/) con [Hive CE](https://pub.dev/packages/hive_ce) y [GetX](https://pub.dev/packages/get).
+- La aplicación móvil está desarrollada en [Flutter](https://flutter.dev/) con [Hive CE](https://pub.dev/packages/hive_ce) y [Riverpod](https://pub.dev/packages/flutter_riverpod).
 - El sitio web está desarrollado en [Astro](https://astro.build/) con [Tailwind CSS](https://tailwindcss.com/).
-- Las funciones serverless están desarrolladas en [Bun](https://bun.sh/) y se ejecutan en [Appwrite Functions](https://appwrite.io/products/functions). Las funciones de IA utilizan [Genkit](https://genkit.dev/) y [Gemini](https://ai.google.dev/).
+- Las funciones serverless están desarrolladas en [Python](https://www.python.org/) y se ejecutan en [Appwrite Functions](https://appwrite.io/products/functions). Las funciones de IA utilizan el [SDK de Google Gen AI](https://pypi.org/project/google-genai/) y [Gemini](https://ai.google.dev/).
 - La aplicación móvil usa [Appwrite](https://appwrite.io/) para la autenticación de usuarios, almacenamiento de recetas y demás.
 
 ## Desarrollo
