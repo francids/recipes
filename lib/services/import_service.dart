@@ -161,9 +161,7 @@ class ImportService {
           ingredients: List<String>.from(recipeData["ingredients"] ?? []),
           directions: List<String>.from(recipeData["directions"] ?? []),
           preparationTime: recipeData["preparationTime"] ?? 0,
-          ownerId: _authState.isLoggedIn
-              ? _authState.user!.$id
-              : "",
+          ownerId: _authState.isLoggedIn ? _authState.user!.$id : "",
           isPublic: false,
           cloudId: null,
         );

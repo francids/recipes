@@ -7,7 +7,7 @@ import "package:flutter_animate/flutter_animate.dart";
 
 class TextFieldsStepWidget extends ConsumerWidget {
   final VoidCallback? onChanged;
-  
+
   const TextFieldsStepWidget({Key? key, this.onChanged}) : super(key: key);
 
   @override
@@ -22,9 +22,7 @@ class TextFieldsStepWidget extends ConsumerWidget {
             state.title,
             "text_fields_step.title_hint".tr,
             (text) {
-              ref
-                  .read(addRecipeControllerProvider.notifier)
-                  .updateTitle(text);
+              ref.read(addRecipeControllerProvider.notifier).updateTitle(text);
               onChanged?.call();
             },
           )

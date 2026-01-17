@@ -30,8 +30,7 @@ class SyncService {
       final localBox = Hive.box<Recipe>(recipesBox);
       final userRecipes = localBox.values
           .where((recipe) =>
-              recipe.ownerId!.isEmpty ||
-              recipe.ownerId == _authState.user!.$id)
+              recipe.ownerId!.isEmpty || recipe.ownerId == _authState.user!.$id)
           .toList();
 
       for (Recipe recipe in userRecipes) {
@@ -222,9 +221,7 @@ class SyncService {
           data: recipeData,
           permissions: [
             Permission.read(
-              isPublic
-                  ? Role.any()
-                  : Role.user(_authState.user!.$id),
+              isPublic ? Role.any() : Role.user(_authState.user!.$id),
             ),
             Permission.update(Role.user(_authState.user!.$id)),
             Permission.delete(Role.user(_authState.user!.$id)),
@@ -239,9 +236,7 @@ class SyncService {
             data: recipeData,
             permissions: [
               Permission.read(
-                isPublic
-                    ? Role.any()
-                    : Role.user(_authState.user!.$id),
+                isPublic ? Role.any() : Role.user(_authState.user!.$id),
               ),
               Permission.update(Role.user(_authState.user!.$id)),
               Permission.delete(Role.user(_authState.user!.$id)),
@@ -272,9 +267,7 @@ class SyncService {
               data: recipeData,
               permissions: [
                 Permission.read(
-                  isPublic
-                      ? Role.any()
-                      : Role.user(_authState.user!.$id),
+                  isPublic ? Role.any() : Role.user(_authState.user!.$id),
                 ),
                 Permission.update(Role.user(_authState.user!.$id)),
                 Permission.delete(Role.user(_authState.user!.$id)),
@@ -322,9 +315,7 @@ class SyncService {
         file: InputFile.fromPath(path: localPath, filename: fileName),
         permissions: [
           Permission.read(
-            isPublic
-                ? Role.any()
-                : Role.user(_authState.user!.$id),
+            isPublic ? Role.any() : Role.user(_authState.user!.$id),
           ),
           Permission.update(Role.user(_authState.user!.$id)),
           Permission.delete(Role.user(_authState.user!.$id)),
