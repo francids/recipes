@@ -105,7 +105,7 @@ wheels = [
 ]
 
 [[package]]
-name = "the-recipes-accounts-py"
+name = "the-recipes-accounts"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
