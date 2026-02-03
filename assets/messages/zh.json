@@ -47,8 +47,16 @@
     "delete_cloud_recipes_error": "删除云端食谱错误：{0}",
     "shared_recipes": "分享的食谱",
     "shared_recipes_description": "查看您公开分享的食谱",
+    "search_public_recipes": "搜索公开食谱",
+    "search_public_recipes_description": "搜索社区分享的食谱",
     "favorite_recipes": "收藏的食谱",
     "favorite_recipes_description": "查看您收藏的食谱"
+  },
+  "public_recipes_search": {
+    "title": "搜索公开食谱",
+    "search_hint": "搜索食谱...",
+    "error": "搜索食谱时出错：{0}",
+    "no_recipes": "未找到食谱"
   },
   "profile_info_screen": {
     "title": "账户信息",

@@ -47,8 +47,16 @@
     "delete_cloud_recipes_error": "Errore durante l'eliminazione delle ricette cloud: {0}",
     "shared_recipes": "Ricette Condivise",
     "shared_recipes_description": "Visualizza le tue ricette condivise pubblicamente",
+    "search_public_recipes": "Cerca Ricette Pubbliche",
+    "search_public_recipes_description": "Cerca ricette condivise dalla comunità",
     "favorite_recipes": "Ricette Preferite",
     "favorite_recipes_description": "Visualizza le tue ricette preferite"
+  },
+  "public_recipes_search": {
+    "title": "Cerca Ricette Pubbliche",
+    "search_hint": "Cerca ricette...",
+    "error": "Errore durante la ricerca delle ricette: {0}",
+    "no_recipes": "Nessuna ricetta trovata"
   },
   "profile_info_screen": {
     "title": "Informazioni Account",

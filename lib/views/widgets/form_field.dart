@@ -12,6 +12,7 @@ class ModernFormField extends StatelessWidget {
   final bool? expands;
   final String topLabel;
   final ModernFormFieldDecoration decoration;
+  final bool autofocus;
 
   ModernFormField({
     Key? key,
@@ -25,6 +26,7 @@ class ModernFormField extends StatelessWidget {
     this.topLabel = "",
     this.textInputAction,
     this.expands,
+    this.autofocus = false,
     ModernFormFieldDecoration? decoration,
   })  : decoration =
             decoration ?? ModernFormFieldDecoration(topLabel: topLabel),
@@ -53,7 +55,7 @@ class ModernFormField extends StatelessWidget {
           TextFormField(
             controller: controller,
             focusNode: decoration.focusNode,
-            autofocus: decoration.autofocus,
+            autofocus: autofocus,
             keyboardType: keyboardType,
             obscureText: obscureText,
             maxLines: decoration.wrapText ? null : 1,

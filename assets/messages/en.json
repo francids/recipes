@@ -47,8 +47,16 @@
     "delete_cloud_recipes_error": "Delete error: {0}",
     "shared_recipes": "Shared Recipes",
     "shared_recipes_description": "View your public recipes",
+    "search_public_recipes": "Search public recipes",
+    "search_public_recipes_description": "Search for recipes shared by the community",
     "favorite_recipes": "Favorite Recipes",
     "favorite_recipes_description": "View your favorite recipes"
+  },
+  "public_recipes_search": {
+    "title": "Search Public Recipes",
+    "search_hint": "Search recipes...",
+    "error": "Error searching recipes: {0}",
+    "no_recipes": "No recipes found"
   },
   "profile_info_screen": {
     "title": "Account Information",

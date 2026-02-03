@@ -578,4 +578,67 @@ class SyncService {
       String cloudUrl, String recipeId) async {
     return await _downloadImage(cloudUrl, recipeId);
   }
+
+  String _getStorageViewUrl(String fileId) {
+    return "${AppwriteConfig.endpoint}/storage/buckets/${AppwriteConfig.bucketId}/files/$fileId/view?project=${AppwriteConfig.projectId}";
+  }
+
+  Future<List<Recipe>> searchPublicRecipes(String query) async {
+    try {
+      final List<String> queries = [
+        Query.equal("isPublic", true),
+        Query.limit(20),
+      ];
+
+      if (query.isNotEmpty) {
+        queries.add(Query.search("title", query));
+      } else {
+        queries.add(Query.orderDesc("\$createdAt"));
+      }
+
+      final documentList = await _tables.listRows(
+        databaseId: AppwriteConfig.databaseId,
+        tableId: AppwriteConfig.recipesTableId,
+        queries: queries,
+      );
+
+      final recipes = <Recipe>[];
+
+      for (var doc in documentList.rows) {
+        final recipeData = doc.data;
+        recipeData["cloudId"] = doc.$id;
+
+        if (_authState.isLoggedIn &&
+            recipeData["ownerId"] == _authState.user!.$id) {
+          continue;
+        }
+
+        if (recipeData["image"] != null &&
+            recipeData["image"].toString().isNotEmpty) {
+          String imageValue = recipeData["image"].toString();
+          if (!imageValue.startsWith("http") && !imageValue.contains("/")) {
+            recipeData["image"] = _getStorageViewUrl(imageValue);
+          }
+        }
+
+        recipes.add(Recipe(
+          id: const Uuid().v4(),
+          title: recipeData["title"] ?? "",
+          description: recipeData["description"] ?? "",
+          image: recipeData["image"] ?? "",
+          ingredients: List<String>.from(recipeData["ingredients"] ?? []),
+          directions: List<String>.from(recipeData["directions"] ?? []),
+          preparationTime: recipeData["preparationTime"] ?? 0,
+          ownerId: recipeData["ownerId"] ?? "",
+          isPublic: true,
+          cloudId: recipeData["cloudId"],
+        ));
+      }
+
+      return recipes;
+    } catch (e) {
+      debugPrint("Error searching public recipes: \$e");
+      rethrow;
+    }
+  }
 }

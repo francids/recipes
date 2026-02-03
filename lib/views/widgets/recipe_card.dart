@@ -11,10 +11,12 @@ class RecipeCard extends StatelessWidget {
     super.key,
     required this.recipe,
     this.viewOption = ViewOption.list,
+    this.onTap,
   });
 
   final Recipe recipe;
   final ViewOption viewOption;
+  final VoidCallback? onTap;
 
   Widget _buildImage(BuildContext context) {
     final isGridView = viewOption == ViewOption.grid;
@@ -238,13 +240,14 @@ class RecipeCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => RecipeScreen(recipe: recipe),
-              ),
-            );
-          },
+          onTap: onTap ??
+              () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => RecipeScreen(recipe: recipe),
+                  ),
+                );
+              },
           child: cardContent,
         ),
       )

@@ -42,7 +42,9 @@
   "functions": [
     {
       "$id": "the-recipes-ai",
-      "execute": ["users"],
+      "execute": [
+        "users"
+      ],
       "name": "The Recipes AI",
       "enabled": true,
       "logging": true,
@@ -58,12 +60,16 @@
     },
     {
       "$id": "the-recipes-accounts",
-      "execute": ["users"],
+      "execute": [
+        "users"
+      ],
       "name": "The Recipes Accounts",
       "enabled": true,
       "logging": true,
       "runtime": "python-3.12",
-      "scopes": ["users.write"],
+      "scopes": [
+        "users.write"
+      ],
       "events": [],
       "schedule": "",
       "timeout": 15,
@@ -101,7 +107,10 @@
   "tables": [
     {
       "$id": "recipes",
-      "$permissions": ["create(\"users\")"],
+      "$permissions": [
+        "create(\"users\")"
+      ],
+      "rowSecurity": true,
       "databaseId": "principal",
       "name": "recipes",
       "enabled": true,
@@ -177,18 +186,46 @@
           "default": false
         }
       ],
-      "indexes": []
+      "indexes": [
+        {
+          "key": "title_search",
+          "type": "fulltext",
+          "status": "available",
+          "attributes": [
+            "title"
+          ],
+          "orders": []
+        },
+        {
+          "key": "isPublic_index",
+          "type": "key",
+          "status": "available",
+          "attributes": [
+            "isPublic"
+          ],
+          "orders": [
+            "ASC"
+          ]
+        }
+      ]
     }
   ],
   "buckets": [
     {
       "$id": "recipes",
-      "$permissions": ["create(\"users\")"],
+      "$permissions": [
+        "create(\"users\")"
+      ],
       "fileSecurity": true,
       "name": "recipes",
       "enabled": true,
       "maximumFileSize": 50000000,
-      "allowedFileExtensions": ["jpg", "png", "webp", "jpeg"],
+      "allowedFileExtensions": [
+        "jpg",
+        "png",
+        "webp",
+        "jpeg"
+      ],
       "compression": "none",
       "encryption": true,
       "antivirus": true

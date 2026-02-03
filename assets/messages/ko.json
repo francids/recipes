@@ -47,8 +47,16 @@
     "delete_cloud_recipes_error": "클라우드 레시피 삭제 오류: {0}",
     "shared_recipes": "공유 레시피",
     "shared_recipes_description": "공개적으로 공유한 레시피 보기",
+    "search_public_recipes": "공개 레시피 검색",
+    "search_public_recipes_description": "커뮤니티에서 공유된 레시피 검색",
     "favorite_recipes": "즐겨찾기 레시피",
     "favorite_recipes_description": "즐겨찾기 레시피 보기"
+  },
+  "public_recipes_search": {
+    "title": "공개 레시피 검색",
+    "search_hint": "레시피 검색...",
+    "error": "레시피 검색 오류: {0}",
+    "no_recipes": "레시피를 찾을 수 없습니다"
   },
   "profile_info_screen": {
     "title": "계정 정보",

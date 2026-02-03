@@ -7,6 +7,7 @@ import "package:the_recipes/controllers/profile_controller.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/views/screens/favorites_recipes_screen.dart";
 import "package:the_recipes/views/screens/profile_info_screen.dart";
+import "package:the_recipes/views/screens/public_recipes_search_screen.dart";
 import "package:the_recipes/views/screens/shared_recipes_screen.dart";
 import "package:the_recipes/views/widgets/pressable_button.dart";
 import "package:the_recipes/views/widgets/ui_helpers.dart";
@@ -282,7 +283,36 @@ class ProfilePage extends ConsumerWidget {
                 ),
               ),
             ),
-          ]
+          ],
+          const Divider(height: 1),
+          ListTile(
+            title: Text(
+              "profile_page.search_public_recipes".tr,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+            subtitle: Text(
+              "profile_page.search_public_recipes_description".tr,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+            ),
+            leading: Icon(
+              CupertinoIcons.search,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            trailing: Icon(
+              CupertinoIcons.chevron_forward,
+              color: Theme.of(context).colorScheme.outline,
+            ),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const PublicRecipesSearchScreen(),
+              ),
+            ),
+          ),
         ],
       ),
     );

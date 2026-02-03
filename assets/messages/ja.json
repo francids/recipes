@@ -47,8 +47,16 @@
     "delete_cloud_recipes_error": "クラウドレシピの削除エラー: {0}",
     "shared_recipes": "共有レシピ",
     "shared_recipes_description": "公開で共有したレシピを表示",
+    "search_public_recipes": "公開レシピを検索",
+    "search_public_recipes_description": "コミュニティで共有されたレシピを検索",
     "favorite_recipes": "お気に入りのレシピ",
     "favorite_recipes_description": "お気に入りのレシピを表示"
+  },
+  "public_recipes_search": {
+    "title": "公開レシピを検索",
+    "search_hint": "レシピを検索...",
+    "error": "レシピの検索中にエラーが発生しました：{0}",
+    "no_recipes": "レシピが見つかりません"
   },
   "profile_info_screen": {
     "title": "アカウント情報",
