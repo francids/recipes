@@ -11,10 +11,8 @@
 - [x] **Modo oscuro**: La aplicación cuenta con un modo oscuro para mejorar la experiencia del usuario en condiciones de poca luz.
 - [x] **Soporte multi-idioma**: La aplicación está disponible en varios idiomas (Alemán, Chino, Coreano, Español, Francés, Inglés, Italiano, Japonés, Portugués).
 - [x] **Compartición de recetas**: El usuario puede compartir sus recetas con otros usuarios a través de un enlace único.
-- [ ] **IA**: La aplicación utiliza inteligencia artificial para:
-  - [x] Generar recetas basadas en una foto de un plato.
-  - [ ] Sugerir recetas basadas en los ingredientes que el usuario tiene en casa.
-  - [ ] Sugerir recetas basadas en las preferencias del usuario.
+- [x] **IA**: Generar recetas basadas en una foto de un plato.
+- [x] **Búsqueda de recetas públicas**: El usuario puede buscar recetas públicas en la plataforma.
 
 ## Estructura del proyecto
 
