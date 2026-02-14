@@ -9,26 +9,26 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: "stable"
-      
+
       - name: Get dependencies
         run: flutter pub get
-      
+
       - name: Generate build files
         run: dart run build_runner build --delete-conflicting-outputs
-      
+
       - name: Decode keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/upload-keystore.jks
-      
+
       - name: Create key.properties
         run: |
           cat > android/key.properties << EOF
@@ -37,21 +37,21 @@ jobs:
           keyAlias=${{ secrets.KEY_ALIAS }}
           storeFile=upload-keystore.jks
           EOF
-      
+
       - name: Build release APK
         run: flutter build apk --release
-      
+
       - name: Get version from pubspec.yaml
         id: get_version
         run: |
           VERSION=$(grep "^version:" pubspec.yaml | sed 's/version: //' | sed 's/+.*//')
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-      
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.get_version.outputs.VERSION }}
-          name: Release v${{ steps.get_version.outputs.VERSION }}
+          name: v${{ steps.get_version.outputs.VERSION }}
           files: |
             build/app/outputs/flutter-apk/app-release.apk
           generate_release_notes: true
