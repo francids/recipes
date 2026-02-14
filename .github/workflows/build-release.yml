@@ -3,29 +3,32 @@ name: Build and Release APK
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+      
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: "stable"
-
+      
       - name: Get dependencies
         run: flutter pub get
-
+      
       - name: Generate build files
         run: dart run build_runner build --delete-conflicting-outputs
-
+      
       - name: Decode keystore
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/upload-keystore.jks
-
+      
       - name: Create key.properties
         run: |
           cat > android/key.properties << EOF
@@ -34,33 +37,23 @@ jobs:
           keyAlias=${{ secrets.KEY_ALIAS }}
           storeFile=upload-keystore.jks
           EOF
-
+      
       - name: Build release APK
         run: flutter build apk --release
-
+      
       - name: Get version from pubspec.yaml
         id: get_version
         run: |
           VERSION=$(grep "^version:" pubspec.yaml | sed 's/version: //' | sed 's/+.*//')
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
-
+      
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.get_version.outputs.VERSION }}
-          release_name: Release v${{ steps.get_version.outputs.VERSION }}
-          draft: false
-          prerelease: false
-
-      - name: Upload APK to Release
-        uses: actions/upload-release-asset@v1
+          name: Release v${{ steps.get_version.outputs.VERSION }}
+          files: |
+            build/app/outputs/flutter-apk/app-release.apk
+          generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/app/outputs/flutter-apk/app-release.apk
-          asset_name: the_recipes-v${{ steps.get_version.outputs.VERSION }}.apk
-          asset_content_type: application/vnd.android.package-archive
