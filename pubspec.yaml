@@ -1,7 +1,7 @@
 name: the_recipes
 description: "Aplicación de recetas de cocina"
 publish_to: "none"
-version: 2.0.0+3
+version: 2.0.0+4
 
 environment:
   sdk: ">=3.2.4 <4.0.0"
