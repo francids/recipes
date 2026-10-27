@@ -1,10 +1,10 @@
 import "dart:async";
 import "dart:io";
 
-import "package:flutter/material.dart";
 import "package:flutter_easyloading/flutter_easyloading.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hive_ce_flutter/adapters.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/auth_controller.dart";
 import "package:the_recipes/hive_boxes.dart";
 import "package:the_recipes/messages.dart";
@@ -16,15 +16,9 @@ class RecipeState {
   final List<Recipe> recipes;
   final bool isLoading;
 
-  RecipeState({
-    required this.recipes,
-    this.isLoading = false,
-  });
+  RecipeState({required this.recipes, this.isLoading = false});
 
-  RecipeState copyWith({
-    List<Recipe>? recipes,
-    bool? isLoading,
-  }) {
+  RecipeState copyWith({List<Recipe>? recipes, bool? isLoading}) {
     return RecipeState(
       recipes: recipes ?? this.recipes,
       isLoading: isLoading ?? this.isLoading,
@@ -66,7 +60,9 @@ class RecipeController extends Notifier<RecipeState> {
 
       // Solo mostrar loading si no hay recetas cargadas
       if (state.recipes.isEmpty) {
-        EasyLoading.show(status: "recipe_controller.loading_recipes".tr);
+        unawaited(
+          EasyLoading.show(status: "recipe_controller.loading_recipes".tr),
+        );
       }
 
       if (!Hive.isBoxOpen(recipesBox)) {
@@ -76,12 +72,14 @@ class RecipeController extends Notifier<RecipeState> {
 
       state = state.copyWith(recipes: box.values.toList());
     } catch (e) {
-      EasyLoading.showError("recipe_controller.load_error".trParams({
-        "0": e.toString(),
-      }));
+      unawaited(
+        EasyLoading.showError(
+          "recipe_controller.load_error".trParams({"0": e.toString()}),
+        ),
+      );
     } finally {
       state = state.copyWith(isLoading: false);
-      EasyLoading.dismiss();
+      unawaited(EasyLoading.dismiss());
     }
   }
 
@@ -98,10 +96,10 @@ class RecipeController extends Notifier<RecipeState> {
       if (!Hive.isBoxOpen(recipesBox)) {
         await Hive.openBox<Recipe>(recipesBox);
       }
-      var box = Hive.box<Recipe>(recipesBox);
-      String id = const Uuid().v4();
+      final box = Hive.box<Recipe>(recipesBox);
+      final String id = const Uuid().v4();
 
-      Recipe recipe = Recipe(
+      final Recipe recipe = Recipe(
         id: id,
         title: title,
         description: description,
@@ -125,15 +123,19 @@ class RecipeController extends Notifier<RecipeState> {
           await syncService.syncRecipesToCloud();
           getRecipes();
         } catch (e) {
-          EasyLoading.showError("recipe_controller.sync_error".trParams({
-            "0": e.toString(),
-          }));
+          unawaited(
+            EasyLoading.showError(
+              "recipe_controller.sync_error".trParams({"0": e.toString()}),
+            ),
+          );
         }
       }
     } catch (e) {
-      EasyLoading.showError("recipe_controller.add_error".trParams({
-        "0": e.toString(),
-      }));
+      unawaited(
+        EasyLoading.showError(
+          "recipe_controller.add_error".trParams({"0": e.toString()}),
+        ),
+      );
     }
   }
 
@@ -143,8 +145,8 @@ class RecipeController extends Notifier<RecipeState> {
       if (!Hive.isBoxOpen(recipesBox)) {
         await Hive.openBox<Recipe>(recipesBox);
       }
-      var box = Hive.box<Recipe>(recipesBox);
-      String id = const Uuid().v4();
+      final box = Hive.box<Recipe>(recipesBox);
+      final String id = const Uuid().v4();
 
       String localImagePath = sharedRecipe.image!;
 
@@ -152,14 +154,16 @@ class RecipeController extends Notifier<RecipeState> {
           sharedRecipe.image!.startsWith("http")) {
         try {
           localImagePath = await SyncService.downloadSharedRecipeImage(
-              sharedRecipe.image!, id);
+            sharedRecipe.image!,
+            id,
+          );
         } catch (e) {
           debugPrint("Error downloading shared recipe image: $e");
           localImagePath = sharedRecipe.image!;
         }
       }
 
-      Recipe recipe = Recipe(
+      final Recipe recipe = Recipe(
         id: id,
         title: sharedRecipe.title,
         description: sharedRecipe.description,
@@ -183,9 +187,11 @@ class RecipeController extends Notifier<RecipeState> {
           await syncService.syncRecipesToCloud();
           getRecipes();
         } catch (e) {
-          EasyLoading.showError("recipe_controller.sync_error".trParams({
-            "0": e.toString(),
-          }));
+          unawaited(
+            EasyLoading.showError(
+              "recipe_controller.sync_error".trParams({"0": e.toString()}),
+            ),
+          );
         }
       }
     } catch (e) {
@@ -207,10 +213,10 @@ class RecipeController extends Notifier<RecipeState> {
       if (!Hive.isBoxOpen(recipesBox)) {
         await Hive.openBox<Recipe>(recipesBox);
       }
-      var box = Hive.box<Recipe>(recipesBox);
+      final box = Hive.box<Recipe>(recipesBox);
 
       if (box.containsKey(id)) {
-        Recipe recipe = box.get(id)!;
+        final Recipe recipe = box.get(id)!;
 
         recipe.title = title ?? recipe.title;
         recipe.description = description ?? recipe.description;
@@ -223,19 +229,23 @@ class RecipeController extends Notifier<RecipeState> {
         await box.put(id, recipe);
 
         final currentRecipes = List<Recipe>.from(state.recipes);
-        int index = currentRecipes.indexWhere((r) => r.id == id);
+        final int index = currentRecipes.indexWhere((r) => r.id == id);
         if (index != -1) {
           currentRecipes[index] = recipe;
           state = state.copyWith(recipes: currentRecipes);
         }
       } else {
-        EasyLoading.showError("recipe_controller.recipe_not_found".tr);
+        unawaited(
+          EasyLoading.showError("recipe_controller.recipe_not_found".tr),
+        );
         return;
       }
     } catch (e) {
-      EasyLoading.showError("recipe_controller.update_error".trParams({
-        "0": e.toString(),
-      }));
+      unawaited(
+        EasyLoading.showError(
+          "recipe_controller.update_error".trParams({"0": e.toString()}),
+        ),
+      );
     }
   }
 
@@ -245,7 +255,7 @@ class RecipeController extends Notifier<RecipeState> {
       if (!Hive.isBoxOpen(recipesBox)) {
         await Hive.openBox<Recipe>(recipesBox);
       }
-      var box = Hive.box<Recipe>(recipesBox);
+      final box = Hive.box<Recipe>(recipesBox);
 
       if (box.containsKey(id)) {
         final recipe = box.get(id)!;
@@ -266,27 +276,34 @@ class RecipeController extends Notifier<RecipeState> {
         currentRecipes.removeWhere((recipe) => recipe.id == id);
         state = state.copyWith(recipes: currentRecipes);
       } else {
-        EasyLoading.showError("recipe_controller.recipe_not_found".tr);
+        unawaited(
+          EasyLoading.showError("recipe_controller.recipe_not_found".tr),
+        );
         return;
       }
 
       if (image.isNotEmpty) {
         try {
-          File imageFile = File(image);
+          final File imageFile = File(image);
           if (await imageFile.exists()) {
             await imageFile.delete();
           }
         } catch (e) {
-          EasyLoading.showError(
+          unawaited(
+            EasyLoading.showError(
               "recipe_controller.image_delete_error".trParams({
-            "0": e.toString(),
-          }));
+                "0": e.toString(),
+              }),
+            ),
+          );
         }
       }
     } catch (e) {
-      EasyLoading.showError("recipe_controller.delete_error".trParams({
-        "0": e.toString(),
-      }));
+      unawaited(
+        EasyLoading.showError(
+          "recipe_controller.delete_error".trParams({"0": e.toString()}),
+        ),
+      );
     }
   }
 
@@ -300,5 +317,5 @@ class RecipeController extends Notifier<RecipeState> {
 
 final recipeControllerProvider =
     NotifierProvider<RecipeController, RecipeState>(() {
-  return RecipeController();
-});
+      return RecipeController();
+    });

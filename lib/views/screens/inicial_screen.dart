@@ -1,13 +1,13 @@
-import "package:flutter/cupertino.dart";
+import "package:cupertino_ui/cupertino_ui.dart";
+import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/recipe_controller.dart";
 import "package:the_recipes/messages.dart";
-import "package:the_recipes/views/screens/profile_page.dart";
-import "package:the_recipes/views/screens/settings_screen.dart";
-import "package:the_recipes/views/screens/recipes_page.dart";
 import "package:the_recipes/views/screens/add_recipe_screen.dart";
-import "package:flutter/material.dart";
-import "package:flutter_animate/flutter_animate.dart";
+import "package:the_recipes/views/screens/profile_page.dart";
+import "package:the_recipes/views/screens/recipes_page.dart";
+import "package:the_recipes/views/screens/settings_screen.dart";
 import "package:the_recipes/views/widgets/pressable_button.dart";
 
 class InicialScreen extends ConsumerStatefulWidget {
@@ -51,19 +51,17 @@ class _InicialScreenState extends ConsumerState<InicialScreen>
   }
 
   List<String> get _titles => [
-        "inicial_screen.title".tr,
-        "profile_page.title".tr,
-      ];
+    "inicial_screen.title".tr,
+    "profile_page.title".tr,
+  ];
 
-  List<Widget> get _pages => [
-        const RecipesPage(),
-        const ProfilePage(),
-      ];
+  List<Widget> get _pages => [const RecipesPage(), const ProfilePage()];
 
   @override
   Widget build(BuildContext context) {
-    final RecipeController recipeController =
-        ref.read(recipeControllerProvider.notifier);
+    final RecipeController recipeController = ref.read(
+      recipeControllerProvider.notifier,
+    );
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
@@ -77,8 +75,7 @@ class _InicialScreenState extends ConsumerState<InicialScreen>
             shadows: [
               Shadow(
                 blurRadius: 32.0,
-                color: Theme.of(context)
-                    .scaffoldBackgroundColor
+                color: Theme.of(context).scaffoldBackgroundColor
                     .withAlpha(isDark ? 150 : 100),
                 offset: Offset(15.0, 15.0),
               ),
@@ -92,9 +89,7 @@ class _InicialScreenState extends ConsumerState<InicialScreen>
                   width: 0.5,
                 ),
               )
-            : const RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero,
-              ),
+            : const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         backgroundColor: _currentIndex == 0
             ? Colors.transparent
             : Theme.of(context).scaffoldBackgroundColor,
@@ -114,9 +109,7 @@ class _InicialScreenState extends ConsumerState<InicialScreen>
         ),
         actions: [
           IconButton(
-            icon: const Icon(
-              CupertinoIcons.ellipsis_vertical,
-            ),
+            icon: const Icon(CupertinoIcons.ellipsis_vertical),
             tooltip: "inicial_screen.menu_tooltip".tr,
             onPressed: () {
               showMenu(
@@ -175,10 +168,7 @@ class _InicialScreenState extends ConsumerState<InicialScreen>
         },
         child: Stack(
           children: [
-            TabBarView(
-              controller: _tabController,
-              children: _pages,
-            ),
+            TabBarView(controller: _tabController, children: _pages),
             Positioned(
               bottom: 48,
               left: 20,
@@ -189,7 +179,8 @@ class _InicialScreenState extends ConsumerState<InicialScreen>
                     width: MediaQuery.of(context).size.width * 0.6,
                     height: 56,
                     decoration: BoxDecoration(
-                      color: Theme.of(context)
+                      color:
+                          Theme.of(context)
                               .bottomNavigationBarTheme
                               .backgroundColor ??
                           Theme.of(context).colorScheme.surface,
@@ -204,10 +195,8 @@ class _InicialScreenState extends ConsumerState<InicialScreen>
                         BoxShadow(
                           color: Theme.of(context).brightness == Brightness.dark
                               ? Colors.black.withAlpha(77)
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer
-                                  .withAlpha(77),
+                              : Theme.of(context).colorScheme.primaryContainer
+                                    .withAlpha(77),
                           blurRadius: 10,
                           offset: const Offset(0, -2),
                         ),
@@ -227,16 +216,22 @@ class _InicialScreenState extends ConsumerState<InicialScreen>
                       unselectedLabelColor: Theme.of(context)
                           .bottomNavigationBarTheme
                           .unselectedItemColor,
-                      labelStyle: Theme.of(context)
+                      labelStyle:
+                          Theme.of(context)
                               .bottomNavigationBarTheme
                               .selectedLabelStyle ??
                           const TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w600),
-                      unselectedLabelStyle: Theme.of(context)
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                      unselectedLabelStyle:
+                          Theme.of(context)
                               .bottomNavigationBarTheme
                               .unselectedLabelStyle ??
                           const TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w400),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
                       tabs: [
                         Tab(
                           iconMargin: const EdgeInsets.only(bottom: 4),
@@ -274,10 +269,10 @@ class _InicialScreenState extends ConsumerState<InicialScreen>
                         child: const Icon(CupertinoIcons.add),
                       ),
                     ).animate().scale(
-                          delay: 150.ms,
-                          duration: 300.ms,
-                          curve: Curves.easeOutBack,
-                        ),
+                      delay: 150.ms,
+                      duration: 300.ms,
+                      curve: Curves.easeOutBack,
+                    ),
                   ],
                 ],
               ),

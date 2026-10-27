@@ -1,21 +1,15 @@
-import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hive_ce_flutter/adapters.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/hive_boxes.dart";
 
 class ThemeState {
   final bool isDarkMode;
   final bool followSystemTheme;
 
-  ThemeState({
-    required this.isDarkMode,
-    required this.followSystemTheme,
-  });
+  ThemeState({required this.isDarkMode, required this.followSystemTheme});
 
-  ThemeState copyWith({
-    bool? isDarkMode,
-    bool? followSystemTheme,
-  }) {
+  ThemeState copyWith({bool? isDarkMode, bool? followSystemTheme}) {
     return ThemeState(
       isDarkMode: isDarkMode ?? this.isDarkMode,
       followSystemTheme: followSystemTheme ?? this.followSystemTheme,
@@ -37,8 +31,10 @@ class ThemeController extends Notifier<ThemeState> {
     try {
       if (Hive.isBoxOpen(settingsBox)) {
         final box = Hive.box(settingsBox);
-        final followSystemTheme =
-            box.get(followSystemThemeKey, defaultValue: true);
+        final followSystemTheme = box.get(
+          followSystemThemeKey,
+          defaultValue: true,
+        );
         var isDarkMode = box.get(themeKey, defaultValue: false);
 
         if (followSystemTheme) {
@@ -53,7 +49,7 @@ class ThemeController extends Notifier<ThemeState> {
         );
       }
     } catch (e) {
-      print("Error getting initial theme: $e");
+      debugPrint("Error getting initial theme: $e");
     }
 
     final brightness =
@@ -75,8 +71,10 @@ class ThemeController extends Notifier<ThemeState> {
       }
 
       final box = Hive.box(settingsBox);
-      final followSystemTheme =
-          box.get(followSystemThemeKey, defaultValue: true);
+      final followSystemTheme = box.get(
+        followSystemThemeKey,
+        defaultValue: true,
+      );
       var isDarkMode = box.get(themeKey, defaultValue: false);
 
       if (followSystemTheme) {
@@ -90,7 +88,7 @@ class ThemeController extends Notifier<ThemeState> {
         followSystemTheme: followSystemTheme,
       );
     } catch (e) {
-      print("Error loading theme: $e");
+      debugPrint("Error loading theme: $e");
     }
   }
 
@@ -117,12 +115,13 @@ class ThemeController extends Notifier<ThemeState> {
       await box.put(themeKey, state.isDarkMode);
       await box.put(followSystemThemeKey, state.followSystemTheme);
     } catch (e) {
-      print("Error saving theme: $e");
+      debugPrint("Error saving theme: $e");
     }
   }
 }
 
-final themeControllerProvider =
-    NotifierProvider<ThemeController, ThemeState>(() {
-  return ThemeController();
-});
+final themeControllerProvider = NotifierProvider<ThemeController, ThemeState>(
+  () {
+    return ThemeController();
+  },
+);

@@ -1,8 +1,9 @@
 import "dart:io";
+
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:image_picker/image_picker.dart";
-import "package:path_provider/path_provider.dart";
 import "package:path/path.dart" as path;
+import "package:path_provider/path_provider.dart";
 import "package:the_recipes/controllers/recipe_controller.dart";
 
 class AddRecipeState {
@@ -102,13 +103,13 @@ class AddRecipeController extends Notifier<AddRecipeState> {
 
   Future<void> saveImageLocally() async {
     if (state.image == null) return;
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String imagesPath = path.join(appDocDir.path, "recipe-images");
-    Directory imagesDir = Directory(imagesPath);
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
+    final String imagesPath = path.join(appDocDir.path, "recipe-images");
+    final Directory imagesDir = Directory(imagesPath);
     if (!await imagesDir.exists()) {
       await imagesDir.create(recursive: true);
     }
-    String finalImagePath = path.join(imagesPath, state.fileName!);
+    final String finalImagePath = path.join(imagesPath, state.fileName!);
     await state.image!.copy(finalImagePath);
     state = state.copyWith(fullPath: finalImagePath);
   }
@@ -116,7 +117,9 @@ class AddRecipeController extends Notifier<AddRecipeState> {
   Future<void> addRecipe() async {
     await saveImageLocally();
 
-    await ref.read(recipeControllerProvider.notifier).addRecipe(
+    await ref
+        .read(recipeControllerProvider.notifier)
+        .addRecipe(
           state.title,
           state.description,
           state.fullPath,
@@ -133,5 +136,5 @@ class AddRecipeController extends Notifier<AddRecipeState> {
 
 final addRecipeControllerProvider =
     NotifierProvider<AddRecipeController, AddRecipeState>(() {
-  return AddRecipeController();
-});
+      return AddRecipeController();
+    });

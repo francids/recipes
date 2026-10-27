@@ -24,7 +24,7 @@ El repositorio está organizado en tres carpetas principales:
 
 ## Tecnologías utilizadas
 
-- La aplicación móvil está desarrollada en [Flutter](https://flutter.dev/) con [Hive CE](https://pub.dev/packages/hive_ce) y [Riverpod](https://pub.dev/packages/flutter_riverpod).
+- La aplicación móvil está desarrollada en [Flutter](https://flutter.dev/) con [Riverpod](https://pub.dev/packages/flutter_riverpod), [Hive CE](https://pub.dev/packages/hive_ce) y los paquetes de diseño [material_ui](https://pub.dev/packages/material_ui) y [cupertino_ui](https://pub.dev/packages/cupertino_ui).
 - El sitio web está desarrollado en [Astro](https://astro.build/) con [Tailwind CSS](https://tailwindcss.com/).
 - Las funciones serverless están desarrolladas en [Python](https://www.python.org/) y se ejecutan en [Appwrite Functions](https://appwrite.io/products/functions). Las funciones de IA utilizan el [SDK de Google Gen AI](https://pypi.org/project/google-genai/) y [Gemini](https://ai.google.dev/).
 - La aplicación móvil usa [Appwrite](https://appwrite.io/) para la autenticación de usuarios, almacenamiento de recetas y demás.
@@ -34,11 +34,11 @@ El repositorio está organizado en tres carpetas principales:
 > [!NOTE]
 > Para iniciar con el desarrollo del sitio web o las funciones, revisar el archivo `README.md` correspondiente en cada carpeta.
 
-Para iniciar con el desarrollo de la aplicación móvil, se debe tener [Flutter](https://flutter.dev/) instalado.
+Para iniciar con el desarrollo de la aplicación móvil, se debe tener [Flutter](https://flutter.dev/) 3.47 o superior instalado.
 
 1. Clona el repositorio.
 2. Instala las dependencias: `flutter pub get`
-3. Genera los archivos necesarios con build_runner: `dart run build_runner build --delete-conflicting-outputs`
+3. Genera los archivos necesarios con build_runner: `dart run build_runner build`
 4. Inicia el emulador o conecta un dispositivo físico.
 5. Corre la aplicación: `flutter run`
 

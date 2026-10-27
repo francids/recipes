@@ -1,20 +1,20 @@
-import "package:flutter/cupertino.dart";
-import "package:flutter/material.dart";
+import "package:cupertino_ui/cupertino_ui.dart";
+import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/add_recipe_controller.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/views/widgets/pressable_button.dart";
+import "package:the_recipes/views/widgets/recipe_form/dynamic_list_step_widget.dart";
 import "package:the_recipes/views/widgets/recipe_form/image_step_widget.dart";
 import "package:the_recipes/views/widgets/recipe_form/text_fields_step_widget.dart";
-import "package:the_recipes/views/widgets/recipe_form/dynamic_list_step_widget.dart";
 import "package:the_recipes/views/widgets/ui_helpers.dart";
-import "package:flutter_animate/flutter_animate.dart";
 
 class AddRecipeScreen extends ConsumerStatefulWidget {
   const AddRecipeScreen({super.key});
 
   @override
-  _AddRecipeScreenState createState() => _AddRecipeScreenState();
+  ConsumerState<AddRecipeScreen> createState() => _AddRecipeScreenState();
 }
 
 class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
@@ -71,7 +71,9 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     if (isNext) {
       if (_isCurrentStepValid && _currentStep < 3) {
         _pageController.nextPage(
-            duration: _animationDuration, curve: Curves.easeInOut);
+          duration: _animationDuration,
+          curve: Curves.easeInOut,
+        );
         setState(() {
           _currentStep++;
         });
@@ -84,7 +86,9 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
       }
     } else if (_currentStep > 0) {
       _pageController.previousPage(
-          duration: _animationDuration, curve: Curves.easeInOut);
+        duration: _animationDuration,
+        curve: Curves.easeInOut,
+      );
       setState(() {
         _currentStep--;
       });
@@ -111,6 +115,7 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
     try {
       await ref.read(addRecipeControllerProvider.notifier).addRecipe();
       ref.read(addRecipeControllerProvider.notifier).resetState();
+      if (!mounted) return;
       Navigator.of(context).pop(); // Close loading dialog
       Navigator.of(context).pop(); // Close add recipe screen
       UIHelpers.showSuccessSnackbar(
@@ -118,17 +123,16 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
         context,
       );
     } catch (e) {
+      if (!mounted) return;
       Navigator.of(context).pop(); // Close loading dialog
-      UIHelpers.showErrorSnackbar(
-        "add_recipe_screen.error_saving".tr,
-        context,
-      );
+      UIHelpers.showErrorSnackbar("add_recipe_screen.error_saving".tr, context);
     }
   }
 
   void _handleBackButton() {
     final state = ref.watch(addRecipeControllerProvider);
-    final hasData = state.fullPath.isNotEmpty ||
+    final hasData =
+        state.fullPath.isNotEmpty ||
         state.title.isNotEmpty ||
         state.description.isNotEmpty ||
         state.preparationTime > 0 ||
@@ -160,7 +164,8 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
       onPopInvokedWithResult: (bool didPop, dynamic) {
         if (didPop) return;
 
-        final hasData = state.fullPath.isNotEmpty ||
+        final hasData =
+            state.fullPath.isNotEmpty ||
             state.title.isNotEmpty ||
             state.description.isNotEmpty ||
             state.preparationTime > 0 ||
@@ -204,14 +209,10 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
               },
               children: [
                 _wrapInScrollView(
-                  ImageStepWidget(
-                    onImageSelected: _validateStep,
-                  ),
+                  ImageStepWidget(onImageSelected: _validateStep),
                 ),
                 _wrapInScrollView(
-                  TextFieldsStepWidget(
-                    onChanged: _validateStep,
-                  ),
+                  TextFieldsStepWidget(onChanged: _validateStep),
                 ),
                 _wrapInScrollView(
                   DynamicListStepWidget(
@@ -242,20 +243,15 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
                       end: Alignment.topCenter,
                       colors: [
                         Theme.of(context).scaffoldBackgroundColor.withAlpha(0),
-                        Theme.of(context)
-                            .scaffoldBackgroundColor
+                        Theme.of(context).scaffoldBackgroundColor
                             .withAlpha(120),
-                        Theme.of(context)
-                            .scaffoldBackgroundColor
+                        Theme.of(context).scaffoldBackgroundColor
                             .withAlpha(200),
-                        Theme.of(context)
-                            .scaffoldBackgroundColor
+                        Theme.of(context).scaffoldBackgroundColor
                             .withAlpha(240),
-                        Theme.of(context)
-                            .scaffoldBackgroundColor
+                        Theme.of(context).scaffoldBackgroundColor
                             .withAlpha(250),
-                        Theme.of(context)
-                            .scaffoldBackgroundColor
+                        Theme.of(context).scaffoldBackgroundColor
                             .withAlpha(255),
                         Theme.of(context).scaffoldBackgroundColor,
                       ],
@@ -278,16 +274,11 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
                     ),
                   ),
                   Text(
-                    "add_recipe_screen.step_counter".trParams(
-                      {
-                        "0": (_currentStep + 1).toString(),
-                        "1": "4",
-                      },
-                    ),
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey.shade700,
-                    ),
+                    "add_recipe_screen.step_counter".trParams({
+                      "0": (_currentStep + 1).toString(),
+                      "1": "4",
+                    }),
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
                   ),
                 ],
               ),
@@ -305,14 +296,11 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Theme.of(context)
-                              .scaffoldBackgroundColor
+                          Theme.of(context).scaffoldBackgroundColor
                               .withAlpha(0),
-                          Theme.of(context)
-                              .scaffoldBackgroundColor
+                          Theme.of(context).scaffoldBackgroundColor
                               .withAlpha(90),
-                          Theme.of(context)
-                              .scaffoldBackgroundColor
+                          Theme.of(context).scaffoldBackgroundColor
                               .withAlpha(180),
                           Theme.of(context).scaffoldBackgroundColor,
                         ],
@@ -340,27 +328,27 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
                 children: [
                   _currentStep > 0
                       ? PressableButton(
-                          child: TextButton(
-                            onPressed: () => _handleNavigation(false),
-                            child: Text("add_recipe_screen.previous".tr),
-                          ),
-                        )
-                          .animate()
-                          .fadeIn(duration: 200.ms)
-                          .slideX(begin: -0.5, curve: Curves.easeOutCubic)
+                              child: TextButton(
+                                onPressed: () => _handleNavigation(false),
+                                child: Text("add_recipe_screen.previous".tr),
+                              ),
+                            )
+                            .animate()
+                            .fadeIn(duration: 200.ms)
+                            .slideX(begin: -0.5, curve: Curves.easeOutCubic)
                       : const SizedBox(),
                   _currentStep < 3 && _isCurrentStepValid
                       ? PressableButton(
-                          child: FilledButton(
-                            onPressed: () => _handleNavigation(true),
-                            child: Text("add_recipe_screen.next".tr),
-                          ),
-                        )
-                          .animate()
-                          .fadeIn(duration: 200.ms)
-                          .slideX(begin: 0.5, curve: Curves.easeOutCubic)
+                              child: FilledButton(
+                                onPressed: () => _handleNavigation(true),
+                                child: Text("add_recipe_screen.next".tr),
+                              ),
+                            )
+                            .animate()
+                            .fadeIn(duration: 200.ms)
+                            .slideX(begin: 0.5, curve: Curves.easeOutCubic)
                       : _currentStep == 3 && _isCurrentStepValid
-                          ? PressableButton(
+                      ? PressableButton(
                               child: FilledButton.icon(
                                 icon: const Icon(
                                   CupertinoIcons.checkmark_alt,
@@ -370,10 +358,10 @@ class _AddRecipeScreenState extends ConsumerState<AddRecipeScreen> {
                                 label: Text("add_recipe_screen.save".tr),
                               ),
                             )
-                              .animate()
-                              .fadeIn(duration: 200.ms)
-                              .slideX(begin: 0.5, curve: Curves.easeOutCubic)
-                          : const SizedBox(),
+                            .animate()
+                            .fadeIn(duration: 200.ms)
+                            .slideX(begin: 0.5, curve: Curves.easeOutCubic)
+                      : const SizedBox(),
                 ],
               ),
             ),

@@ -1,7 +1,7 @@
 import "dart:convert";
 import "dart:io";
-import "dart:typed_data";
 
+import "package:flutter/foundation.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:intl/intl.dart";
@@ -23,7 +23,7 @@ class AIRecipeController {
       );
       return compressedImage;
     } catch (error) {
-      print("Error compressing image: $error");
+      debugPrint("Error compressing image: $error");
       return null;
     }
   }
@@ -59,8 +59,10 @@ class AIRecipeController {
           preparationTime: recipeData["preparationTime"] ?? 0,
         );
       } else {
-        String errorMessage = _getErrorMessage(
-            execution.responseStatusCode, execution.responseBody);
+        final String errorMessage = _getErrorMessage(
+          execution.responseStatusCode,
+          execution.responseBody,
+        );
         throw AIRecipeException(errorMessage, execution.responseStatusCode);
       }
     } catch (error) {
@@ -79,7 +81,7 @@ class AIRecipeController {
         return "ai_errors.rate_limit_exceeded".tr;
       case 400:
         if (responseBody != null && responseBody['error'] != null) {
-          String error = responseBody['error'].toString();
+          final String error = responseBody['error'].toString();
           if (error.contains("Image too large")) {
             return "ai_errors.image_too_large".tr;
           }

@@ -1,3 +1,4 @@
+import "package:flutter/foundation.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hive_ce_flutter/adapters.dart";
 import "package:the_recipes/hive_boxes.dart";
@@ -31,13 +32,14 @@ class ViewOptionController extends Notifier<ViewOption> {
 
       state = viewOption;
     } catch (e) {
-      print("Error loading view option: $e");
+      debugPrint("Error loading view option: $e");
     }
   }
 
   void toggleViewOption() async {
-    final newViewOption =
-        state == ViewOption.list ? ViewOption.grid : ViewOption.list;
+    final newViewOption = state == ViewOption.list
+        ? ViewOption.grid
+        : ViewOption.list;
     state = newViewOption;
     await _saveViewOption();
   }
@@ -47,12 +49,12 @@ class ViewOptionController extends Notifier<ViewOption> {
       final box = Hive.box(settingsBox);
       await box.put(viewOptionKey, state.toString());
     } catch (e) {
-      print("Error saving view option: $e");
+      debugPrint("Error saving view option: $e");
     }
   }
 }
 
 final viewOptionControllerProvider =
     NotifierProvider<ViewOptionController, ViewOption>(() {
-  return ViewOptionController();
-});
+      return ViewOptionController();
+    });

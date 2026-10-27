@@ -1,6 +1,6 @@
-import "package:flutter/cupertino.dart";
-import "package:flutter/material.dart";
+import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/recipe_controller.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/views/screens/recipes_page.dart";
@@ -35,7 +35,7 @@ class SharedRecipesScreen extends ConsumerWidget {
                     .toList();
 
                 return publicRecipes.isEmpty
-                    ? Container(
+                    ? SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height - 200,
                         child: Column(

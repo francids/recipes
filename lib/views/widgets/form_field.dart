@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import "package:material_ui/material_ui.dart";
 
 class ModernFormField extends StatelessWidget {
   final String hintText;
@@ -15,7 +15,7 @@ class ModernFormField extends StatelessWidget {
   final bool autofocus;
 
   ModernFormField({
-    Key? key,
+    super.key,
     required this.hintText,
     this.initialValue = "",
     this.controller,
@@ -28,9 +28,7 @@ class ModernFormField extends StatelessWidget {
     this.expands,
     this.autofocus = false,
     ModernFormFieldDecoration? decoration,
-  })  : decoration =
-            decoration ?? ModernFormFieldDecoration(topLabel: topLabel),
-        super(key: key);
+  }) : decoration = decoration ?? ModernFormFieldDecoration(topLabel: topLabel);
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +124,8 @@ class ModernFormFieldDecoration {
         borderRadius: BorderRadius.circular(12.0),
         borderSide: BorderSide.none,
       ),
-      enabledBorder: customEnabledBorder ??
+      enabledBorder:
+          customEnabledBorder ??
           OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.0),
             borderSide: BorderSide(
@@ -134,7 +133,8 @@ class ModernFormFieldDecoration {
               width: 1.0,
             ),
           ),
-      focusedBorder: customFocusedBorder ??
+      focusedBorder:
+          customFocusedBorder ??
           OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.0),
             borderSide: BorderSide(
@@ -142,25 +142,17 @@ class ModernFormFieldDecoration {
               width: 2.0,
             ),
           ),
-      errorBorder: customErrorBorder ??
+      errorBorder:
+          customErrorBorder ??
           OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.0),
-            borderSide: BorderSide(
-              color: theme.colorScheme.error,
-              width: 1.0,
-            ),
+            borderSide: BorderSide(color: theme.colorScheme.error, width: 1.0),
           ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12.0),
-        borderSide: BorderSide(
-          color: theme.colorScheme.error,
-          width: 2.0,
-        ),
+        borderSide: BorderSide(color: theme.colorScheme.error, width: 2.0),
       ),
-      errorStyle: TextStyle(
-        color: theme.colorScheme.error,
-        fontSize: 12.0,
-      ),
+      errorStyle: TextStyle(color: theme.colorScheme.error, fontSize: 12.0),
     );
   }
 }

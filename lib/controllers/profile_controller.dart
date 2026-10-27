@@ -1,7 +1,7 @@
-import "package:flutter/material.dart";
+import "package:file_picker/file_picker.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hive_ce_flutter/hive_flutter.dart";
-import "package:file_picker/file_picker.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/auth_controller.dart";
 import "package:the_recipes/controllers/recipe_controller.dart";
 import "package:the_recipes/hive_boxes.dart";
@@ -17,10 +17,7 @@ class ProfileController {
 
   ProfileController(this.ref);
 
-  Future<void> handleAutoSyncToggle(
-    bool enabled,
-    BuildContext context,
-  ) async {
+  Future<void> handleAutoSyncToggle(bool enabled, BuildContext context) async {
     if (enabled) {
       await ref
           .read(authControllerProvider.notifier)
@@ -40,7 +37,9 @@ class ProfileController {
         final syncService = SyncService(authState);
         await syncService.fullSync();
         ref.read(recipeControllerProvider.notifier).refreshRecipes();
-        Navigator.of(context).pop();
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
 
         if (context.mounted) {
           UIHelpers.showSuccessSnackbar(
@@ -49,7 +48,9 @@ class ProfileController {
           );
         }
       } catch (e) {
-        Navigator.of(context).pop();
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
         await ref
             .read(authControllerProvider.notifier)
             .setAutoSyncEnabled(false);
@@ -72,9 +73,12 @@ class ProfileController {
       message: "profile_page.disable_sync_confirmation_message".tr,
       lottieAsset: "assets/lottie/alert.json",
       confirmAction: () async {
+        if (!context.mounted) return;
+
         await ref
             .read(authControllerProvider.notifier)
             .setAutoSyncEnabled(enabled);
+        if (!context.mounted) return;
 
         try {
           UIHelpers.showLoadingDialog(
@@ -86,6 +90,7 @@ class ProfileController {
           final authState = ref.read(authControllerProvider);
           final syncService = SyncService(authState);
           await syncService.deleteAllUserRecipesFromCloud();
+          if (!context.mounted) return;
           Navigator.of(context).pop();
 
           UIHelpers.showSuccessSnackbar(
@@ -93,15 +98,20 @@ class ProfileController {
             context,
           );
         } catch (e) {
-          Navigator.of(context).pop();
+          if (context.mounted) {
+            Navigator.of(context).pop();
+          }
           await ref
               .read(authControllerProvider.notifier)
               .setAutoSyncEnabled(true);
-          UIHelpers.showErrorSnackbar(
-            "profile_page.delete_cloud_recipes_error"
-                .trParams({"0": e.toString()}),
-            context,
-          );
+          if (context.mounted) {
+            UIHelpers.showErrorSnackbar(
+              "profile_page.delete_cloud_recipes_error".trParams({
+                "0": e.toString(),
+              }),
+              context,
+            );
+          }
         }
       },
     );
@@ -178,19 +188,21 @@ class ProfileController {
 
   Future<void> _performImport(BuildContext context) async {
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
+      final PlatformFile? file = await FilePicker.pickFile(
         type: FileType.custom,
         allowedExtensions: ["zip"],
-        allowMultiple: false,
       );
 
-      if (result != null && result.files.single.path != null) {
-        final filePath = result.files.single.path!;
+      if (file?.path != null) {
+        final filePath = file!.path!;
 
         final authState = ref.read(authControllerProvider);
         final importService = ImportService(authState);
-        final importResult =
-            await importService.importRecipes(filePath, context);
+        if (!context.mounted) return;
+        final importResult = await importService.importRecipes(
+          filePath,
+          context,
+        );
 
         if (context.mounted) {
           UIHelpers.showSuccessSnackbar(
@@ -204,7 +216,8 @@ class ProfileController {
 
         ref.read(recipeControllerProvider.notifier).refreshRecipes();
 
-        if (authState.isLoggedIn &&
+        if (context.mounted &&
+            authState.isLoggedIn &&
             authState.autoSyncEnabled &&
             importResult.importedCount > 0) {
           await _syncImportedRecipes(context);
@@ -233,7 +246,9 @@ class ProfileController {
       final authState = ref.read(authControllerProvider);
       final syncService = SyncService(authState);
       await syncService.syncRecipesToCloud();
-      Navigator.of(context).pop();
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
     } catch (e) {
       if (context.mounted) {
         UIHelpers.showErrorSnackbar(

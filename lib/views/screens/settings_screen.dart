@@ -1,12 +1,12 @@
-import "package:flutter/cupertino.dart";
-import "package:flutter/material.dart";
+import "package:cupertino_ui/cupertino_ui.dart";
+import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/profile_controller.dart";
 import "package:the_recipes/controllers/theme_controller.dart";
 import "package:the_recipes/env.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/views/widgets/settings/language_bottom_sheet.dart";
-import "package:flutter_animate/flutter_animate.dart";
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -51,9 +51,10 @@ class SettingsScreen extends ConsumerWidget {
               style: Theme.of(context).textTheme.displayMedium,
             ).animate().fadeIn(delay: 200.ms, duration: 300.ms),
             const SizedBox(height: 16),
-            _buildDataCard(context, ref)
-                .animate()
-                .fadeIn(delay: 250.ms, duration: 300.ms),
+            _buildDataCard(
+              context,
+              ref,
+            ).animate().fadeIn(delay: 250.ms, duration: 300.ms),
             const SizedBox(height: 32),
             Text(
               "settings_screen.about_section".tr,
@@ -85,16 +86,15 @@ class SettingsScreen extends ConsumerWidget {
                 title: Text(
                   "settings_screen.dark_theme".tr,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: themeState.followSystemTheme
-                            ? Theme.of(context).colorScheme.outline
-                            : null,
-                      ),
+                    color: themeState.followSystemTheme
+                        ? Theme.of(context).colorScheme.outline
+                        : null,
+                  ),
                 ),
                 subtitle: Text(
                   "settings_screen.dark_theme_description".tr,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: Theme.of(context).colorScheme.outline),
                 ),
                 value: themeState.isDarkMode,
                 onChanged: themeState.followSystemTheme
@@ -122,9 +122,8 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 subtitle: Text(
                   "settings_screen.system_theme_description".tr,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: Theme.of(context).colorScheme.outline),
                 ),
                 value: themeState.followSystemTheme,
                 onChanged: (value) {
@@ -156,9 +155,8 @@ class SettingsScreen extends ConsumerWidget {
           ),
           subtitle: Text(
             "settings_screen.language_description".tr,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.outline,
-                ),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: Theme.of(context).colorScheme.outline),
           ),
           leading: Icon(
             CupertinoIcons.globe,
@@ -189,9 +187,8 @@ class SettingsScreen extends ConsumerWidget {
             ),
             subtitle: Text(
               "profile_page.export_recipes_description".tr,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: Theme.of(context).colorScheme.outline),
             ),
             leading: Icon(
               CupertinoIcons.share,
@@ -214,9 +211,8 @@ class SettingsScreen extends ConsumerWidget {
             ),
             subtitle: Text(
               "profile_page.import_recipes_description".tr,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: Theme.of(context).colorScheme.outline),
             ),
             leading: Icon(
               CupertinoIcons.tray_arrow_down,
@@ -249,10 +245,9 @@ class SettingsScreen extends ConsumerWidget {
               style: Theme.of(context).textTheme.bodyLarge,
             ),
             subtitle: Text(
-              Environment.APP_VERSION,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
+              Environment.appVersion,
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: Theme.of(context).colorScheme.outline),
             ),
             leading: Icon(
               CupertinoIcons.info_circle,

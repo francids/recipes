@@ -3,7 +3,5 @@ import "package:the_recipes/models/recipe.dart";
 
 part "hive_adapters.g.dart";
 
-@GenerateAdapters([
-  AdapterSpec<Recipe>(),
-])
+@GenerateAdapters([AdapterSpec<Recipe>()])
 class HiveAdapters {}

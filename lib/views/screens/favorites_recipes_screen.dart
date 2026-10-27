@@ -1,8 +1,8 @@
-import "package:flutter/cupertino.dart";
-import "package:flutter/material.dart";
+import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:the_recipes/controllers/recipe_controller.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/favorites_controller.dart";
+import "package:the_recipes/controllers/recipe_controller.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/views/screens/recipes_page.dart";
 import "package:the_recipes/views/widgets/recipe_card.dart";
@@ -28,8 +28,10 @@ class FavoritesRecipesScreen extends ConsumerWidget {
       body: favoritesAsyncState.when(
         data: (favoritesState) {
           final favoriteRecipes = recipeState.recipes
-              .where((recipe) =>
-                  favoritesState.favoriteRecipeIds.contains(recipe.id))
+              .where(
+                (recipe) =>
+                    favoritesState.favoriteRecipeIds.contains(recipe.id),
+              )
               .toList();
 
           return SingleChildScrollView(
@@ -38,7 +40,7 @@ class FavoritesRecipesScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 favoriteRecipes.isEmpty
-                    ? Container(
+                    ? SizedBox(
                         width: MediaQuery.of(context).size.width,
                         height: MediaQuery.of(context).size.height - 200,
                         child: Column(
@@ -69,9 +71,7 @@ class FavoritesRecipesScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Text(':( $error'),
-        ),
+        error: (error, stack) => Center(child: Text(':( $error')),
       ),
     );
   }

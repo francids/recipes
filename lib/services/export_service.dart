@@ -1,19 +1,24 @@
 import "dart:convert";
 import "dart:io";
-import "dart:typed_data";
+
 import "package:archive/archive_io.dart";
 import "package:file_picker/file_picker.dart";
-import "package:flutter/material.dart";
+import "package:flutter/foundation.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/models/recipe.dart";
 import "package:the_recipes/views/widgets/ui_helpers.dart";
 
 class ExportService {
   static Future<void> exportRecipes(
-      List<Recipe> recipes, BuildContext context) async {
+    List<Recipe> recipes,
+    BuildContext context,
+  ) async {
     if (recipes.isEmpty) {
       UIHelpers.showErrorSnackbar(
-          "export_service.no_recipes_to_export".tr, context);
+        "export_service.no_recipes_to_export".tr,
+        context,
+      );
       return;
     }
 
@@ -21,59 +26,70 @@ class ExportService {
   }
 
   static Future<void> _saveRecipes(
-      List<Recipe> recipes, BuildContext context) async {
+    List<Recipe> recipes,
+    BuildContext context,
+  ) async {
     try {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => const Center(
-          child: CircularProgressIndicator(),
-        ),
+        builder: (context) => const Center(child: CircularProgressIndicator()),
       );
 
       final zipData = await _createExportArchive(recipes);
 
-      Navigator.of(context).pop();
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
 
-      String fileName =
+      final String fileName =
           "recipes_export_${DateTime.now().millisecondsSinceEpoch}.zip";
 
-      String? outputFile = await FilePicker.platform.saveFile(
+      final Uri? outputFile = await FilePicker.saveFile(
         dialogTitle: "export_service.save_file".tr,
-        type: FileType.custom,
         fileName: fileName,
-        allowedExtensions: ["zip"],
         bytes: Uint8List.fromList(zipData),
+        mimeType: "application/zip",
       );
 
       if (outputFile == null) {
-        UIHelpers.showErrorSnackbar(
-            "export_service.save_cancelled".tr, context);
+        if (context.mounted) {
+          UIHelpers.showErrorSnackbar(
+            "export_service.save_cancelled".tr,
+            context,
+          );
+        }
         return;
       }
 
-      UIHelpers.showSuccessSnackbar(
-          "export_service.saved_successfully".tr + "\n$outputFile", context);
+      if (context.mounted) {
+        UIHelpers.showSuccessSnackbar(
+          "${"export_service.saved_successfully".tr}\n$outputFile",
+          context,
+        );
+      }
     } catch (e) {
-      Navigator.of(context).pop();
-      UIHelpers.showErrorSnackbar("export_service.save_failed".tr, context);
-      print("Error saving recipes: $e");
+      if (context.mounted) {
+        Navigator.of(context).pop();
+        UIHelpers.showErrorSnackbar("export_service.save_failed".tr, context);
+      }
+      debugPrint("Error saving recipes: $e");
     }
   }
 
   static Future<List<int>> _createExportArchive(List<Recipe> recipes) async {
     final archive = Archive();
 
-    List<Map<String, dynamic>> exportData = [];
-    Set<String> addedImages = {};
+    final List<Map<String, dynamic>> exportData = [];
+    final Set<String> addedImages = {};
 
     for (Recipe recipe in recipes) {
       String? imageFileName;
 
       if (recipe.image != null && recipe.image!.isNotEmpty) {
-        File imageFile = File(recipe.image!);
+        final File imageFile = File(recipe.image!);
         if (await imageFile.exists()) {
-          String originalName = imageFile.path.split("/").last;
+          final String originalName = imageFile.path.split("/").last;
           imageFileName = "${recipe.id}_$originalName";
 
           if (!addedImages.contains(imageFileName)) {
@@ -101,7 +117,7 @@ class ExportService {
       });
     }
 
-    Map<String, dynamic> exportJson = {
+    final Map<String, dynamic> exportJson = {
       "recipes": exportData,
       "exportDate": DateTime.now().toIso8601String(),
       "totalRecipes": recipes.length,
@@ -109,7 +125,8 @@ class ExportService {
       "format": "compressed_with_images",
     };
 
-    String jsonString = const JsonEncoder.withIndent("  ").convert(exportJson);
+    final String jsonString = const JsonEncoder.withIndent("  ")
+        .convert(exportJson);
 
     final jsonBytes = jsonString.codeUnits;
     final jsonArchiveFile = ArchiveFile(

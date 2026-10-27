@@ -1,16 +1,18 @@
+import "dart:async";
+import "dart:convert";
+
 import "package:appwrite/appwrite.dart";
-import "package:appwrite/models.dart" as models;
 import "package:appwrite/enums.dart" as enums;
+import "package:appwrite/models.dart" as models;
 import "package:flutter/foundation.dart";
 import "package:flutter_easyloading/flutter_easyloading.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hive_ce_flutter/hive_flutter.dart";
+import "package:http/http.dart" as http;
+import "package:the_recipes/appwrite_config.dart";
 import "package:the_recipes/hive_boxes.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/services/sync_service.dart";
-import "package:the_recipes/appwrite_config.dart";
-import "package:http/http.dart" as http;
-import "dart:convert";
 
 class AuthState {
   final models.User? user;
@@ -82,7 +84,7 @@ class AuthController extends Notifier<AuthState> {
 
   Future<void> _loadUserProfileImage(models.User user) async {
     try {
-      models.Preferences preferences = await _account.getPrefs();
+      final models.Preferences preferences = await _account.getPrefs();
       final Map<String, dynamic> currentPrefs = preferences.data;
       final userProfileImageUrl = currentPrefs["profileImageUrl"] as String?;
       state = state.copyWith(userProfileImageUrl: userProfileImageUrl);
@@ -98,7 +100,8 @@ class AuthController extends Notifier<AuthState> {
       final Map<String, dynamic> currentPrefs = preferences.data;
       currentPrefs["profileImageUrl"] = imageUrl;
       await _account.updatePrefs(
-          prefs: Map<dynamic, dynamic>.from(currentPrefs));
+        prefs: Map<dynamic, dynamic>.from(currentPrefs),
+      );
       state = state.copyWith(userProfileImageUrl: imageUrl);
     } on AppwriteException catch (e) {
       debugPrint(
@@ -111,7 +114,7 @@ class AuthController extends Notifier<AuthState> {
 
   Future<void> signInWithGoogle() async {
     try {
-      EasyLoading.show(status: "auth_controller.signing_in".tr);
+      unawaited(EasyLoading.show(status: "auth_controller.signing_in".tr));
 
       await _account.createOAuth2Session(
         provider: enums.OAuthProvider.google,
@@ -126,9 +129,7 @@ class AuthController extends Notifier<AuthState> {
 
       final response = await http.get(
         Uri.parse("https://www.googleapis.com/oauth2/v3/userinfo"),
-        headers: {
-          "Authorization": "Bearer $providerAccessToken",
-        },
+        headers: {"Authorization": "Bearer $providerAccessToken"},
       );
 
       if (response.statusCode == 200) {
@@ -139,15 +140,15 @@ class AuthController extends Notifier<AuthState> {
         }
       }
 
-      EasyLoading.dismiss();
+      unawaited(EasyLoading.dismiss());
     } on AppwriteException catch (e) {
-      EasyLoading.dismiss();
+      unawaited(EasyLoading.dismiss());
       debugPrint("Appwrite error: ${e.code} - ${e.message}");
-      EasyLoading.showError("auth_controller.sign_in_error".tr);
+      unawaited(EasyLoading.showError("auth_controller.sign_in_error".tr));
     } catch (e) {
-      EasyLoading.dismiss();
+      unawaited(EasyLoading.dismiss());
       debugPrint("General error: $e");
-      EasyLoading.showError("auth_controller.sign_in_error".tr);
+      unawaited(EasyLoading.showError("auth_controller.sign_in_error".tr));
     }
   }
 
@@ -162,11 +163,9 @@ class AuthController extends Notifier<AuthState> {
 
       state = state.copyWith(clearUser: true, clearProfileImage: true);
     } catch (e) {
-      EasyLoading.showError(
-        "auth_controller.sign_out_error".trParams(
-          {
-            "0": e.toString(),
-          },
+      unawaited(
+        EasyLoading.showError(
+          "auth_controller.sign_out_error".trParams({"0": e.toString()}),
         ),
       );
     }
@@ -174,7 +173,9 @@ class AuthController extends Notifier<AuthState> {
 
   Future<void> deleteAccount() async {
     try {
-      EasyLoading.show(status: "auth_controller.deleting_account".tr);
+      unawaited(
+        EasyLoading.show(status: "auth_controller.deleting_account".tr),
+      );
 
       if (state.user != null) {
         final syncService = SyncService(state);
@@ -188,15 +189,13 @@ class AuthController extends Notifier<AuthState> {
         );
 
         state = state.copyWith(clearUser: true, clearProfileImage: true);
-        EasyLoading.dismiss();
+        unawaited(EasyLoading.dismiss());
       }
     } catch (e) {
-      EasyLoading.dismiss();
-      EasyLoading.showError(
-        "auth_controller.delete_account_error".trParams(
-          {
-            "0": e.toString(),
-          },
+      unawaited(EasyLoading.dismiss());
+      unawaited(
+        EasyLoading.showError(
+          "auth_controller.delete_account_error".trParams({"0": e.toString()}),
         ),
       );
     }

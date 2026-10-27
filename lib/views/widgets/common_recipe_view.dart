@@ -1,8 +1,8 @@
 import "dart:io";
 
-import "package:flutter/cupertino.dart";
-import "package:flutter/material.dart";
+import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_animate/flutter_animate.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/models/recipe.dart";
 
@@ -18,7 +18,7 @@ class CommonRecipeView extends StatelessWidget {
     final minutes = (seconds % 3600) ~/ 60;
     final remainingSeconds = seconds % 60;
 
-    Map<String, Map<String, String>> localizedStrings = {
+    final Map<String, Map<String, String>> localizedStrings = {
       "de": {"h": "Std", "m": "Min", "s": "Sek"},
       "en": {"h": "h", "m": "m", "s": "s"},
       "es": {"h": "h", "m": "m", "s": "s"},
@@ -30,15 +30,16 @@ class CommonRecipeView extends StatelessWidget {
       "zh": {"h": "小时", "m": "分钟", "s": "秒"},
     };
 
-    Map<String, String> currentStrings =
+    final Map<String, String> currentStrings =
         localizedStrings[Localizations.localeOf(context).languageCode] ??
-            localizedStrings["en"]!;
+        localizedStrings["en"]!;
 
-    List<String> parts = [];
+    final List<String> parts = [];
     if (hours > 0) parts.add("$hours${currentStrings["h"]}");
     if (minutes > 0) parts.add("$minutes${currentStrings["m"]}");
-    if (remainingSeconds > 0 && hours == 0)
+    if (remainingSeconds > 0 && hours == 0) {
       parts.add("$remainingSeconds${currentStrings["s"]}");
+    }
 
     return parts.join(" ");
   }
@@ -77,23 +78,24 @@ class CommonRecipeView extends StatelessWidget {
                   ),
                   child: recipe.image != null && recipe.image!.isNotEmpty
                       ? recipe.image!.startsWith("http")
-                          ? Image.network(
-                              recipe.image!,
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.width,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.file(
-                              File(recipe.image!),
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.width,
-                              fit: BoxFit.cover,
-                            )
+                            ? Image.network(
+                                recipe.image!,
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.width,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.file(
+                                File(recipe.image!),
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.width,
+                                fit: BoxFit.cover,
+                              )
                       : Container(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.width,
-                          color:
-                              Theme.of(context).colorScheme.surfaceContainerLow,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerLow,
                           child: const Icon(
                             CupertinoIcons.photo,
                             size: 50,
@@ -104,9 +106,12 @@ class CommonRecipeView extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               Text(
-                recipe.title,
-                style: Theme.of(context).textTheme.displayLarge,
-              ).animate().fadeIn(delay: 100.ms, duration: 500.ms).slideY(
+                    recipe.title,
+                    style: Theme.of(context).textTheme.displayLarge,
+                  )
+                  .animate()
+                  .fadeIn(delay: 100.ms, duration: 500.ms)
+                  .slideY(
                     begin: 0.2,
                     duration: 400.ms,
                     curve: Curves.easeOutCubic,
@@ -114,20 +119,26 @@ class CommonRecipeView extends StatelessWidget {
               const SizedBox(height: 8),
               if (recipe.preparationTime > 0)
                 Chip(
-                  avatar: Icon(CupertinoIcons.time),
-                  label: Text(
-                    _formatPreparationTime(context, recipe.preparationTime),
-                  ),
-                ).animate().fadeIn(delay: 100.ms, duration: 500.ms).slideY(
+                      avatar: Icon(CupertinoIcons.time),
+                      label: Text(
+                        _formatPreparationTime(context, recipe.preparationTime),
+                      ),
+                    )
+                    .animate()
+                    .fadeIn(delay: 100.ms, duration: 500.ms)
+                    .slideY(
                       begin: 0.2,
                       duration: 400.ms,
                       curve: Curves.easeOutCubic,
                     ),
               const SizedBox(height: 8),
               Text(
-                recipe.description,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ).animate().fadeIn(delay: 200.ms, duration: 500.ms).slideY(
+                    recipe.description,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  )
+                  .animate()
+                  .fadeIn(delay: 200.ms, duration: 500.ms)
+                  .slideY(
                     begin: 0.2,
                     duration: 400.ms,
                     curve: Curves.easeOutCubic,
@@ -177,10 +188,7 @@ class CommonRecipeView extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        Text(
-          title,
-          style: Theme.of(context).textTheme.displayMedium,
-        ),
+        Text(title, style: Theme.of(context).textTheme.displayMedium),
       ],
     );
   }
@@ -249,9 +257,9 @@ class CommonRecipeView extends StatelessWidget {
                 child: Text(
                   (index + 1).toString(),
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: Theme.of(context).chipTheme.iconTheme!.color!,
-                      ),
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).chipTheme.iconTheme!.color!,
+                  ),
                 ),
               ),
               Flexible(

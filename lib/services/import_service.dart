@@ -1,16 +1,17 @@
 import "dart:convert";
 import "dart:io";
+
 import "package:archive/archive_io.dart";
-import "package:flutter/material.dart";
 import "package:hive_ce_flutter/adapters.dart";
+import "package:material_ui/material_ui.dart";
+import "package:path/path.dart" as path;
 import "package:path_provider/path_provider.dart";
 import "package:the_recipes/controllers/auth_controller.dart";
 import "package:the_recipes/hive_boxes.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/models/recipe.dart";
-import "package:path/path.dart" as path;
-import "package:uuid/uuid.dart";
 import "package:the_recipes/views/widgets/ui_helpers.dart";
+import "package:uuid/uuid.dart";
 
 class ImportService {
   static final Uuid _uuid = Uuid();
@@ -29,17 +30,18 @@ class ImportService {
         "import_service.extracting_files".tr,
       );
 
-      File zipFile = File(zipFilePath);
+      final File zipFile = File(zipFilePath);
       if (!await zipFile.exists()) {
-        Navigator.of(context).pop();
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
         throw ImportException("import_service.file_not_found".tr);
       }
 
       final bytes = await zipFile.readAsBytes();
       final archive = ZipDecoder().decodeBytes(bytes);
-
       ArchiveFile? jsonFile;
-      Map<String, ArchiveFile> imageFiles = {};
+      final Map<String, ArchiveFile> imageFiles = {};
 
       for (final file in archive) {
         if (file.name == "recipes.json") {
@@ -50,7 +52,9 @@ class ImportService {
       }
 
       if (jsonFile == null) {
-        Navigator.of(context).pop();
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
         throw ImportException("import_service.invalid_format".tr);
       }
 
@@ -61,7 +65,9 @@ class ImportService {
         try {
           jsonContent = latin1.decode(jsonFile.content as List<int>);
         } catch (e2) {
-          Navigator.of(context).pop();
+          if (context.mounted) {
+            Navigator.of(context).pop();
+          }
           throw ImportException("import_service.encoding_error".tr);
         }
       }
@@ -70,32 +76,50 @@ class ImportService {
 
       if (!exportData.containsKey("recipes") ||
           exportData["recipes"] is! List) {
-        Navigator.of(context).pop();
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
         throw ImportException("import_service.invalid_format".tr);
       }
 
-      List<dynamic> recipesData = exportData["recipes"];
+      final List<dynamic> recipesData = exportData["recipes"];
       if (recipesData.isEmpty) {
-        Navigator.of(context).pop();
-        UIHelpers.showErrorSnackbar(
-            "import_service.no_recipes_found".tr, context);
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
+        if (context.mounted) {
+          UIHelpers.showErrorSnackbar(
+            "import_service.no_recipes_found".tr,
+            context,
+          );
+        }
         return ImportResult(importedCount: 0, skippedCount: 0, errors: []);
       }
 
       final result = await _processRecipes(recipesData, imageFiles);
-      Navigator.of(context).pop();
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
       return result;
     } catch (e) {
-      Navigator.of(context).pop();
+      if (context.mounted) {
+        Navigator.of(context).pop();
+      }
       if (e is ImportException) {
-        UIHelpers.showErrorSnackbar(e.message, context);
+        if (context.mounted) {
+          UIHelpers.showErrorSnackbar(e.message, context);
+        }
         rethrow;
       }
-      UIHelpers.showErrorSnackbar(
+      if (context.mounted) {
+        UIHelpers.showErrorSnackbar(
           "import_service.unexpected_error".trParams({"0": e.toString()}),
-          context);
+          context,
+        );
+      }
       throw ImportException(
-          "import_service.unexpected_error".trParams({"0": e.toString()}));
+        "import_service.unexpected_error".trParams({"0": e.toString()}),
+      );
     }
   }
 
@@ -103,14 +127,14 @@ class ImportService {
     List<dynamic> recipesData,
     Map<String, ArchiveFile> imageFiles,
   ) async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String imagesPath = path.join(appDocDir.path, "recipe-images");
-    Directory imagesDir = Directory(imagesPath);
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
+    final String imagesPath = path.join(appDocDir.path, "recipe-images");
+    final Directory imagesDir = Directory(imagesPath);
     if (!await imagesDir.exists()) {
       await imagesDir.create(recursive: true);
     }
 
-    List<String> errors = [];
+    final List<String> errors = [];
     int importedCount = 0;
     int skippedCount = 0;
 
@@ -123,8 +147,8 @@ class ImportService {
           continue;
         }
 
-        String title = recipeData["title"] ?? "";
-        bool recipeExists = recipeBox.values.any(
+        final String title = recipeData["title"] ?? "";
+        final bool recipeExists = recipeBox.values.any(
           (existingRecipe) =>
               existingRecipe.title.toLowerCase() == title.toLowerCase(),
         );
@@ -134,26 +158,26 @@ class ImportService {
           continue;
         }
 
-        String newId = _uuid.v4();
+        final String newId = _uuid.v4();
         String? newImagePath;
 
-        String originalImageName = recipeData["image"] ?? "";
+        final String originalImageName = recipeData["image"] ?? "";
         if (originalImageName.isNotEmpty && imageFiles.isNotEmpty) {
-          String imageKey = "images/$originalImageName";
+          final String imageKey = "images/$originalImageName";
           if (imageFiles.containsKey(imageKey)) {
-            ArchiveFile imageFile = imageFiles[imageKey]!;
+            final ArchiveFile imageFile = imageFiles[imageKey]!;
 
-            String fileExtension = path.extension(originalImageName);
-            String newImageName =
+            final String fileExtension = path.extension(originalImageName);
+            final String newImageName =
                 "${newId}_${DateTime.now().millisecondsSinceEpoch}$fileExtension";
             newImagePath = path.join(imagesPath, newImageName);
 
-            File imageDestination = File(newImagePath);
+            final File imageDestination = File(newImagePath);
             await imageDestination.writeAsBytes(imageFile.content as List<int>);
           }
         }
 
-        Recipe recipe = Recipe(
+        final Recipe recipe = Recipe(
           id: newId,
           title: recipeData["title"] ?? "",
           description: recipeData["description"] ?? "",
@@ -170,7 +194,8 @@ class ImportService {
             recipe.ingredients.isEmpty ||
             recipe.directions.isEmpty) {
           errors.add(
-              "import_service.incomplete_recipe".trParams({"0": recipe.title}));
+            "import_service.incomplete_recipe".trParams({"0": recipe.title}),
+          );
           continue;
         }
 
@@ -178,7 +203,8 @@ class ImportService {
         importedCount++;
       } catch (e) {
         errors.add(
-            "import_service.recipe_import_error".trParams({"0": e.toString()}));
+          "import_service.recipe_import_error".trParams({"0": e.toString()}),
+        );
       }
     }
 

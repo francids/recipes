@@ -1,16 +1,17 @@
 import "dart:io";
+
 import "package:appwrite/appwrite.dart";
 import "package:appwrite/models.dart" as models;
-import "package:flutter/material.dart";
 import "package:hive_ce_flutter/adapters.dart";
-import "package:path_provider/path_provider.dart";
-import "package:path/path.dart" as path;
 import "package:http/http.dart" as http;
+import "package:material_ui/material_ui.dart";
+import "package:path/path.dart" as path;
+import "package:path_provider/path_provider.dart";
+import "package:the_recipes/appwrite_config.dart";
 import "package:the_recipes/controllers/auth_controller.dart";
 import "package:the_recipes/hive_boxes.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/models/recipe.dart";
-import "package:the_recipes/appwrite_config.dart";
 import "package:uuid/uuid.dart";
 
 class SyncService {
@@ -29,8 +30,11 @@ class SyncService {
     try {
       final localBox = Hive.box<Recipe>(recipesBox);
       final userRecipes = localBox.values
-          .where((recipe) =>
-              recipe.ownerId!.isEmpty || recipe.ownerId == _authState.user!.$id)
+          .where(
+            (recipe) =>
+                recipe.ownerId!.isEmpty ||
+                recipe.ownerId == _authState.user!.$id,
+          )
           .toList();
 
       for (Recipe recipe in userRecipes) {
@@ -68,9 +72,7 @@ class SyncService {
       final documentList = await _tables.listRows(
         databaseId: AppwriteConfig.databaseId,
         tableId: AppwriteConfig.recipesTableId,
-        queries: [
-          Query.equal('ownerId', _authState.user!.$id),
-        ],
+        queries: [Query.equal('ownerId', _authState.user!.$id)],
       );
 
       final localBox = Hive.box<Recipe>(recipesBox);
@@ -89,10 +91,10 @@ class SyncService {
 
         if (recipeData["image"] != null &&
             recipeData["image"].toString().isNotEmpty) {
-          String imageValue = recipeData["image"].toString();
+          final String imageValue = recipeData["image"].toString();
 
           if (imageValue.startsWith("http") || !imageValue.contains("/")) {
-            String recipeId = recipeData["id"]?.toString() ?? doc.$id;
+            final String recipeId = recipeData["id"]?.toString() ?? doc.$id;
             recipeData["image"] = await _downloadImage(imageValue, recipeId);
           }
         }
@@ -112,7 +114,7 @@ class SyncService {
           );
           await localBox.put(existingRecipe.id, updatedRecipe);
         } else {
-          String newLocalId = _uuid.v4();
+          final String newLocalId = _uuid.v4();
           final newRecipe = Recipe(
             id: newLocalId,
             title: recipeData["title"] ?? "",
@@ -140,7 +142,7 @@ class SyncService {
         throw Exception("Recipe must have an owner ID to sync to cloud");
       }
 
-      String cloudId = recipe.cloudId ?? _uuid.v4();
+      final String cloudId = recipe.cloudId ?? _uuid.v4();
       String? cloudImageUrl;
       models.Row? existingDoc;
 
@@ -190,17 +192,26 @@ class SyncService {
               }
 
               cloudImageUrl = await _uploadImage(
-                  recipe.image!, cloudId, recipe.isPublic ?? false);
+                recipe.image!,
+                cloudId,
+                recipe.isPublic ?? false,
+              );
             } else {
               cloudImageUrl = existingImage;
             }
           } else {
             cloudImageUrl = await _uploadImage(
-                recipe.image!, cloudId, recipe.isPublic ?? false);
+              recipe.image!,
+              cloudId,
+              recipe.isPublic ?? false,
+            );
           }
         } else {
           cloudImageUrl = await _uploadImage(
-              recipe.image!, cloudId, recipe.isPublic ?? false);
+            recipe.image!,
+            cloudId,
+            recipe.isPublic ?? false,
+          );
         }
       }
 
@@ -292,9 +303,9 @@ class SyncService {
     try {
       final File imageFile = File(localPath);
       if (!await imageFile.exists()) {
-        throw Exception("sync_service.image_file_does_not_exist".trParams({
-          "0": localPath,
-        }));
+        throw Exception(
+          "sync_service.image_file_does_not_exist".trParams({"0": localPath}),
+        );
       }
 
       final String fileName = path.basename(localPath);
@@ -331,17 +342,17 @@ class SyncService {
 
   static Future<String> _downloadImage(String cloudUrl, String recipeId) async {
     try {
-      Directory appDocDir = await getApplicationDocumentsDirectory();
-      String imagesPath = path.join(appDocDir.path, "recipe-images");
-      Directory imagesDir = Directory(imagesPath);
+      final Directory appDocDir = await getApplicationDocumentsDirectory();
+      final String imagesPath = path.join(appDocDir.path, "recipe-images");
+      final Directory imagesDir = Directory(imagesPath);
 
       if (!await imagesDir.exists()) {
         await imagesDir.create(recursive: true);
       }
 
-      String fileName =
+      final String fileName =
           "${recipeId}_${DateTime.now().millisecondsSinceEpoch}.jpg";
-      String localPath = path.join(imagesPath, fileName);
+      final String localPath = path.join(imagesPath, fileName);
 
       if (cloudUrl.startsWith("http")) {
         final response = await http.get(Uri.parse(cloudUrl));
@@ -350,10 +361,12 @@ class SyncService {
           await imageFile.writeAsBytes(response.bodyBytes);
           return localPath;
         } else {
-          throw Exception("sync_service.failed_to_download_image".trParams({
-            "0": cloudUrl,
-            "1": response.statusCode.toString(),
-          }));
+          throw Exception(
+            "sync_service.failed_to_download_image".trParams({
+              "0": cloudUrl,
+              "1": response.statusCode.toString(),
+            }),
+          );
         }
       } else {
         final bytes = await _storage.getFileDownload(
@@ -453,9 +466,7 @@ class SyncService {
       final documentList = await _tables.listRows(
         databaseId: AppwriteConfig.databaseId,
         tableId: AppwriteConfig.recipesTableId,
-        queries: [
-          Query.equal("ownerId", _authState.user!.$id),
-        ],
+        queries: [Query.equal("ownerId", _authState.user!.$id)],
       );
 
       for (var doc in documentList.rows) {
@@ -533,7 +544,8 @@ class SyncService {
 
       if (hasChanges) {
         debugPrint(
-            "Updated ${localBox.values.where((r) => r.cloudId != null).length} recipes with cloudIds");
+          "Updated ${localBox.values.where((r) => r.cloudId != null).length} recipes with cloudIds",
+        );
       }
     } catch (e) {
       debugPrint("Error ensuring recipes have cloudIds: $e");
@@ -568,14 +580,17 @@ class SyncService {
       }
 
       debugPrint(
-          "Cleared ${recipesToRemove.length} synced recipes from local storage");
+        "Cleared ${recipesToRemove.length} synced recipes from local storage",
+      );
     } catch (e) {
       debugPrint("Error clearing local recipes on sign out: $e");
     }
   }
 
   static Future<String> downloadSharedRecipeImage(
-      String cloudUrl, String recipeId) async {
+    String cloudUrl,
+    String recipeId,
+  ) async {
     return await _downloadImage(cloudUrl, recipeId);
   }
 
@@ -615,24 +630,26 @@ class SyncService {
 
         if (recipeData["image"] != null &&
             recipeData["image"].toString().isNotEmpty) {
-          String imageValue = recipeData["image"].toString();
+          final String imageValue = recipeData["image"].toString();
           if (!imageValue.startsWith("http") && !imageValue.contains("/")) {
             recipeData["image"] = _getStorageViewUrl(imageValue);
           }
         }
 
-        recipes.add(Recipe(
-          id: const Uuid().v4(),
-          title: recipeData["title"] ?? "",
-          description: recipeData["description"] ?? "",
-          image: recipeData["image"] ?? "",
-          ingredients: List<String>.from(recipeData["ingredients"] ?? []),
-          directions: List<String>.from(recipeData["directions"] ?? []),
-          preparationTime: recipeData["preparationTime"] ?? 0,
-          ownerId: recipeData["ownerId"] ?? "",
-          isPublic: true,
-          cloudId: recipeData["cloudId"],
-        ));
+        recipes.add(
+          Recipe(
+            id: const Uuid().v4(),
+            title: recipeData["title"] ?? "",
+            description: recipeData["description"] ?? "",
+            image: recipeData["image"] ?? "",
+            ingredients: List<String>.from(recipeData["ingredients"] ?? []),
+            directions: List<String>.from(recipeData["directions"] ?? []),
+            preparationTime: recipeData["preparationTime"] ?? 0,
+            ownerId: recipeData["ownerId"] ?? "",
+            isPublic: true,
+            cloudId: recipeData["cloudId"],
+          ),
+        );
       }
 
       return recipes;

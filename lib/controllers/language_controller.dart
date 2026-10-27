@@ -1,7 +1,7 @@
-import "package:flutter/material.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hive_ce_flutter/adapters.dart";
 import "package:intl/intl.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/hive_boxes.dart";
 
 class LanguageController extends Notifier<String> {
@@ -18,13 +18,10 @@ class LanguageController extends Notifier<String> {
       if (Hive.isBoxOpen(settingsBox)) {
         final box = Hive.box(settingsBox);
         final deviceLocale = WidgetsBinding.instance.platformDispatcher.locale;
-        return box.get(
-          languageKey,
-          defaultValue: deviceLocale.languageCode,
-        );
+        return box.get(languageKey, defaultValue: deviceLocale.languageCode);
       }
     } catch (e) {
-      print("Error getting initial language: $e");
+      debugPrint("Error getting initial language: $e");
     }
     return WidgetsBinding.instance.platformDispatcher.locale.languageCode;
   }
@@ -45,7 +42,7 @@ class LanguageController extends Notifier<String> {
       state = language;
       applyLanguage();
     } catch (e) {
-      print("Error loading language: $e");
+      debugPrint("Error loading language: $e");
       state = "en";
       applyLanguage();
     }
@@ -58,7 +55,7 @@ class LanguageController extends Notifier<String> {
       final box = Hive.box(settingsBox);
       await box.put(languageKey, language.languageCode);
     } catch (e) {
-      print("Error saving language: $e");
+      debugPrint("Error saving language: $e");
     }
 
     applyLanguage();
@@ -69,7 +66,8 @@ class LanguageController extends Notifier<String> {
   }
 }
 
-final languageControllerProvider =
-    NotifierProvider<LanguageController, String>(() {
-  return LanguageController();
-});
+final languageControllerProvider = NotifierProvider<LanguageController, String>(
+  () {
+    return LanguageController();
+  },
+);

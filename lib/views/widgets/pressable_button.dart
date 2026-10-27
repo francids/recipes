@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+import "package:material_ui/material_ui.dart";
 
 class PressableButton extends StatefulWidget {
   final Widget child;
 
-  const PressableButton({required this.child});
+  const PressableButton({super.key, required this.child});
 
   @override
   State<PressableButton> createState() => PressableButtonState();

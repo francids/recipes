@@ -57,7 +57,8 @@ class FavoritesController extends AsyncNotifier<FavoritesState> {
     }
 
     state = AsyncValue.data(
-        currentState.copyWith(favoriteRecipeIds: currentFavorites));
+      currentState.copyWith(favoriteRecipeIds: currentFavorites),
+    );
   }
 
   Future<bool> isFavorite(String recipeId) async {
@@ -67,8 +68,9 @@ class FavoritesController extends AsyncNotifier<FavoritesState> {
 
   Future<void> toggleFilter() async {
     final currentState = await future;
-    state = AsyncValue.data(currentState.copyWith(
-        showFavoritesOnly: !currentState.showFavoritesOnly));
+    state = AsyncValue.data(
+      currentState.copyWith(showFavoritesOnly: !currentState.showFavoritesOnly),
+    );
   }
 
   Future<void> clearFilter() async {
@@ -79,11 +81,12 @@ class FavoritesController extends AsyncNotifier<FavoritesState> {
   Future<void> setFilter(bool showFavoritesOnly) async {
     final currentState = await future;
     state = AsyncValue.data(
-        currentState.copyWith(showFavoritesOnly: showFavoritesOnly));
+      currentState.copyWith(showFavoritesOnly: showFavoritesOnly),
+    );
   }
 }
 
 final favoritesControllerProvider =
     AsyncNotifierProvider<FavoritesController, FavoritesState>(() {
-  return FavoritesController();
-});
+      return FavoritesController();
+    });

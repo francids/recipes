@@ -9,16 +9,10 @@ import "package:the_recipes/models/recipe.dart";
 class ShareRecipeState {
   final Map<String, bool> isLoadingMap;
 
-  ShareRecipeState({
-    this.isLoadingMap = const {},
-  });
+  ShareRecipeState({this.isLoadingMap = const {}});
 
-  ShareRecipeState copyWith({
-    Map<String, bool>? isLoadingMap,
-  }) {
-    return ShareRecipeState(
-      isLoadingMap: isLoadingMap ?? this.isLoadingMap,
-    );
+  ShareRecipeState copyWith({Map<String, bool>? isLoadingMap}) {
+    return ShareRecipeState(isLoadingMap: isLoadingMap ?? this.isLoadingMap);
   }
 }
 
@@ -66,9 +60,7 @@ class ShareRecipeController extends Notifier<ShareRecipeState> {
         databaseId: AppwriteConfig.databaseId,
         tableId: AppwriteConfig.recipesTableId,
         rowId: cloudId,
-        data: {
-          "isPublic": true,
-        },
+        data: {"isPublic": true},
         permissions: [
           Permission.read(Role.any()),
           Permission.update(Role.user(authState.user!.$id)),
@@ -111,9 +103,7 @@ class ShareRecipeController extends Notifier<ShareRecipeState> {
         databaseId: AppwriteConfig.databaseId,
         tableId: AppwriteConfig.recipesTableId,
         rowId: cloudId,
-        data: {
-          "isPublic": false,
-        },
+        data: {"isPublic": false},
         permissions: [
           Permission.read(Role.user(authState.user!.$id)),
           Permission.update(Role.user(authState.user!.$id)),
@@ -190,10 +180,8 @@ class ShareRecipeController extends Notifier<ShareRecipeState> {
 
   Recipe? findLocalRecipeByTitle(String title) {
     final recipes = ref.read(recipeControllerProvider).recipes;
-    var exactMatch = recipes
-        .where(
-          (recipe) => recipe.title.toLowerCase() == title.toLowerCase(),
-        )
+    final exactMatch = recipes
+        .where((recipe) => recipe.title.toLowerCase() == title.toLowerCase())
         .firstOrNull;
 
     if (exactMatch != null) return exactMatch;
@@ -215,8 +203,8 @@ class ShareRecipeController extends Notifier<ShareRecipeState> {
 
     final byTitle = findLocalRecipeByTitle(sharedRecipe.title);
     if (byTitle != null) {
-      final sameIngredients = byTitle.ingredients.length ==
-              sharedRecipe.ingredients.length &&
+      final sameIngredients =
+          byTitle.ingredients.length == sharedRecipe.ingredients.length &&
           byTitle.ingredients.every(
             (ingredient) => sharedRecipe.ingredients.any(
               (sharedIngredient) =>
@@ -233,5 +221,5 @@ class ShareRecipeController extends Notifier<ShareRecipeState> {
 
 final shareRecipeControllerProvider =
     NotifierProvider<ShareRecipeController, ShareRecipeState>(() {
-  return ShareRecipeController();
-});
+      return ShareRecipeController();
+    });

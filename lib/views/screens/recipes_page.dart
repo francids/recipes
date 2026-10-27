@@ -1,11 +1,11 @@
-import "package:flutter/cupertino.dart";
-import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_animate/flutter_animate.dart";
-import "package:the_recipes/controllers/recipe_controller.dart";
-import "package:the_recipes/controllers/favorites_controller.dart";
-import "package:the_recipes/controllers/view_option_controller.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/auth_controller.dart";
+import "package:the_recipes/controllers/favorites_controller.dart";
+import "package:the_recipes/controllers/recipe_controller.dart";
+import "package:the_recipes/controllers/view_option_controller.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/views/widgets/recipe_card.dart";
 
@@ -37,14 +37,17 @@ class _RecipesPageState extends ConsumerState<RecipesPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: MediaQuery.of(context).padding.top,
-                ),
+                SizedBox(height: MediaQuery.of(context).padding.top),
                 if (recipeState.recipes.isEmpty)
                   const SizedBox.shrink()
                 else
-                  _buildFilterChip(ref, currentSortOption, viewOption,
-                          favoritesState, authState)
+                  _buildFilterChip(
+                        ref,
+                        currentSortOption,
+                        viewOption,
+                        favoritesState,
+                        authState,
+                      )
                       .animate()
                       .fadeIn(duration: 300.ms)
                       .slideY(begin: -0.2, curve: Curves.easeOutCubic),
@@ -85,7 +88,7 @@ class _RecipesPageState extends ConsumerState<RecipesPage> {
                       0.3,
                       0.35,
                       0.4,
-                      1.0
+                      1.0,
                     ],
                   ),
                 ),
@@ -129,7 +132,7 @@ class _RecipesPageState extends ConsumerState<RecipesPage> {
                       0.8,
                       0.9,
                       0.95,
-                      1.0
+                      1.0,
                     ],
                   ),
                 ),
@@ -139,9 +142,8 @@ class _RecipesPageState extends ConsumerState<RecipesPage> {
         ],
       ),
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stack) => Center(
-        child: Text('Error loading favorites: $error'),
-      ),
+      error: (error, stack) =>
+          Center(child: Text('Error loading favorites: $error')),
     );
   }
 
@@ -151,25 +153,30 @@ class _RecipesPageState extends ConsumerState<RecipesPage> {
     FavoritesState favoritesState,
     ViewOption viewOption,
   ) {
-    var displayedRecipes = favoritesState.showFavoritesOnly
+    final displayedRecipes = favoritesState.showFavoritesOnly
         ? recipeState.recipes
-            .where((recipe) =>
-                favoritesState.favoriteRecipeIds.contains(recipe.id))
-            .toList()
+              .where(
+                (recipe) =>
+                    favoritesState.favoriteRecipeIds.contains(recipe.id),
+              )
+              .toList()
         : recipeState.recipes.toList();
 
     if (currentSortOption == SortOption.title) {
       displayedRecipes.sort(
-          (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+        (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+      );
     } else if (currentSortOption == SortOption.duration) {
-      displayedRecipes
-          .sort((a, b) => a.preparationTime.compareTo(b.preparationTime));
+      displayedRecipes.sort(
+        (a, b) => a.preparationTime.compareTo(b.preparationTime),
+      );
     }
 
     if (displayedRecipes.isEmpty) {
-      return Container(
+      return SizedBox(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height -
+        height:
+            MediaQuery.of(context).size.height -
             MediaQuery.of(context).padding.top -
             MediaQuery.of(context).padding.bottom,
         child: Column(
@@ -227,14 +234,11 @@ class _RecipesPageState extends ConsumerState<RecipesPage> {
                 itemCount: displayedRecipes.length,
                 itemBuilder: (context, index) {
                   return RecipeCard(
-                    recipe: displayedRecipes[index],
-                    viewOption: viewOption,
-                  )
-                      .animate()
-                      .fadeIn(
-                        delay: (50 * index).ms,
-                        duration: 300.ms,
+                        recipe: displayedRecipes[index],
+                        viewOption: viewOption,
                       )
+                      .animate()
+                      .fadeIn(delay: (50 * index).ms, duration: 300.ms)
                       .slideX(
                         begin: -0.1,
                         delay: (50 * index).ms,
@@ -274,9 +278,11 @@ class _RecipesPageState extends ConsumerState<RecipesPage> {
   Widget _buildViewChip(ViewOption viewOption) {
     return FilterChip(
       showCheckmark: false,
-      label: Text(viewOption == ViewOption.list
-          ? "recipes_page.view_list".tr
-          : "recipes_page.view_grid".tr),
+      label: Text(
+        viewOption == ViewOption.list
+            ? "recipes_page.view_list".tr
+            : "recipes_page.view_grid".tr,
+      ),
       selected: true,
       onSelected: (selected) {
         ref.read(viewOptionControllerProvider.notifier).toggleViewOption();
@@ -326,10 +332,7 @@ class _RecipesPageState extends ConsumerState<RecipesPage> {
     );
   }
 
-  Widget _buildFavoritesChip(
-    WidgetRef ref,
-    FavoritesState favoritesState,
-  ) {
+  Widget _buildFavoritesChip(WidgetRef ref, FavoritesState favoritesState) {
     return FilterChip(
       showCheckmark: false,
       label: Text("recipes_page.favorites_filter".tr),

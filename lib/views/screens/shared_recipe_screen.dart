@@ -1,6 +1,6 @@
-import "package:flutter/cupertino.dart";
-import "package:flutter/material.dart";
+import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/recipe_controller.dart";
 import "package:the_recipes/controllers/share_recipe_controller.dart";
 import "package:the_recipes/messages.dart";
@@ -9,10 +9,7 @@ import "package:the_recipes/views/widgets/common_recipe_view.dart";
 import "package:the_recipes/views/widgets/ui_helpers.dart";
 
 class SharedRecipeScreen extends ConsumerWidget {
-  const SharedRecipeScreen({
-    super.key,
-    required this.recipe,
-  });
+  const SharedRecipeScreen({super.key, required this.recipe});
 
   final Recipe recipe;
 
@@ -20,8 +17,9 @@ class SharedRecipeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final shareController = ref.watch(shareRecipeControllerProvider.notifier);
 
-    final bool recipeExistsLocally =
-        shareController.isRecipeAlreadySaved(recipe);
+    final bool recipeExistsLocally = shareController.isRecipeAlreadySaved(
+      recipe,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -50,20 +48,11 @@ class SharedRecipeScreen extends ConsumerWidget {
             ),
         ],
       ),
-      body: Column(
-        children: [
-          CommonRecipeView(
-            recipe: recipe,
-          ),
-        ],
-      ),
+      body: Column(children: [CommonRecipeView(recipe: recipe)]),
     );
   }
 
-  Future<void> _saveRecipeLocally(
-    BuildContext context,
-    WidgetRef ref,
-  ) async {
+  Future<void> _saveRecipeLocally(BuildContext context, WidgetRef ref) async {
     try {
       UIHelpers.showLoadingDialog(
         context,
@@ -74,15 +63,15 @@ class SharedRecipeScreen extends ConsumerWidget {
 
       await ref.read(recipeControllerProvider.notifier).addSharedRecipe(recipe);
 
+      if (!context.mounted) return;
+
       Navigator.of(context).pop();
 
-      UIHelpers.showSuccessSnackbar(
-        "shared_recipe.save_success".tr,
-        context,
-      );
+      UIHelpers.showSuccessSnackbar("shared_recipe.save_success".tr, context);
 
       Navigator.of(context).pop();
     } catch (e) {
+      if (!context.mounted) return;
       Navigator.of(context).pop();
       UIHelpers.showErrorSnackbar(
         "shared_recipe.save_error".trParams({"0": e.toString()}),

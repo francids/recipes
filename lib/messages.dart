@@ -1,4 +1,5 @@
 import "dart:convert";
+
 import "package:flutter/services.dart";
 import "package:intl/intl.dart";
 
@@ -76,8 +77,10 @@ class Messages {
     });
   }
 
-  static Map<String, String> _flattenTranslations(Map<String, dynamic> json,
-      [String prefix = ""]) {
+  static Map<String, String> _flattenTranslations(
+    Map<String, dynamic> json, [
+    String prefix = "",
+  ]) {
     final Map<String, String> result = {};
 
     json.forEach((key, value) {
@@ -85,7 +88,8 @@ class Messages {
 
       if (value is Map) {
         result.addAll(
-            _flattenTranslations(Map<String, dynamic>.from(value), newKey));
+          _flattenTranslations(Map<String, dynamic>.from(value), newKey),
+        );
       } else if (value is String) {
         result[newKey] = value;
       }

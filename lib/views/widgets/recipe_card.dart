@@ -1,9 +1,9 @@
 import "dart:io";
 
-import "package:the_recipes/models/recipe.dart";
-import "package:flutter/material.dart";
-import "package:the_recipes/views/screens/recipe_screen.dart";
 import "package:flutter_animate/flutter_animate.dart";
+import "package:material_ui/material_ui.dart";
+import "package:the_recipes/models/recipe.dart";
+import "package:the_recipes/views/screens/recipe_screen.dart";
 import "package:the_recipes/views/screens/recipes_page.dart";
 
 class RecipeCard extends StatelessWidget {
@@ -28,10 +28,7 @@ class RecipeCard extends StatelessWidget {
         width: imageWidth,
         height: imageHeight,
         color: Colors.grey[300],
-        child: Icon(
-          Icons.image_not_supported,
-          color: Colors.grey[600],
-        ),
+        child: Icon(Icons.image_not_supported, color: Colors.grey[600]),
       );
     }
 
@@ -53,10 +50,7 @@ class RecipeCard extends StatelessWidget {
           width: imageWidth,
           height: imageHeight,
           color: Colors.grey[300],
-          child: Icon(
-            Icons.image_not_supported,
-            color: Colors.grey[600],
-          ),
+          child: Icon(Icons.image_not_supported, color: Colors.grey[600]),
         );
       },
       loadingBuilder: (context, child, loadingProgress) {
@@ -69,7 +63,7 @@ class RecipeCard extends StatelessWidget {
             child: CircularProgressIndicator(
               value: loadingProgress.expectedTotalBytes != null
                   ? loadingProgress.cumulativeBytesLoaded /
-                      loadingProgress.expectedTotalBytes!
+                        loadingProgress.expectedTotalBytes!
                   : null,
             ),
           ),
@@ -145,10 +139,10 @@ class RecipeCard extends StatelessWidget {
               child: Text(
                 recipe.title,
                 style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
               ),
@@ -225,35 +219,41 @@ class RecipeCard extends StatelessWidget {
           ),
         ],
       ),
-      child: Card(
-        margin: const EdgeInsets.all(0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(
-            color: isDarkMode ? Colors.white30 : Colors.black26,
-            width: 0.5,
-            strokeAlign: BorderSide.strokeAlignInside,
-          ),
-        ),
-        color: Colors.transparent,
-        elevation: 0,
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(10),
-          onTap: onTap ??
-              () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => RecipeScreen(recipe: recipe),
+      child:
+          Card(
+                margin: const EdgeInsets.all(0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: BorderSide(
+                    color: isDarkMode ? Colors.white30 : Colors.black26,
+                    width: 0.5,
+                    strokeAlign: BorderSide.strokeAlignInside,
                   ),
-                );
-              },
-          child: cardContent,
-        ),
-      )
-          .animate()
-          .fadeIn(duration: 500.ms)
-          .slideX(begin: -0.2, duration: 400.ms, curve: Curves.easeOutCubic),
+                ),
+                color: Colors.transparent,
+                elevation: 0,
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(10),
+                  onTap:
+                      onTap ??
+                      () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => RecipeScreen(recipe: recipe),
+                          ),
+                        );
+                      },
+                  child: cardContent,
+                ),
+              )
+              .animate()
+              .fadeIn(duration: 500.ms)
+              .slideX(
+                begin: -0.2,
+                duration: 400.ms,
+                curve: Curves.easeOutCubic,
+              ),
     );
   }
 }

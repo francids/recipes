@@ -1,10 +1,10 @@
-import "package:flutter/material.dart";
+import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/add_recipe_controller.dart";
 import "package:the_recipes/gestures/drag_start_listener.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/views/widgets/form_field.dart";
-import "package:flutter_animate/flutter_animate.dart";
 import "package:the_recipes/views/widgets/pressable_button.dart";
 
 class DynamicListStepWidget extends ConsumerStatefulWidget {
@@ -13,11 +13,11 @@ class DynamicListStepWidget extends ConsumerStatefulWidget {
   final VoidCallback? onChanged;
 
   const DynamicListStepWidget({
-    Key? key,
+    super.key,
     required this.type,
     required this.label,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<DynamicListStepWidget> createState() =>
@@ -57,25 +57,21 @@ class _DynamicListStepWidgetState extends ConsumerState<DynamicListStepWidget> {
     final List<String> list = widget.type == "ingredients"
         ? state.ingredientsList
         : widget.type == "directions"
-            ? state.directionsList
-            : [];
+        ? state.directionsList
+        : [];
 
     _syncControllers(list);
 
     return Column(
       children: [
         PressableButton(
-          child: FilledButton(
-            onPressed: () => _addItem(ref),
-            child: Text(
-              "dynamic_list.add_item".trParams(
-                {
-                  "0": widget.label,
-                },
+              child: FilledButton(
+                onPressed: () => _addItem(ref),
+                child: Text(
+                  "dynamic_list.add_item".trParams({"0": widget.label}),
+                ),
               ),
-            ),
-          ),
-        )
+            )
             .animate()
             .fadeIn(duration: 400.ms)
             .slideY(begin: -0.2, curve: Curves.easeOutCubic),
@@ -89,11 +85,9 @@ class _DynamicListStepWidgetState extends ConsumerState<DynamicListStepWidget> {
     if (list.isEmpty) {
       return Center(
         child: Text(
-          "dynamic_list.no_items_yet".trParams(
-            {
-              "0": widget.label.toLowerCase(),
-            },
-          ),
+          "dynamic_list.no_items_yet".trParams({
+            "0": widget.label.toLowerCase(),
+          }),
           style: const TextStyle(
             color: Colors.grey,
             fontStyle: FontStyle.italic,
@@ -105,7 +99,7 @@ class _DynamicListStepWidgetState extends ConsumerState<DynamicListStepWidget> {
     return ReorderableListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      onReorder: (oldIndex, newIndex) =>
+      onReorderItem: (oldIndex, newIndex) =>
           _onReorder(oldIndex, newIndex, list, ref),
       itemCount: list.length,
       itemBuilder: (context, i) => _buildListItem(i, list, ref),
@@ -134,9 +128,7 @@ class _DynamicListStepWidgetState extends ConsumerState<DynamicListStepWidget> {
             ]
           : [],
       child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Row(
           children: [
@@ -144,10 +136,7 @@ class _DynamicListStepWidgetState extends ConsumerState<DynamicListStepWidget> {
               index: index,
               child: const Padding(
                 padding: EdgeInsets.only(right: 8.0),
-                child: Icon(
-                  Icons.drag_handle,
-                  color: Colors.grey,
-                ),
+                child: Icon(Icons.drag_handle, color: Colors.grey),
               ),
             ),
             Expanded(
@@ -190,10 +179,6 @@ class _DynamicListStepWidgetState extends ConsumerState<DynamicListStepWidget> {
     List<String> list,
     WidgetRef ref,
   ) {
-    if (newIndex > oldIndex) {
-      newIndex = newIndex - 1;
-    }
-
     final controller = _controllers.removeAt(oldIndex);
     _controllers.insert(newIndex, controller);
 

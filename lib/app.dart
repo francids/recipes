@@ -1,8 +1,7 @@
 import "package:app_links/app_links.dart";
-import "package:flutter/material.dart";
 import "package:flutter_easyloading/flutter_easyloading.dart";
-import "package:flutter_localizations/flutter_localizations.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/auth_controller.dart";
 import "package:the_recipes/controllers/language_controller.dart";
 import "package:the_recipes/controllers/share_recipe_controller.dart";
@@ -53,7 +52,8 @@ class _TheRecipesAppState extends ConsumerState<TheRecipesApp>
   }
 
   Future<void> _handleDeepLink(Uri uri) async {
-    bool isSharingLink = (uri.host == "sharing" ||
+    final bool isSharingLink =
+        (uri.host == "sharing" ||
             uri.pathSegments.contains("recipe") ||
             uri.pathSegments.contains("sharing")) &&
         uri.queryParameters.containsKey("id");
@@ -62,10 +62,12 @@ class _TheRecipesAppState extends ConsumerState<TheRecipesApp>
       final recipeCloudId = uri.queryParameters["id"];
 
       if (recipeCloudId != null) {
-        final shareController =
-            ref.read(shareRecipeControllerProvider.notifier);
-        final localRecipe =
-            shareController.findLocalRecipeByCloudId(recipeCloudId);
+        final shareController = ref.read(
+          shareRecipeControllerProvider.notifier,
+        );
+        final localRecipe = shareController.findLocalRecipeByCloudId(
+          recipeCloudId,
+        );
 
         if (localRecipe != null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -77,8 +79,9 @@ class _TheRecipesAppState extends ConsumerState<TheRecipesApp>
           });
         } else {
           try {
-            final recipeShared =
-                await shareController.getSharedRecipe(recipeCloudId);
+            final recipeShared = await shareController.getSharedRecipe(
+              recipeCloudId,
+            );
             WidgetsBinding.instance.addPostFrameCallback((_) {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -123,7 +126,14 @@ class _TheRecipesAppState extends ConsumerState<TheRecipesApp>
       darkTheme: TheRecipeAppTheme.darkTheme,
       themeMode: themeMode,
       home: const InicialScreen(),
-      builder: EasyLoading.init(),
+      builder: (context, child) {
+        // EasyLoading still uses the legacy Material library while its
+        // ecosystem migration is in progress.
+        // ignore: deprecated_member_use
+        return MaterialUiCompatibilityBridge(
+          child: EasyLoading.init()(context, child),
+        );
+      },
       locale: Locale(language),
       supportedLocales: const [
         Locale("es"),
@@ -136,11 +146,7 @@ class _TheRecipesAppState extends ConsumerState<TheRecipesApp>
         Locale("ja"),
         Locale("ko"),
       ],
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
     );
   }
 }

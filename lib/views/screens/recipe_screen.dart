@@ -1,21 +1,18 @@
-import "package:flutter/cupertino.dart";
-import "package:flutter/material.dart";
+import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/auth_controller.dart";
-import "package:the_recipes/controllers/recipe_controller.dart";
 import "package:the_recipes/controllers/favorites_controller.dart";
+import "package:the_recipes/controllers/recipe_controller.dart";
+import "package:the_recipes/controllers/share_recipe_controller.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/models/recipe.dart";
 import "package:the_recipes/views/widgets/common_recipe_view.dart";
 import "package:the_recipes/views/widgets/share_recipe_bottom_sheet.dart";
 import "package:the_recipes/views/widgets/ui_helpers.dart";
-import "package:the_recipes/controllers/share_recipe_controller.dart";
 
 class RecipeScreen extends ConsumerWidget {
-  const RecipeScreen({
-    super.key,
-    required this.recipe,
-  });
+  const RecipeScreen({super.key, required this.recipe});
 
   final Recipe recipe;
 
@@ -77,6 +74,7 @@ class RecipeScreen extends ConsumerWidget {
                       ),
                       onTap: () {
                         Future.delayed(Duration.zero, () {
+                          if (!context.mounted) return;
                           UIHelpers.showConfirmationDialog(
                             context: context,
                             title: "recipe_screen.delete_confirmation_title".tr,
@@ -92,10 +90,7 @@ class RecipeScreen extends ConsumerWidget {
                               );
                               await ref
                                   .read(recipeControllerProvider.notifier)
-                                  .deleteRecipe(
-                                    recipe.id,
-                                    recipe.image!,
-                                  );
+                                  .deleteRecipe(recipe.id, recipe.image!);
                               navigatorContext.pop();
                             },
                           );
@@ -108,11 +103,7 @@ class RecipeScreen extends ConsumerWidget {
             ),
           ],
         ),
-        body: Column(
-          children: [
-            CommonRecipeView(recipe: recipe),
-          ],
-        ),
+        body: Column(children: [CommonRecipeView(recipe: recipe)]),
       ),
       loading: () => Scaffold(
         appBar: AppBar(
@@ -136,9 +127,7 @@ class RecipeScreen extends ConsumerWidget {
             icon: const Icon(CupertinoIcons.back),
           ),
         ),
-        body: Center(
-          child: Text('Error loading favorites: $error'),
-        ),
+        body: Center(child: Text('Error loading favorites: $error')),
       ),
     );
   }

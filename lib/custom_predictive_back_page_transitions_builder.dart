@@ -1,5 +1,5 @@
-import "package:flutter/material.dart";
 import "package:flutter/services.dart";
+import "package:material_ui/material_ui.dart";
 
 class CustomPredictiveBackPageTransitionsBuilder
     extends PageTransitionsBuilder {
@@ -22,13 +22,7 @@ class CustomPredictiveBackPageTransitionsBuilder
   }
 }
 
-enum _PredictiveBackPhase {
-  idle,
-  start,
-  update,
-  commit,
-  cancel,
-}
+enum _PredictiveBackPhase { idle, start, update, commit, cancel }
 
 class _CustomPredictiveBackGestureDetector extends StatefulWidget {
   const _CustomPredictiveBackGestureDetector({
@@ -83,8 +77,9 @@ class _CustomPredictiveBackGestureDetectorState
       _currentBackEvent = backEvent;
     });
 
-    widget.route
-        .handleUpdateBackGestureProgress(progress: 1 - backEvent.progress);
+    widget.route.handleUpdateBackGestureProgress(
+      progress: 1 - backEvent.progress,
+    );
   }
 
   @override
@@ -123,8 +118,9 @@ class _CustomPredictiveBackGestureDetectorState
 
   @override
   Widget build(BuildContext context) {
-    final effectivePhase =
-        widget.route.popGestureInProgress ? _phase : _PredictiveBackPhase.idle;
+    final effectivePhase = widget.route.popGestureInProgress
+        ? _phase
+        : _PredictiveBackPhase.idle;
 
     return _CustomPredictiveBackPageTransition(
       animation: widget.animation,
@@ -212,13 +208,13 @@ class _CustomPredictiveBackPageTransitionState
 
     _positionAnimation = _animation.drive(switch (widget.phase) {
       _PredictiveBackPhase.commit => Tween<Offset>(
-          begin: _lastDrag,
-          end: Offset(screenSize.width, 0.0),
-        ),
+        begin: _lastDrag,
+        end: Offset(screenSize.width, 0.0),
+      ),
       _ => Tween<Offset>(
-          begin: Offset.zero,
-          end: shouldAnimate ? Offset(xShift, 0.0) : Offset.zero,
-        ),
+        begin: Offset.zero,
+        end: shouldAnimate ? Offset(xShift, 0.0) : Offset.zero,
+      ),
     });
   }
 
@@ -272,16 +268,14 @@ class _CustomPredictiveBackPageTransitionState
 
     if (!widget.hasGesture) {
       return SlideTransition(
-        position: Tween<Offset>(
-          begin: const Offset(1, 0.0),
-          end: Offset.zero,
-        ).animate(
-          CurvedAnimation(
-            parent: widget.animation,
-            curve: Curves.easeOutCubic,
-            reverseCurve: Curves.easeInOut,
-          ),
-        ),
+        position: Tween<Offset>(begin: const Offset(1, 0.0), end: Offset.zero)
+            .animate(
+              CurvedAnimation(
+                parent: widget.animation,
+                curve: Curves.easeOutCubic,
+                reverseCurve: Curves.easeInOut,
+              ),
+            ),
         child: widget.child,
       );
     }
@@ -292,8 +286,7 @@ class _CustomPredictiveBackPageTransitionState
         final offset = switch (widget.phase) {
           _PredictiveBackPhase.idle => Offset.zero,
           _PredictiveBackPhase.commit => _positionAnimation.value,
-          _PredictiveBackPhase.start ||
-          _PredictiveBackPhase.update =>
+          _PredictiveBackPhase.start || _PredictiveBackPhase.update =>
             _lastDrag = _calculateOffset(screenSize),
           _PredictiveBackPhase.cancel => Offset.zero,
         };

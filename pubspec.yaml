@@ -4,18 +4,18 @@ publish_to: "none"
 version: 2.0.0+4
 
 environment:
-  sdk: ">=3.2.4 <4.0.0"
+  sdk: ^3.13.0
 
 dependencies:
   archive: ^4.0.7
-  cupertino_icons: ^1.0.8
+  cupertino_icons: ^2.0.0
   flutter:
     sdk: flutter
   flutter_animate: ^4.5.2
-  flutter_easyloading: ^3.0.5
+  flutter_easyloading: ^4.0.2
   flutter_image_compress: ^2.4.0
   flutter_native_splash: ^2.4.6
-  google_fonts: ^8.0.1
+  google_fonts: ^9.0.0
   hive_ce: ^2.11.3
   hive_ce_flutter: ^2.3.2
   image_picker: ^1.2.0
@@ -23,17 +23,17 @@ dependencies:
   path: ^1.9.1
   path_provider: ^2.1.5
   uuid: ^4.5.1
-  file_picker: ^10.3.2
+  file_picker: ^13.3.0
   http: ^1.5.0
-  appwrite: ^22.0.0
+  appwrite: ^28.1.0
   pretty_qr_code: ^3.5.0
-  share_plus: ^12.0.1
+  share_plus: ^13.3.1
   app_links: ^7.0.0
   screen_brightness: ^2.1.7
-  flutter_riverpod: ^3.0.0
-  flutter_localizations:
-    sdk: flutter
-  intl: any
+  flutter_riverpod: ^3.4.3
+  intl: ^0.20.2
+  material_ui: ^1.8.0
+  cupertino_ui: ^1.1.4
 
 dev_dependencies:
   flutter_test:
@@ -41,8 +41,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   hive_ce_generator: ^1.9.3
   build_runner: ^2.7.0
-  custom_lint: ^0.8.0
-  riverpod_lint: ^3.0.0
+  riverpod_lint: ^3.1.9
 
 flutter:
   uses-material-design: true

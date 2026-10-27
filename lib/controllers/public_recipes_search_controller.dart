@@ -49,5 +49,5 @@ class PublicRecipesSearchController extends Notifier<PublicRecipesSearchState> {
 
 final publicRecipesSearchControllerProvider =
     NotifierProvider<PublicRecipesSearchController, PublicRecipesSearchState>(
-  () => PublicRecipesSearchController(),
-);
+      () => PublicRecipesSearchController(),
+    );

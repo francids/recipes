@@ -1,4 +1,4 @@
-import "package:flutter/material.dart";
+import "package:material_ui/material_ui.dart";
 import "package:pretty_qr_code/pretty_qr_code.dart";
 import "package:screen_brightness/screen_brightness.dart";
 import "package:the_recipes/messages.dart";
@@ -52,8 +52,9 @@ class _QrBottomSheetState extends State<QrBottomSheet> {
   Future<void> _restoreOriginalBrightness() async {
     try {
       if (_originalBrightness != null) {
-        await ScreenBrightness.instance
-            .setApplicationScreenBrightness(_originalBrightness!);
+        await ScreenBrightness.instance.setApplicationScreenBrightness(
+          _originalBrightness!,
+        );
       } else {
         await ScreenBrightness.instance.resetApplicationScreenBrightness();
       }

@@ -1,7 +1,7 @@
-import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hive_ce_flutter/adapters.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/app.dart";
 import "package:the_recipes/appwrite_config.dart";
 import "package:the_recipes/easy_loading_config.dart";
@@ -16,7 +16,7 @@ void main() async {
   await Messages.init();
 
   await Hive.initFlutter();
-  Hive..registerAdapter(RecipeAdapter());
+  Hive.registerAdapter(RecipeAdapter());
   await Hive.openBox<Recipe>(recipesBox);
   await Hive.openBox<String>(favoritesBox);
   await Hive.openBox(settingsBox);
@@ -25,17 +25,10 @@ void main() async {
 
   await SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.edgeToEdge,
-    overlays: [
-      SystemUiOverlay.top,
-      SystemUiOverlay.bottom,
-    ],
+    overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
   );
 
   configureEasyLoading();
 
-  runApp(
-    const ProviderScope(
-      child: TheRecipesApp(),
-    ),
-  );
+  runApp(const ProviderScope(child: TheRecipesApp()));
 }

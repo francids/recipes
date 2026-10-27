@@ -1,35 +1,34 @@
 import "dart:io";
-import "package:flutter/cupertino.dart";
-import "package:flutter/material.dart";
+
+import "package:cupertino_ui/cupertino_ui.dart";
+import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:image_picker/image_picker.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/add_recipe_controller.dart";
 import "package:the_recipes/controllers/ai_recipe_controller.dart";
 import "package:the_recipes/controllers/auth_controller.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/views/widgets/pressable_button.dart";
 import "package:the_recipes/views/widgets/ui_helpers.dart";
-import "package:flutter_animate/flutter_animate.dart";
 
 class ImageStepWidget extends ConsumerWidget {
   final ImagePicker _imagePicker = ImagePicker();
   final VoidCallback? onImageSelected;
 
-  ImageStepWidget({Key? key, this.onImageSelected}) : super(key: key);
+  ImageStepWidget({super.key, this.onImageSelected});
 
   Future<void> _pickImage(WidgetRef ref) async {
-    final XFile? image =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
+    final XFile? image = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
     if (image != null) {
       ref.read(addRecipeControllerProvider.notifier).setImagePath(image);
       onImageSelected?.call();
     }
   }
 
-  void _generateRecipeFromImage(
-    BuildContext context,
-    WidgetRef ref,
-  ) async {
+  void _generateRecipeFromImage(BuildContext context, WidgetRef ref) async {
     UIHelpers.showLoadingDialog(
       context,
       "image_step.analyzing_image_title".tr,
@@ -55,23 +54,22 @@ class ImageStepWidget extends ConsumerWidget {
           .read(addRecipeControllerProvider.notifier)
           .updatePreparationTime(recipe.preparationTime);
 
+      if (!context.mounted) return;
+
       Navigator.of(context).pop();
       UIHelpers.showSuccessSnackbar(
         "image_step.recipe_generated_success".tr,
         context,
       );
     } on AIRecipeException catch (e) {
+      if (!context.mounted) return;
       Navigator.of(context).pop();
-      UIHelpers.showErrorSnackbar(
-        e.message,
-        context,
-      );
+      UIHelpers.showErrorSnackbar(e.message, context);
     } catch (e) {
+      if (!context.mounted) return;
       Navigator.of(context).pop();
       UIHelpers.showErrorSnackbar(
-        "image_step.recipe_generated_error".trParams({
-          "0": e.toString(),
-        }),
+        "image_step.recipe_generated_error".trParams({"0": e.toString()}),
         context,
       );
     }
@@ -87,9 +85,9 @@ class ImageStepWidget extends ConsumerWidget {
       child: Column(
         children: [
           GestureDetector(
-            onTap: () => _pickImage(ref),
-            child: _buildImageContainer(state, ref),
-          )
+                onTap: () => _pickImage(ref),
+                child: _buildImageContainer(state, ref),
+              )
               .animate()
               .fadeIn(duration: 400.ms)
               .scaleXY(begin: 0.8, curve: Curves.easeOutBack),
@@ -106,18 +104,18 @@ class ImageStepWidget extends ConsumerWidget {
             ),
           ).animate().fadeIn(delay: 200.ms, duration: 400.ms),
           const SizedBox(height: 24),
-          _buildAISection(context, ref, authState, isDarkMode)
-              .animate()
-              .fadeIn(delay: 400.ms, duration: 400.ms),
+          _buildAISection(
+            context,
+            ref,
+            authState,
+            isDarkMode,
+          ).animate().fadeIn(delay: 400.ms, duration: 400.ms),
         ],
       ),
     );
   }
 
-  Widget _buildImageContainer(
-    AddRecipeState state,
-    WidgetRef ref,
-  ) {
+  Widget _buildImageContainer(AddRecipeState state, WidgetRef ref) {
     return Material(
       borderRadius: BorderRadius.circular(10),
       child: InkWell(
@@ -169,10 +167,7 @@ class ImageStepWidget extends ConsumerWidget {
             icon: const Icon(Icons.auto_awesome, color: Colors.white),
             label: Text(
               "image_step.generate_recipe_info".tr,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-              ),
+              style: const TextStyle(fontSize: 16, color: Colors.white),
             ),
           ),
         ),

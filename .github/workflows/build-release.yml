@@ -23,7 +23,7 @@ jobs:
         run: flutter pub get
 
       - name: Generate build files
-        run: dart run build_runner build --delete-conflicting-outputs
+        run: dart run build_runner build
 
       - name: Decode keystore
         run: |

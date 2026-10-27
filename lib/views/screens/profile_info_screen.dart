@@ -1,8 +1,8 @@
-import "package:flutter/cupertino.dart";
-import "package:flutter/material.dart";
-import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:the_recipes/controllers/auth_controller.dart";
+import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_animate/flutter_animate.dart";
+import "package:flutter_riverpod/flutter_riverpod.dart";
+import "package:material_ui/material_ui.dart";
+import "package:the_recipes/controllers/auth_controller.dart";
 import "package:the_recipes/messages.dart";
 import "package:the_recipes/views/widgets/ui_helpers.dart";
 
@@ -37,149 +37,154 @@ class ProfileInfoScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildProfileAvatar(
-                  context,
-                  controller.userProfileImageUrl ?? "",
-                ).animate().fadeIn(duration: 300.ms).scale(
-                    begin: const Offset(0.8, 0.8), curve: Curves.easeOutCubic),
+                      context,
+                      controller.userProfileImageUrl ?? "",
+                    )
+                    .animate()
+                    .fadeIn(duration: 300.ms)
+                    .scale(
+                      begin: const Offset(0.8, 0.8),
+                      curve: Curves.easeOutCubic,
+                    ),
                 const SizedBox(height: 32),
                 Text(
-                  "profile_info_screen.personal_info".tr,
-                  style: textTheme.displayMedium,
-                )
+                      "profile_info_screen.personal_info".tr,
+                      style: textTheme.displayMedium,
+                    )
                     .animate()
                     .fadeIn(delay: 100.ms, duration: 250.ms)
                     .slideX(begin: -0.1, curve: Curves.easeOutCubic),
                 const SizedBox(height: 16),
                 Card(
-                  elevation: 0,
-                  margin: EdgeInsets.zero,
-                  clipBehavior: Clip.antiAlias,
-                  child: Column(
-                    children: [
-                      _buildInfoListTile(
-                        context,
-                        title: "profile_info_screen.display_name".tr,
-                        value: user.name.isNotEmpty
-                            ? user.name
-                            : "profile_info_screen.not_available".tr,
-                        icon: CupertinoIcons.person,
+                      elevation: 0,
+                      margin: EdgeInsets.zero,
+                      clipBehavior: Clip.antiAlias,
+                      child: Column(
+                        children: [
+                          _buildInfoListTile(
+                            context,
+                            title: "profile_info_screen.display_name".tr,
+                            value: user.name.isNotEmpty
+                                ? user.name
+                                : "profile_info_screen.not_available".tr,
+                            icon: CupertinoIcons.person,
+                          ),
+                          const Divider(height: 1, indent: 16, endIndent: 16),
+                          _buildInfoListTile(
+                            context,
+                            title: "profile_info_screen.email".tr,
+                            value: user.email.isNotEmpty
+                                ? user.email
+                                : "profile_info_screen.not_available".tr,
+                            icon: CupertinoIcons.mail,
+                          ),
+                          const Divider(height: 1, indent: 16, endIndent: 16),
+                          _buildInfoListTile(
+                            context,
+                            title: "profile_info_screen.user_id".tr,
+                            value: user.$id,
+                            icon: CupertinoIcons.number,
+                            isSelectable: true,
+                          ),
+                        ],
                       ),
-                      const Divider(height: 1, indent: 16, endIndent: 16),
-                      _buildInfoListTile(
-                        context,
-                        title: "profile_info_screen.email".tr,
-                        value: user.email.isNotEmpty
-                            ? user.email
-                            : "profile_info_screen.not_available".tr,
-                        icon: CupertinoIcons.mail,
-                      ),
-                      const Divider(height: 1, indent: 16, endIndent: 16),
-                      _buildInfoListTile(
-                        context,
-                        title: "profile_info_screen.user_id".tr,
-                        value: user.$id,
-                        icon: CupertinoIcons.number,
-                        isSelectable: true,
-                      ),
-                    ],
-                  ),
-                )
+                    )
                     .animate()
                     .fadeIn(delay: 150.ms, duration: 250.ms)
                     .slideX(begin: -0.1, curve: Curves.easeOutCubic),
                 const SizedBox(height: 32),
                 Text(
-                  "profile_info_screen.account_details".tr,
-                  style: textTheme.displayMedium,
-                )
+                      "profile_info_screen.account_details".tr,
+                      style: textTheme.displayMedium,
+                    )
                     .animate()
                     .fadeIn(delay: 300.ms, duration: 250.ms)
                     .slideX(begin: -0.1, curve: Curves.easeOutCubic),
                 const SizedBox(height: 16),
                 Card(
-                  elevation: 0,
-                  margin: EdgeInsets.zero,
-                  clipBehavior: Clip.antiAlias,
-                  child: Column(
-                    children: [
-                      _buildInfoListTile(
-                        context,
-                        title: "profile_info_screen.email_verified".tr,
-                        value: user.emailVerification
-                            ? "profile_info_screen.verified".tr
-                            : "profile_info_screen.not_verified".tr,
-                        icon: user.emailVerification
-                            ? CupertinoIcons.checkmark_shield
-                            : CupertinoIcons.exclamationmark_shield,
-                        valueColor: user.emailVerification
-                            ? Colors.green
-                            : Colors.orange,
+                      elevation: 0,
+                      margin: EdgeInsets.zero,
+                      clipBehavior: Clip.antiAlias,
+                      child: Column(
+                        children: [
+                          _buildInfoListTile(
+                            context,
+                            title: "profile_info_screen.email_verified".tr,
+                            value: user.emailVerification
+                                ? "profile_info_screen.verified".tr
+                                : "profile_info_screen.not_verified".tr,
+                            icon: user.emailVerification
+                                ? CupertinoIcons.checkmark_shield
+                                : CupertinoIcons.exclamationmark_shield,
+                            valueColor: user.emailVerification
+                                ? Colors.green
+                                : Colors.orange,
+                          ),
+                          const Divider(height: 1, indent: 16, endIndent: 16),
+                          _buildInfoListTile(
+                            context,
+                            title: "profile_info_screen.account_created".tr,
+                            value: user.registration.isNotEmpty
+                                ? _formatDate(DateTime.parse(user.registration))
+                                : "profile_info_screen.not_available".tr,
+                            icon: CupertinoIcons.calendar,
+                          ),
+                          const Divider(height: 1, indent: 16, endIndent: 16),
+                          _buildInfoListTile(
+                            context,
+                            title: "profile_info_screen.last_sign_in".tr,
+                            value: user.accessedAt.isNotEmpty
+                                ? _formatDate(DateTime.parse(user.accessedAt))
+                                : "profile_info_screen.not_available".tr,
+                            icon: CupertinoIcons.time,
+                          ),
+                        ],
                       ),
-                      const Divider(height: 1, indent: 16, endIndent: 16),
-                      _buildInfoListTile(
-                        context,
-                        title: "profile_info_screen.account_created".tr,
-                        value: user.registration.isNotEmpty
-                            ? _formatDate(DateTime.parse(user.registration))
-                            : "profile_info_screen.not_available".tr,
-                        icon: CupertinoIcons.calendar,
-                      ),
-                      const Divider(height: 1, indent: 16, endIndent: 16),
-                      _buildInfoListTile(
-                        context,
-                        title: "profile_info_screen.last_sign_in".tr,
-                        value: user.accessedAt.isNotEmpty
-                            ? _formatDate(DateTime.parse(user.accessedAt))
-                            : "profile_info_screen.not_available".tr,
-                        icon: CupertinoIcons.time,
-                      ),
-                    ],
-                  ),
-                )
+                    )
                     .animate()
                     .fadeIn(delay: 350.ms, duration: 250.ms)
                     .slideX(begin: -0.1, curve: Curves.easeOutCubic),
                 const SizedBox(height: 32),
                 Text(
-                  "profile_info_screen.danger_zone".tr,
-                  style: textTheme.displayMedium?.copyWith(
-                    color: Colors.red,
-                  ),
-                )
+                      "profile_info_screen.danger_zone".tr,
+                      style: textTheme.displayMedium?.copyWith(
+                        color: Colors.red,
+                      ),
+                    )
                     .animate()
                     .fadeIn(delay: 400.ms, duration: 250.ms)
                     .slideX(begin: -0.1, curve: Curves.easeOutCubic),
                 const SizedBox(height: 16),
                 Card(
-                  elevation: 0,
-                  margin: EdgeInsets.zero,
-                  clipBehavior: Clip.antiAlias,
-                  color: Colors.red.withAlpha(25),
-                  child: ListTile(
-                    title: Text(
-                      "profile_info_screen.delete_account".tr,
-                      style: textTheme.bodyLarge?.copyWith(
-                        color: Colors.red,
-                        fontWeight: FontWeight.w600,
+                      elevation: 0,
+                      margin: EdgeInsets.zero,
+                      clipBehavior: Clip.antiAlias,
+                      color: Colors.red.withAlpha(25),
+                      child: ListTile(
+                        title: Text(
+                          "profile_info_screen.delete_account".tr,
+                          style: textTheme.bodyLarge?.copyWith(
+                            color: Colors.red,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        subtitle: Text(
+                          "profile_info_screen.delete_account_warning".tr,
+                          style: textTheme.bodySmall?.copyWith(
+                            color: Colors.red.withAlpha(179),
+                          ),
+                        ),
+                        leading: const Icon(
+                          CupertinoIcons.delete,
+                          color: Colors.red,
+                        ),
+                        trailing: const Icon(
+                          CupertinoIcons.chevron_right,
+                          color: Colors.red,
+                        ),
+                        onTap: () => _showDeleteAccountDialog(context, ref),
                       ),
-                    ),
-                    subtitle: Text(
-                      "profile_info_screen.delete_account_warning".tr,
-                      style: textTheme.bodySmall?.copyWith(
-                        color: Colors.red.withAlpha(179),
-                      ),
-                    ),
-                    leading: const Icon(
-                      CupertinoIcons.delete,
-                      color: Colors.red,
-                    ),
-                    trailing: const Icon(
-                      CupertinoIcons.chevron_right,
-                      color: Colors.red,
-                    ),
-                    onTap: () => _showDeleteAccountDialog(context, ref),
-                  ),
-                )
+                    )
                     .animate()
                     .fadeIn(delay: 450.ms, duration: 250.ms)
                     .slideX(begin: -0.1, curve: Curves.easeOutCubic),
@@ -192,10 +197,7 @@ class ProfileInfoScreen extends ConsumerWidget {
     );
   }
 
-  void _showDeleteAccountDialog(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
+  void _showDeleteAccountDialog(BuildContext context, WidgetRef ref) {
     UIHelpers.showConfirmationDialog(
       context: context,
       title: "profile_info_screen.confirm_delete_title".tr,
@@ -206,7 +208,7 @@ class ProfileInfoScreen extends ConsumerWidget {
         final authController = ref.read(authControllerProvider.notifier);
         authController.deleteAccount().then((_) {
           final authState = ref.read(authControllerProvider);
-          if (!authState.isLoggedIn) {
+          if (context.mounted && !authState.isLoggedIn) {
             Navigator.of(context).pop();
           }
         });
@@ -287,10 +289,7 @@ class ProfileInfoScreen extends ConsumerWidget {
     final textTheme = theme.textTheme;
 
     return ListTile(
-      title: Text(
-        title,
-        style: textTheme.bodyLarge,
-      ),
+      title: Text(title, style: textTheme.bodyLarge),
       subtitle: isSelectable
           ? SelectableText(
               value,
@@ -304,10 +303,7 @@ class ProfileInfoScreen extends ConsumerWidget {
                 color: valueColor ?? theme.colorScheme.outline,
               ),
             ),
-      leading: Icon(
-        icon,
-        color: theme.colorScheme.primary,
-      ),
+      leading: Icon(icon, color: theme.colorScheme.primary),
     );
   }
 
@@ -317,9 +313,7 @@ class ProfileInfoScreen extends ConsumerWidget {
 
     if (difference.inDays > 365) {
       final years = (difference.inDays / 365).floor();
-      return "profile_info_screen.years_ago".trParams({
-        "0": years.toString(),
-      });
+      return "profile_info_screen.years_ago".trParams({"0": years.toString()});
     } else if (difference.inDays > 30) {
       final months = (difference.inDays / 30).floor();
       return "profile_info_screen.months_ago".trParams({

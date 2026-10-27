@@ -24,23 +24,23 @@ class Recipe extends HiveObject {
     String? ownerId,
     this.isPublic = false,
     this.cloudId,
-  })  : ownerId = ownerId ?? "",
-        assert(ingredients.isNotEmpty),
-        assert(directions.isNotEmpty);
+  }) : ownerId = ownerId ?? "",
+       assert(ingredients.isNotEmpty),
+       assert(directions.isNotEmpty);
 
   Recipe.fromMap(Map<String, dynamic> map)
-      : id = map["id"]?.toString().isNotEmpty == true
-            ? map["id"].toString()
-            : const Uuid().v4(),
-        title = map["title"] ?? "",
-        description = map["description"] ?? "",
-        image = map["image"],
-        ingredients = List<String>.from(map["ingredients"] ?? []),
-        directions = List<String>.from(map["directions"] ?? []),
-        preparationTime = map["preparationTime"] ?? 0,
-        ownerId = map["ownerId"] ?? "",
-        isPublic = map["isPublic"] ?? false,
-        cloudId = map["cloudId"] {
+    : id = map["id"]?.toString().isNotEmpty == true
+          ? map["id"].toString()
+          : const Uuid().v4(),
+      title = map["title"] ?? "",
+      description = map["description"] ?? "",
+      image = map["image"],
+      ingredients = List<String>.from(map["ingredients"] ?? []),
+      directions = List<String>.from(map["directions"] ?? []),
+      preparationTime = map["preparationTime"] ?? 0,
+      ownerId = map["ownerId"] ?? "",
+      isPublic = map["isPublic"] ?? false,
+      cloudId = map["cloudId"] {
     assert(ingredients.isNotEmpty);
     assert(directions.isNotEmpty);
   }

@@ -1,7 +1,7 @@
-import "package:flutter/material.dart";
-import "package:flutter/cupertino.dart";
+import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter/services.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/custom_predictive_back_page_transitions_builder.dart";
 
 class TheRecipeAppTheme {
@@ -42,9 +42,7 @@ class TheRecipeAppTheme {
     return DialogThemeData(
       elevation: 8,
       backgroundColor: isDark ? _darkColorScheme.surface : _colorScheme.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     );
   }
 
@@ -66,20 +64,16 @@ class TheRecipeAppTheme {
   }
 
   static DividerThemeData _dividerTheme(bool isDark) => DividerThemeData(
-        color: isDark
-            ? Colors.white30.withAlpha(24)
-            : Colors.black26.withAlpha(24),
-        thickness: 0.5,
-        space: 0.5,
-      );
+    color: isDark ? Colors.white30.withAlpha(24) : Colors.black26.withAlpha(24),
+    thickness: 0.5,
+    space: 0.5,
+  );
 
   static TextButtonThemeData _textButtonTheme(bool isDark) =>
       TextButtonThemeData(
         style: ButtonStyle(
           textStyle: WidgetStatePropertyAll(
-            TextStyle(
-              fontWeight: FontWeight.w600,
-            ),
+            TextStyle(fontWeight: FontWeight.w600),
           ),
           surfaceTintColor: WidgetStatePropertyAll(
             isDark ? Colors.grey.shade800 : Colors.grey.shade200,
@@ -96,9 +90,7 @@ class TheRecipeAppTheme {
           ),
           shape: WidgetStatePropertyAll(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10),
-              ),
+              borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
           ),
         ),
@@ -106,44 +98,30 @@ class TheRecipeAppTheme {
 
   static const OutlinedButtonThemeData _outlinedButtonTheme =
       OutlinedButtonThemeData(
-    style: ButtonStyle(
-      textStyle: WidgetStatePropertyAll(
-        TextStyle(
-          fontWeight: FontWeight.w500,
-        ),
-      ),
-      foregroundColor: WidgetStatePropertyAll(Colors.deepOrange),
-      side: WidgetStatePropertyAll(
-        BorderSide(
-          color: Colors.deepOrange,
-          width: 1.5,
-        ),
-      ),
-      shape: WidgetStatePropertyAll(
-        RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
+        style: ButtonStyle(
+          textStyle: WidgetStatePropertyAll(
+            TextStyle(fontWeight: FontWeight.w500),
+          ),
+          foregroundColor: WidgetStatePropertyAll(Colors.deepOrange),
+          side: WidgetStatePropertyAll(
+            BorderSide(color: Colors.deepOrange, width: 1.5),
+          ),
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
           ),
         ),
-      ),
-    ),
-  );
+      );
 
-  static const FilledButtonThemeData _filledButtonTheme =
-      const FilledButtonThemeData(
+  static const FilledButtonThemeData _filledButtonTheme = FilledButtonThemeData(
     style: ButtonStyle(
-      textStyle: WidgetStatePropertyAll(
-        TextStyle(
-          fontWeight: FontWeight.w600,
-        ),
-      ),
+      textStyle: WidgetStatePropertyAll(TextStyle(fontWeight: FontWeight.w600)),
       backgroundColor: WidgetStatePropertyAll(Colors.deepOrange),
       foregroundColor: WidgetStatePropertyAll(Colors.white),
       shape: WidgetStatePropertyAll(
         RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
       ),
     ),
@@ -178,19 +156,18 @@ class TheRecipeAppTheme {
   }
 
   static FloatingActionButtonThemeData _floatingActionButtonThemeData(
-      bool isDark) {
+    bool isDark,
+  ) {
     return FloatingActionButtonThemeData(
       backgroundColor: Colors.deepOrange,
       foregroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
     );
   }
 
-  static ColorScheme _colorScheme = ColorScheme.fromSeed(
+  static final ColorScheme _colorScheme = ColorScheme.fromSeed(
     seedColor: Colors.deepOrange,
     primary: Colors.deepOrange,
     secondary: Colors.deepOrange,
@@ -199,7 +176,7 @@ class TheRecipeAppTheme {
     brightness: Brightness.light,
   );
 
-  static ColorScheme _darkColorScheme = ColorScheme.fromSeed(
+  static final ColorScheme _darkColorScheme = ColorScheme.fromSeed(
     seedColor: Colors.deepOrange,
     primary: Colors.deepOrange,
     secondary: Colors.deepOrange,
@@ -287,12 +264,8 @@ class TheRecipeAppTheme {
       elevation: 0,
       enableFeedback: true,
       mouseCursor: WidgetStateProperty.all(SystemMouseCursors.click),
-      selectedIconTheme: const IconThemeData(
-        size: 20,
-      ),
-      unselectedIconTheme: const IconThemeData(
-        size: 20,
-      ),
+      selectedIconTheme: const IconThemeData(size: 20),
+      unselectedIconTheme: const IconThemeData(size: 20),
       landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
       showSelectedLabels: true,
       showUnselectedLabels: true,
@@ -301,17 +274,16 @@ class TheRecipeAppTheme {
 
   static SnackBarThemeData _snackBarTheme(bool isDark) {
     return SnackBarThemeData(
-      backgroundColor:
-          isDark ? const Color(0xFF2A2A2A) : const Color(0xFF323232),
+      backgroundColor: isDark
+          ? const Color(0xFF2A2A2A)
+          : const Color(0xFF323232),
       contentTextStyle: TextStyle(
         color: Colors.white,
         fontSize: 14,
         fontWeight: FontWeight.w500,
       ),
       actionTextColor: Colors.deepOrange,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       behavior: SnackBarBehavior.floating,
       elevation: 6,
     );
@@ -319,26 +291,25 @@ class TheRecipeAppTheme {
 
   static ChipThemeData _chipTheme(bool isDark) {
     return ChipThemeData(
-      backgroundColor:
-          isDark ? const Color(0xFF2A2A2A) : const Color(0xFFF5F5F5),
+      backgroundColor: isDark
+          ? const Color(0xFF2A2A2A)
+          : const Color(0xFFF5F5F5),
       selectedColor: Colors.deepOrange.withAlpha(50),
       disabledColor: isDark ? Colors.white12 : Colors.black12,
       deleteIconColor: isDark ? Colors.white70 : Colors.black54,
       labelStyle: _getTextTheme(isDark).labelLarge!.copyWith(
-            fontWeight: FontWeight.w500,
-            color: isDark ? Colors.white70 : Colors.black54,
-          ),
+        fontWeight: FontWeight.w500,
+        color: isDark ? Colors.white70 : Colors.black54,
+      ),
       secondaryLabelStyle: _getTextTheme(isDark).labelMedium!.copyWith(
-            fontWeight: FontWeight.w400,
-            color: isDark ? Colors.white70 : Colors.black54,
-          ),
+        fontWeight: FontWeight.w400,
+        color: isDark ? Colors.white70 : Colors.black54,
+      ),
       side: BorderSide(
         color: isDark ? Colors.white30 : Colors.black26,
         width: 0.5,
       ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 0,
       pressElevation: 2,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

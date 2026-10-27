@@ -22,7 +22,7 @@ Los servicios backend utilizan Appwrite (Auth, Database, Storage, Functions).
 flutter pub get
 
 # Genera los archivos necesarios con build_runner (requerido después de cambios en modelos)
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 
 # Corre la aplicación
 flutter run
@@ -70,12 +70,23 @@ appwrite run function --function-id <function-id> --port 3000
 
 Usa **dobles comillas** para las importaciones.
 
+Los widgets de Material y Cupertino vienen de paquetes desacoplados del SDK desde Flutter 3.47. Importa siempre:
+
+```dart
+import "package:material_ui/material_ui.dart";
+import "package:cupertino_ui/cupertino_ui.dart";
+```
+
+Nunca importes `package:flutter/material.dart` ni `package:flutter/cupertino.dart` en código nuevo.
+
 Ordena las importaciones de la siguiente manera:
 
 1. Librerías principales de Dart (`dart:async`, `dart:io`)
-2. Paquetes de Flutter (`package:flutter/material.dart`)
+2. Paquetes de Flutter (`package:flutter/services.dart`, `package:material_ui/...`)
 3. Paquetes externos (`package:flutter_riverpod/...`)
 4. Paquetes internos (`package:the_recipes/...`)
+
+`dart format` inserta una línea en blanco entre cada sección.
 
 ```dart
 import "dart:async";
@@ -153,15 +164,17 @@ class RecipesPage extends ConsumerStatefulWidget {
 
 - Usa `try-catch` con tipos de excepción específicos siempre que sea posible
 - Usa `debugPrint` para el registro (no `print`)
-- Usa `EasyLoading.showError` para errores que detecta el usuario
+- Usa `EasyLoading.showError` para errores que detecta el usuario y envuélvelo con `unawaited(...)`
 - Usa claves de traducción para los mensajes de error
 
 ```dart
+import "dart:async";
+
 try {
   await operation();
 } on AppwriteException catch (e) {
   debugPrint("Appwrite error: ${e.code} - ${e.message}");
-  EasyLoading.showError("auth_controller.sign_in_error".tr);
+  unawaited(EasyLoading.showError("auth_controller.sign_in_error".tr));
 } catch (e) {
   debugPrint("General error: $e");
   rethrow;
@@ -236,7 +249,8 @@ import { detectUserLocale } from "@/utils/i18n";
 
 ### Flutter
 
-- **Gestión de estado**: Riverpod 3.0
+- **Gestión de estado**: Riverpod 3.4
+- **Sistema de diseño**: material_ui y cupertino_ui
 - **Base de datos local**: Hive CE
 - **Backend**: Appwrite SDK
 - **Linting**: flutter_lints, riverpod_lint
@@ -268,5 +282,6 @@ de, en, es, fr, it, ja, ko, pt, zh
 - `lib/hive_boxes.dart` - Cajas de Hive para el almacenamiento local
 - `lib/services/` - Servicios de lógica de negocio
 - `pubspec.yaml` - Dependencias de Flutter
+- `analysis_options.yaml` - Reglas de lint (flutter_lints y riverpod_lint)
 - `appwrite.config.json` - Configuración del proyecto Appwrite
 - `website/astro.config.ts` - Configuración de Astro

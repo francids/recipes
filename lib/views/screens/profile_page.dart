@@ -1,7 +1,8 @@
-import "package:flutter/cupertino.dart";
-import "package:flutter/material.dart";
+import "package:cupertino_ui/cupertino_ui.dart";
+import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:lottie/lottie.dart";
+import "package:material_ui/material_ui.dart";
 import "package:the_recipes/controllers/auth_controller.dart";
 import "package:the_recipes/controllers/profile_controller.dart";
 import "package:the_recipes/messages.dart";
@@ -11,7 +12,6 @@ import "package:the_recipes/views/screens/public_recipes_search_screen.dart";
 import "package:the_recipes/views/screens/shared_recipes_screen.dart";
 import "package:the_recipes/views/widgets/pressable_button.dart";
 import "package:the_recipes/views/widgets/ui_helpers.dart";
-import "package:flutter_animate/flutter_animate.dart";
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
@@ -23,9 +23,7 @@ class ProfilePage extends ConsumerWidget {
         builder: (context, ref, child) {
           final authController = ref.watch(authControllerProvider);
           if (!authController.isLoggedIn) {
-            return Center(
-              child: _buildSignInPrompt(context, ref),
-            );
+            return Center(child: _buildSignInPrompt(context, ref));
           }
           return SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -33,9 +31,7 @@ class ProfilePage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 16,
               children: [
-                SizedBox(
-                  height: MediaQuery.of(context).padding.top,
-                ),
+                SizedBox(height: MediaQuery.of(context).padding.top),
                 _buildProfileHeader(context, ref)
                     .animate()
                     .fadeIn(duration: 300.ms)
@@ -48,10 +44,7 @@ class ProfilePage extends ConsumerWidget {
                     .animate()
                     .fadeIn(delay: 100.ms, duration: 250.ms)
                     .slideX(begin: -0.15, curve: Curves.easeOutCubic),
-                const Divider(
-                  indent: 16,
-                  endIndent: 16,
-                )
+                const Divider(indent: 16, endIndent: 16)
                     .animate()
                     .fadeIn(delay: 150.ms, duration: 200.ms)
                     .slideX(begin: -0.1, curve: Curves.easeOutCubic),
@@ -67,14 +60,12 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildSignInPrompt(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
+  Widget _buildSignInPrompt(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
-    final AuthController authController =
-        ref.read(authControllerProvider.notifier);
+    final AuthController authController = ref.read(
+      authControllerProvider.notifier,
+    );
 
     return Padding(
       padding: const EdgeInsets.all(24),
@@ -112,10 +103,7 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildProfileHeader(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
+  Widget _buildProfileHeader(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
     final authController = ref.watch(authControllerProvider);
@@ -128,9 +116,7 @@ class ProfilePage extends ConsumerWidget {
       child: InkWell(
         onTap: () => Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => const ProfileInfoScreen(),
-          ),
+          MaterialPageRoute(builder: (context) => const ProfileInfoScreen()),
         ),
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -162,10 +148,7 @@ class ProfilePage extends ConsumerWidget {
                       style: textTheme.displayMedium,
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      user?.email ?? "",
-                      style: textTheme.bodyMedium,
-                    ),
+                    Text(user?.email ?? "", style: textTheme.bodyMedium),
                   ],
                 ),
               ),
@@ -198,15 +181,13 @@ class ProfilePage extends ConsumerWidget {
         child: ListTile(
           title: Text(
             "profile_page.sign_out".tr,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
+            style: Theme.of(context).textTheme.bodyLarge
+                ?.copyWith(fontWeight: FontWeight.w500),
           ),
           subtitle: Text(
             "profile_page.sign_out_description".tr,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.outline,
-                ),
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: Theme.of(context).colorScheme.outline),
           ),
           leading: Icon(
             CupertinoIcons.square_arrow_right,
@@ -221,10 +202,7 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildRecipesManagementCard(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
+  Widget _buildRecipesManagementCard(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authControllerProvider);
     final profileController = ref.read(profileControllerProvider);
 
@@ -241,9 +219,8 @@ class ProfilePage extends ConsumerWidget {
             ),
             subtitle: Text(
               "profile_page.backup_recipes_description".tr,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: Theme.of(context).colorScheme.outline),
             ),
             value: authState.autoSyncEnabled,
             onChanged: (value) =>
@@ -258,15 +235,13 @@ class ProfilePage extends ConsumerWidget {
             ListTile(
               title: Text(
                 "profile_page.shared_recipes".tr,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+                style: Theme.of(context).textTheme.bodyLarge
+                    ?.copyWith(fontWeight: FontWeight.w500),
               ),
               subtitle: Text(
                 "profile_page.shared_recipes_description".tr,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
+                style: Theme.of(context).textTheme.bodySmall
+                    ?.copyWith(color: Theme.of(context).colorScheme.outline),
               ),
               leading: Icon(
                 CupertinoIcons.person_2_square_stack,
@@ -288,15 +263,13 @@ class ProfilePage extends ConsumerWidget {
           ListTile(
             title: Text(
               "profile_page.search_public_recipes".tr,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
+              style: Theme.of(context).textTheme.bodyLarge
+                  ?.copyWith(fontWeight: FontWeight.w500),
             ),
             subtitle: Text(
               "profile_page.search_public_recipes_description".tr,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
+              style: Theme.of(context).textTheme.bodySmall
+                  ?.copyWith(color: Theme.of(context).colorScheme.outline),
             ),
             leading: Icon(
               CupertinoIcons.search,
@@ -318,10 +291,7 @@ class ProfilePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildFavoritesCard(
-    BuildContext context,
-    WidgetRef ref,
-  ) {
+  Widget _buildFavoritesCard(BuildContext context, WidgetRef ref) {
     return Card(
       elevation: 0,
       margin: EdgeInsets.zero,
@@ -329,15 +299,13 @@ class ProfilePage extends ConsumerWidget {
       child: ListTile(
         title: Text(
           "profile_page.favorite_recipes".tr,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+          style: Theme.of(context).textTheme.bodyLarge
+              ?.copyWith(fontWeight: FontWeight.w500),
         ),
         subtitle: Text(
           "profile_page.favorite_recipes_description".tr,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.outline,
-              ),
+          style: Theme.of(context).textTheme.bodySmall
+              ?.copyWith(color: Theme.of(context).colorScheme.outline),
         ),
         leading: Icon(
           CupertinoIcons.heart,
