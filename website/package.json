@@ -9,14 +9,13 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "9.4.4",
-    "@tailwindcss/typography": "^0.5.16",
-    "@tailwindcss/vite": "^4.1.16",
-    "astro": "5.14.1",
-    "tailwindcss": "^4.1.16"
+    "@astrojs/node": "11.1.9",
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "7.4.2",
+    "tailwindcss": "^4.3.3"
   },
   "allowScripts": {
-    "esbuild@0.25.11": true,
-    "sharp@0.34.4": true
+    "sharp@0.35.5": true
   }
 }

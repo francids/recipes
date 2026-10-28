@@ -10,7 +10,7 @@ const locale: Locale = detectUserLocale(Astro.request);
 const t = await createTranslationHelper(locale);
 ---
 
-<Layout client:load>
+<Layout>
   <div class="flex flex-col bg-white dark:bg-zinc-900 relative min-h-screen">
     <div class="flex-1 min-h-screen relative z-10">
       <div

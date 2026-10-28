@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { detectUserLocale } from "../utils/i18n.ts";
-import { getEntry } from "astro:content";
+import { getEntry, render } from "astro:content";
 
 const locale = detectUserLocale(Astro.request);
 
@@ -14,7 +14,7 @@ let pageTitle = "Privacy Policy";
 let Content = null;
 
 if (privacyEntry) {
-  const { Content: MarkdownContent } = await privacyEntry.render();
+  const { Content: MarkdownContent } = await render(privacyEntry);
   Content = MarkdownContent;
   pageTitle = privacyEntry.data.title;
 }
