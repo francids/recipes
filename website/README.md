@@ -12,7 +12,7 @@ Este sitio web sirve como punto de entrada para la aplicación Recipes, presenta
 
 - [Astro](https://astro.build/) como framework web.
 - [Tailwind CSS](https://tailwindcss.com/) para el diseño y estilos.
-- [Node.js](https://nodejs.org/) como entorno de ejecución.
+- [Cloudflare Workers](https://workers.cloudflare.com/) como plataforma de despliegue.
 
 ## Desarrollo
 
@@ -22,3 +22,21 @@ Para desarrollar o modificar el sitio web:
 2. Instala las dependencias: `npm install`
 3. Inicia el servidor de desarrollo: `npm run dev`
 4. Visita [localhost:4321](http://localhost:4321) para ver el sitio web en funcionamiento.
+
+## Despliegue en Cloudflare Workers
+
+El sitio usa el adaptador `@astrojs/cloudflare` y se renderiza en el servidor para detectar el idioma del visitante desde la cabecera `Accept-Language` y las cookies.
+
+1. Inicia sesión en Cloudflare (solo la primera vez): `npx wrangler login`
+2. Compila y despliega: `npm run deploy`
+
+También puedes previsualizar el Worker localmente con el runtime de Cloudflare:
+
+```sh
+npm run build
+npm run preview
+```
+
+La configuración del Worker está en `wrangler.jsonc`. Para publicar en el dominio de producción, añade una sección `routes` con el dominio. Si el proyecto usa otro nombre de Worker, cambia el campo `name`.
+
+> El adaptador configura automáticamente el binding de assets (`ASSETS`). El sitio no usa sesiones ni optimización de imágenes en tiempo de ejecución, por lo que no provisiona KV ni el binding de Cloudflare Images.

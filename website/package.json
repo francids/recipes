@@ -1,21 +1,30 @@
 {
-  "name": "the-recipes-website",
+  "name": "recipes-website",
   "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "deploy": "npm run build && wrangler deploy",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "11.1.9",
+    "@astrojs/cloudflare": "^14.4.3",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
     "astro": "7.4.2",
     "tailwindcss": "^4.3.3"
   },
+  "devDependencies": {
+    "wrangler": "^4.156.0"
+  },
+  "overrides": {
+    "postcss-selector-parser": "6.1.5"
+  },
   "allowScripts": {
-    "sharp@0.35.5": true
+    "esbuild@0.28.2": true,
+    "sharp@0.35.5": true,
+    "workerd@1.20261023.1": true
   }
 }
