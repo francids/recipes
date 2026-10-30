@@ -4,7 +4,8 @@
     "feature4_description": "生成独特的链接来分享您最喜欢的食谱。用户可以从任何设备访问链接，应用程序将自动打开并显示包含所有配料和说明的完整食谱。",
     "feature5_title": "AI食谱生成",
     "feature5_description": "拍摄任何菜品的照片，我们的人工智能将分析图像生成完整的食谱。AI识别可见的配料，并基于菜品的视觉分析建议制作方法。", "home": "首页",
-    "privacy": "隐私"
+    "privacy": "隐私",
+    "menu": "菜单"
   },
   "HeroSection": {
     "title": "您的数字食谱书",

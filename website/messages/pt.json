@@ -1,7 +1,8 @@
 {
   "Navbar": {
     "home": "Início",
-    "privacy": "Privacidade"
+    "privacy": "Privacidade",
+    "menu": "Menu"
   },
   "HeroSection": {
     "title": "Seu livro de receitas digital",

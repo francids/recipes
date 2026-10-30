@@ -1,7 +1,8 @@
 {
   "Navbar": {
     "home": "Startseite",
-    "privacy": "Datenschutz"
+    "privacy": "Datenschutz",
+    "menu": "Menü"
   },
   "HeroSection": {
     "title": "Dein digitales Rezeptbuch",

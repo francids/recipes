@@ -4,7 +4,8 @@
     "feature4_description": "Genera link unici per condividere le tue ricette preferite. Gli utenti possono accedere al link da qualsiasi dispositivo e l'app si aprirà automaticamente mostrando la ricetta completa con tutti gli ingredienti e le istruzioni.",
     "feature5_title": "Generazione ricette con IA",
     "feature5_description": "Scatta una foto di qualsiasi piatto e la nostra intelligenza artificiale analizzerà l'immagine per generare una ricetta completa. L'IA identifica gli ingredienti visibili e suggerisce metodi di preparazione basati sull'analisi visiva del piatto.", "home": "Home",
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "menu": "Menu"
   },
   "HeroSection": {
     "title": "Il tuo ricettario digitale",

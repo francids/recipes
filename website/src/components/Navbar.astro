@@ -15,134 +15,164 @@ const privacyUrl = getRelativeLocaleUrl(locale, "privacy");
 const isHome = pathname === homeUrl || pathname === `${homeUrl}/`;
 ---
 
-<nav
-  class={`flex justify-between items-center px-8 py-4 static z-50 transition-all duration-300 bg-white dark:bg-zinc-900 ${
-    !isHome
-      ? "border-b border-zinc-300 dark:border-zinc-700"
-      : "border-b border-main/25 dark:border-amber-500/25"
-  }`}
->
-  <div class="flex items-center gap-4 select-none">
-    <a href={homeUrl} class="flex items-center select-none">
-      <img src="/Logo.svg" alt="Recipes App" width={40} height={40} />
-    </a>
-    <LanguageSelect />
-  </div>
-
-  <div class="hidden md:flex gap-4 items-center select-none">
-    <a
-      href={homeUrl}
-      class="px-4 py-2 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-200 font-semibold text-sm transition-all duration-300 active:scale-95 hover:bg-zinc-200 dark:hover:bg-zinc-700/20 hover:shadow-sm select-none"
-    >
-      {t("Navbar.home")}
-    </a>
-    <a
-      href={privacyUrl}
-      class="px-4 py-2 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-200 font-semibold text-sm transition-all duration-300 active:scale-95 hover:bg-zinc-200 dark:hover:bg-zinc-700/20 hover:shadow-sm select-none"
-    >
-      {t("Navbar.privacy")}
-    </a>
-    <a
-      href="https://github.com/francids/recipes"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="px-4 py-2 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-200 font-semibold text-sm transition-all duration-300 active:scale-95 hover:bg-zinc-200 dark:hover:bg-zinc-700/20 hover:shadow-sm select-none"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-      >
-        <path
-          d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
-        ></path>
-      </svg>
-    </a>
-  </div>
-
-  <button
-    id="mobile-menu-toggle"
-    class="md:hidden flex flex-col justify-between h-5 w-7 bg-transparent border-none cursor-pointer z-10"
-    aria-label="Menú"
+<div data-navbar>
+  <nav
+    class={`flex justify-between items-center px-8 py-4 relative z-50 transition-all duration-300 bg-white dark:bg-zinc-900 ${
+      !isHome
+        ? "border-b border-zinc-300 dark:border-zinc-700"
+        : "border-b border-main/25 dark:border-amber-500/25"
+    }`}
   >
-    <span
-      class="w-full h-0.5 rounded-full bg-zinc-900 dark:bg-white transition-all"
-    ></span>
-    <span
-      class="w-full h-0.5 rounded-full bg-zinc-900 dark:bg-white transition-all"
-    ></span>
-    <span
-      class="w-full h-0.5 rounded-full bg-zinc-900 dark:bg-white transition-all"
-    ></span>
-  </button>
+    <div class="flex items-center gap-4 select-none">
+      <a
+        href={homeUrl}
+        class="flex items-center select-none pointer-events-none"
+      >
+        <img src="/Logo.svg" alt="Recipes App" width={40} height={40} />
+      </a>
+      <LanguageSelect />
+    </div>
+
+    <div class="hidden md:flex gap-4 items-center select-none">
+      <a
+        href={homeUrl}
+        class="px-4 py-2 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-200 font-semibold text-sm transition-all duration-300 active:scale-95 hover:bg-zinc-200 dark:hover:bg-zinc-700/20 hover:shadow-sm select-none"
+      >
+        {t("Navbar.home")}
+      </a>
+      <a
+        href={privacyUrl}
+        class="px-4 py-2 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-200 font-semibold text-sm transition-all duration-300 active:scale-95 hover:bg-zinc-200 dark:hover:bg-zinc-700/20 hover:shadow-sm select-none"
+      >
+        {t("Navbar.privacy")}
+      </a>
+      <a
+        href="https://github.com/francids/recipes"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="px-4 py-2 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-200 font-semibold text-sm transition-all duration-300 active:scale-95 hover:bg-zinc-200 dark:hover:bg-zinc-700/20 hover:shadow-sm select-none"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+        >
+          <path
+            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+          ></path>
+        </svg>
+      </a>
+    </div>
+
+    <div class="relative md:hidden">
+      <button
+        id="mobile-menu-toggle"
+        type="button"
+        data-menu-button
+        aria-label={t("Navbar.menu", "Menu")}
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        class="inline-flex items-center justify-center size-10 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-200 transition-all duration-300 active:scale-95 hover:bg-zinc-200 dark:hover:bg-zinc-700/20 hover:shadow-sm cursor-pointer"
+      >
+        <svg
+          data-menu-icon
+          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          class="size-5"
+        >
+          <path
+            data-icon-closed
+            d="M3 4H21V6H3V4ZM3 11H21V13H3V11ZM3 18H21V20H3V18Z"></path>
+          <path
+            data-icon-open
+            class="hidden"
+            d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z"
+          ></path>
+        </svg>
+      </button>
+    </div>
+  </nav>
 
   <div
     id="mobile-menu"
-    class="fixed top-17.5 left-0 right-0 flex flex-col gap-4 m-0 p-6 shadow-lg rounded-b-lg md:hidden transition-opacity duration-300 ease-in-out opacity-0 pointer-events-none bg-white dark:bg-zinc-800 border-t border-zinc-200 dark:border-zinc-700 z-40"
+    data-menu
+    class="fixed inset-0 z-40 hidden md:hidden overflow-y-auto bg-white dark:bg-zinc-900"
   >
-    <a
-      href={homeUrl}
-      class="font-medium py-2 text-zinc-800 dark:text-zinc-100 hover:text-orange-600 dark:hover:text-orange-400 mobile-menu-link"
-    >
-      {t("Navbar.home")}
-    </a>
-    <a
-      href={privacyUrl}
-      class="font-medium py-2 text-zinc-800 dark:text-zinc-100 hover:text-orange-600 dark:hover:text-orange-400 mobile-menu-link"
-    >
-      {t("Navbar.privacy")}
-    </a>
-    <a
-      href="https://github.com/francids/recipes"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="font-medium py-2 text-zinc-800 dark:text-zinc-100 hover:text-orange-600 dark:hover:text-orange-400 mobile-menu-link"
-    >
-      GitHub
-    </a>
+    <div class="flex h-full flex-col gap-6 px-8 pt-28 pb-8">
+      <a
+        href={homeUrl}
+        class="block py-3 text-3xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100"
+      >
+        {t("Navbar.home")}
+      </a>
+      <a
+        href={privacyUrl}
+        class="block py-3 text-3xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100"
+      >
+        {t("Navbar.privacy")}
+      </a>
+      <a
+        href="https://github.com/francids/recipes"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="block py-3 text-3xl font-medium tracking-tight text-zinc-900 dark:text-zinc-100"
+      >
+        GitHub
+      </a>
+    </div>
   </div>
-</nav>
+</div>
 
 <script>
-  const menuToggle = document.getElementById("mobile-menu-toggle");
-  const mobileMenu = document.getElementById("mobile-menu");
-  const menuLinks = document.querySelectorAll(".mobile-menu-link");
+  function initNavbar(root: HTMLElement) {
+    if (root.dataset.initialized) return;
+    root.dataset.initialized = "true";
 
-  let isMenuOpen = false;
+    const button = root.querySelector<HTMLButtonElement>("[data-menu-button]");
+    const menu = root.querySelector<HTMLElement>("[data-menu]");
+    const iconOpen = root.querySelector("[data-icon-open]");
+    const iconClosed = root.querySelector("[data-icon-closed]");
 
-  function toggleMenu() {
-    isMenuOpen = !isMenuOpen;
-    if (mobileMenu) {
-      mobileMenu.style.opacity = isMenuOpen ? "1" : "0";
-      mobileMenu.style.pointerEvents = isMenuOpen ? "auto" : "none";
+    if (!button || !menu) return;
+
+    let isOpen = false;
+
+    function setOpen(next: boolean) {
+      isOpen = next;
+      button!.setAttribute("aria-expanded", String(next));
+      menu!.classList.toggle("hidden", !next);
+      document.body.style.overflow = next ? "hidden" : "";
+      iconOpen?.classList.toggle("hidden", !next);
+      iconClosed?.classList.toggle("hidden", next);
     }
+
+    button.addEventListener("click", () => setOpen(!isOpen));
+
+    menu.addEventListener("click", (event) => {
+      if ((event.target as HTMLElement).closest("a")) setOpen(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && isOpen) {
+        setOpen(false);
+        button.focus();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 768 && isOpen) setOpen(false);
+    });
   }
 
-  function closeMenu() {
-    isMenuOpen = false;
-    if (mobileMenu) {
-      mobileMenu.style.opacity = "0";
-      mobileMenu.style.pointerEvents = "none";
-    }
+  function initAll() {
+    document.querySelectorAll<HTMLElement>("[data-navbar]").forEach(initNavbar);
   }
 
-  menuToggle?.addEventListener("click", toggleMenu);
-
-  menuLinks.forEach((link) => {
-    link.addEventListener("click", closeMenu);
-  });
-
-  document.addEventListener("click", (e) => {
-    if (
-      isMenuOpen &&
-      mobileMenu &&
-      menuToggle &&
-      !mobileMenu.contains(e.target as Node) &&
-      !menuToggle.contains(e.target as Node)
-    ) {
-      closeMenu();
-    }
-  });
+  initAll();
+  document.addEventListener("astro:after-swap", initAll);
 </script>

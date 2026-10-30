@@ -1,7 +1,8 @@
 {
   "Navbar": {
     "home": "홈",
-    "privacy": "개인정보보호"
+    "privacy": "개인정보보호",
+    "menu": "메뉴"
   },
   "HeroSection": {
     "title": "나만의 디지털 레시피 북",
