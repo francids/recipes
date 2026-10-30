@@ -1,16 +1,7 @@
 import { i18n } from "astro:config/client";
 import { toCodes } from "astro:i18n";
 
-export type Locale =
-  | "de"
-  | "en"
-  | "es"
-  | "fr"
-  | "it"
-  | "ja"
-  | "ko"
-  | "pt"
-  | "zh";
+export type Locale = "de" | "en" | "es" | "fr" | "it" | "ja" | "ko" | "pt" | "zh";
 
 export interface Translations {
   [key: string]: string | Translations;
@@ -27,6 +18,42 @@ export function resolveLocale(locale: string | undefined): Locale {
   return isLocale(locale) ? locale : defaultLocale;
 }
 
+export function resolveLocaleFromAcceptLanguage(
+  header: string | null | undefined,
+): Locale | undefined {
+  if (!header) {
+    return undefined;
+  }
+
+  const candidates = header
+    .split(",")
+    .map((part) => {
+      const [tag, ...params] = part.trim().split(";");
+      const qualityParam = params.find((param) => param.trim().startsWith("q="));
+      const quality = qualityParam ? Number.parseFloat(qualityParam.split("=")[1]) : 1;
+
+      return {
+        tag: tag.trim().toLowerCase(),
+        quality: Number.isFinite(quality) ? quality : 1,
+      };
+    })
+    .filter(({ tag, quality }) => tag && tag !== "*" && quality > 0)
+    .sort((a, b) => b.quality - a.quality);
+
+  for (const { tag } of candidates) {
+    if (isLocale(tag)) {
+      return tag;
+    }
+
+    const base = tag.split("-")[0];
+    if (isLocale(base)) {
+      return base;
+    }
+  }
+
+  return undefined;
+}
+
 const translationsCache = new Map<Locale, Translations>();
 
 async function loadTranslations(locale: Locale): Promise<Translations> {
@@ -38,10 +65,8 @@ async function loadTranslations(locale: Locale): Promise<Translations> {
     const translations = await import(`../../messages/${locale}.json`);
     translationsCache.set(locale, translations.default);
     return translations.default;
-  } catch (error) {
-    console.warn(
-      `Could not load locale ${locale}, falling back to ${defaultLocale}`
-    );
+  } catch {
+    console.warn(`Could not load locale ${locale}, falling back to ${defaultLocale}`);
     if (locale !== defaultLocale) {
       return await loadTranslations(defaultLocale);
     }
@@ -49,10 +74,7 @@ async function loadTranslations(locale: Locale): Promise<Translations> {
   }
 }
 
-function getNestedTranslation(
-  obj: Translations,
-  path: string
-): string | undefined {
+function getNestedTranslation(obj: Translations, path: string): string | undefined {
   const result = path
     .split(".")
     .reduce((current: Translations | string | undefined, key: string) => {
@@ -65,25 +87,20 @@ function getNestedTranslation(
   return typeof result === "string" ? result : undefined;
 }
 
-export async function t(
-  key: string,
-  locale: Locale = defaultLocale
-): Promise<string> {
+export async function t(key: string, locale: Locale = defaultLocale): Promise<string> {
   const translations = await loadTranslations(locale);
   return getNestedTranslation(translations, key) || key;
 }
 
 export async function createTranslationHelper(
-  locale: Locale
-): Promise<
-  (key: string, fallback?: string, params?: Record<string, string>) => string
-> {
+  locale: Locale,
+): Promise<(key: string, fallback?: string, params?: Record<string, string>) => string> {
   const translations = await loadTranslations(locale);
 
   return function translate(
     key: string,
     fallback: string = key,
-    params?: Record<string, string>
+    params?: Record<string, string>,
   ): string {
     let result = getNestedTranslation(translations, key) || fallback;
 

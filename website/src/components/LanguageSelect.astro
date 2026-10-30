@@ -1,10 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
-import {
-  resolveLocale,
-  supportedLocales,
-  type Locale,
-} from "../utils/i18n.ts";
+import { resolveLocale, supportedLocales, type Locale } from "../utils/i18n.ts";
 
 const locale: Locale = resolveLocale(Astro.currentLocale);
 const pathname = Astro.url.pathname;
@@ -87,6 +83,7 @@ const currentName = languageNames[locale];
             <a
               href={`${getRelativeLocaleUrl(langCode, path)}${search}`}
               hreflang={langCode}
+              data-locale={langCode}
               class={`flex justify-start items-center w-full gap-0 text-left px-4 py-2 text-sm ${
                 langCode === locale
                   ? "bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 font-medium"
@@ -145,4 +142,18 @@ const currentName = languageNames[locale];
       closeDropdown();
     }
   });
+
+  const LOCALE_COOKIE = "locale";
+  const ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365;
+
+  document
+    .querySelectorAll<HTMLAnchorElement>("#language-dropdown a[data-locale]")
+    .forEach((link) => {
+      link.addEventListener("click", () => {
+        const locale = link.dataset.locale;
+        if (locale) {
+          document.cookie = `${LOCALE_COOKIE}=${locale};path=/;max-age=${ONE_YEAR_IN_SECONDS};SameSite=Lax`;
+        }
+      });
+    });
 </script>

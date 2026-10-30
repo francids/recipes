@@ -1,5 +1,17 @@
 ---
-import { defaultLocale } from "../utils/i18n";
+import {
+  defaultLocale,
+  isLocale,
+  resolveLocaleFromAcceptLanguage,
+} from "../utils/i18n";
 
-return Astro.redirect(`/${defaultLocale}`, 302);
+const savedLocale = Astro.cookies.get("locale")?.value;
+const locale =
+  (isLocale(savedLocale) ? savedLocale : undefined) ??
+  resolveLocaleFromAcceptLanguage(
+    Astro.request.headers.get("accept-language"),
+  ) ??
+  defaultLocale;
+
+return Astro.redirect(`/${locale}${Astro.url.search}`, 302);
 ---
