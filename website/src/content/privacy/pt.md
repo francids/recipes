@@ -1,13 +1,13 @@
 ---
-title: "Política de Privacidade do The Recipes"
+title: "Política de Privacidade do Recipes"
 lastUpdated: 2025-07-03
 ---
 
-# **Política de Privacidade do The Recipes**
+# **Política de Privacidade do Recipes**
 
 **Última atualização:** 3 de julho de 2025
 
-Obrigado por usar "The Recipes". Sua privacidade é importante para nós. Esta Política de Privacidade explica de maneira simples quais informações coletamos e como as usamos.
+Obrigado por usar "Recipes". Sua privacidade é importante para nós. Esta Política de Privacidade explica de maneira simples quais informações coletamos e como as usamos.
 
 ### **Resumo Principal**
 
@@ -47,7 +47,7 @@ O aplicativo solicita as seguintes permissões para funcionar corretamente:
 
 ### **Transparência e Código Aberto**
 
-"The Recipes" é um aplicativo de código aberto. Acreditamos na total transparência, então você pode revisar nosso código-fonte a qualquer momento para verificar como lidamos com seus dados.
+"Recipes" é um aplicativo de código aberto. Acreditamos na total transparência, então você pode revisar nosso código-fonte a qualquer momento para verificar como lidamos com seus dados.
 
 - **Código-fonte:** [https://github.com/francids/recipes](https://github.com/francids/recipes)
 

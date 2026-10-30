@@ -5,4 +5,10 @@
   "observability": {
     "enabled": true,
   },
+  "routes": [
+    {
+      "pattern": "recipes.francids.com",
+      "custom_domain": true,
+    },
+  ],
 }

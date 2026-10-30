@@ -1,13 +1,13 @@
 ---
-title: "Datenschutzrichtlinie von The Recipes"
+title: "Datenschutzrichtlinie von Recipes"
 lastUpdated: 2025-07-03
 ---
 
-# **Datenschutzrichtlinie von The Recipes**
+# **Datenschutzrichtlinie von Recipes**
 
 **Letzte Aktualisierung:** 3. Juli 2025
 
-Vielen Dank für die Nutzung von "The Recipes". Deine Privatsphäre ist uns wichtig. Diese Datenschutzrichtlinie erklärt auf einfache Weise, welche Informationen wir sammeln und wie wir sie verwenden.
+Vielen Dank für die Nutzung von "Recipes". Deine Privatsphäre ist uns wichtig. Diese Datenschutzrichtlinie erklärt auf einfache Weise, welche Informationen wir sammeln und wie wir sie verwenden.
 
 ### **Hauptübersicht**
 
@@ -47,7 +47,7 @@ Die App benötigt folgende Berechtigungen, um ordnungsgemäß zu funktionieren:
 
 ### **Transparenz und Open Source**
 
-"The Recipes" ist eine Open-Source-Anwendung. Wir glauben an vollständige Transparenz, daher kannst du unseren Quellcode jederzeit überprüfen, um zu sehen, wie wir mit deinen Daten umgehen.
+"Recipes" ist eine Open-Source-Anwendung. Wir glauben an vollständige Transparenz, daher kannst du unseren Quellcode jederzeit überprüfen, um zu sehen, wie wir mit deinen Daten umgehen.
 
 - **Quellcode:** [https://github.com/francids/recipes](https://github.com/francids/recipes)
 

@@ -1,13 +1,13 @@
 ---
-title: "Informativa sulla Privacy di The Recipes"
+title: "Informativa sulla Privacy di Recipes"
 lastUpdated: 2025-07-03
 ---
 
-# **Informativa sulla Privacy di The Recipes**
+# **Informativa sulla Privacy di Recipes**
 
 **Ultimo aggiornamento:** 3 luglio 2025
 
-Grazie per utilizzare "The Recipes". La tua privacy è importante per noi. Questa Informativa sulla Privacy spiega in modo semplice quali informazioni raccogliamo e come le utilizziamo.
+Grazie per utilizzare "Recipes". La tua privacy è importante per noi. Questa Informativa sulla Privacy spiega in modo semplice quali informazioni raccogliamo e come le utilizziamo.
 
 ### **Riepilogo Principale**
 
@@ -47,7 +47,7 @@ L'applicazione richiede le seguenti autorizzazioni per funzionare correttamente:
 
 ### **Trasparenza e Codice Open Source**
 
-"The Recipes" è un'applicazione open source. Crediamo nella totale trasparenza, quindi puoi esaminare il nostro codice sorgente in qualsiasi momento per verificare come gestiamo i tuoi dati.
+"Recipes" è un'applicazione open source. Crediamo nella totale trasparenza, quindi puoi esaminare il nostro codice sorgente in qualsiasi momento per verificare come gestiamo i tuoi dati.
 
 - **Codice sorgente:** [https://github.com/francids/recipes](https://github.com/francids/recipes)
 

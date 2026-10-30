@@ -23,7 +23,7 @@
   },
   "CTASection": {
     "title": "今すぐ利用可能！",
-    "description": "The Recipes AppがAndroidで利用可能になりました。アプリをダウンロードして、今日からお気に入りのレシピの整理を始めましょう。",
+    "description": "Recipes AppがAndroidで利用可能になりました。アプリをダウンロードして、今日からお気に入りのレシピの整理を始めましょう。",
     "download_now": "今すぐダウンロード",
     "source_code": "ソースコード",
     "discover_features": "特徴を発見"
@@ -35,12 +35,12 @@
   },
   "Sharing": {
     "no_recipe_id": "レシピIDが提供されていません",
-    "view_recipe_message": "このレシピを見るには、モバイルデバイスでThe Recipesアプリを開いてください。",
+    "view_recipe_message": "このレシピを見るには、モバイルデバイスでRecipesアプリを開いてください。",
     "open_app_button": "アプリで開く"
   },
   "Footer": {
     "tagline": "あなたのデジタル料理アシスタント",
-    "section_recipes": "The Recipes",
+    "section_recipes": "Recipes",
     "link_features": "特徴",
     "link_development": "開発",
     "section_contact": "連絡先",
@@ -52,6 +52,6 @@
     "theme_toggle_to_dark": "ダークモードに切り替え",
     "theme_toggle_to_system": "システムモードに切り替え",
     "theme_toggle_to_light": "ライトモードに切り替え",
-    "copyright": "© {{year}} The Recipes. 無断複写・転載を禁じます。"
+    "copyright": "© {{year}} Recipes. 無断複写・転載を禁じます。"
   }
 }

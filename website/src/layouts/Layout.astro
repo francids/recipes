@@ -91,7 +91,7 @@ const translations: Record<string, Translation> = {
 const t =
   translations[currentLang as keyof typeof translations] || translations.en;
 
-const { title = "The Recipes", description = t.description } = Astro.props;
+const { title = "Recipes", description = t.description } = Astro.props;
 
 const theme = Astro.cookies.get("theme")?.value || "system";
 ---

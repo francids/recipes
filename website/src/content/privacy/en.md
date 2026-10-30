@@ -1,13 +1,13 @@
 ---
-title: "The Recipes Privacy Policy"
+title: "Recipes Privacy Policy"
 lastUpdated: 2025-07-03
 ---
 
-# **The Recipes Privacy Policy**
+# **Recipes Privacy Policy**
 
 **Last updated:** July 3, 2025
 
-Thank you for using "The Recipes". Your privacy is important to us. This Privacy Policy explains in simple terms what information we collect and how we use it.
+Thank you for using "Recipes". Your privacy is important to us. This Privacy Policy explains in simple terms what information we collect and how we use it.
 
 ### **Main Summary**
 
@@ -47,7 +47,7 @@ The application requests the following permissions to function properly:
 
 ### **Transparency and Open Source**
 
-"The Recipes" is an open-source application. We believe in total transparency, so you can review our source code at any time to verify how we handle your data.
+"Recipes" is an open-source application. We believe in total transparency, so you can review our source code at any time to verify how we handle your data.
 
 - **Source code:** [https://github.com/francids/recipes](https://github.com/francids/recipes)
 

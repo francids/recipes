@@ -23,7 +23,7 @@
   },
   "CTASection": {
     "title": "지금 이용 가능!",
-    "description": "The Recipes 앱이 이제 Android에서 사용 가능합니다. 앱을 다운로드하고 오늘부터 좋아하는 레시피 정리를 시작하세요.",
+    "description": "Recipes 앱이 이제 Android에서 사용 가능합니다. 앱을 다운로드하고 오늘부터 좋아하는 레시피 정리를 시작하세요.",
     "download_now": "지금 다운로드",
     "source_code": "소스 코드",
     "discover_features": "기능 살펴보기"
@@ -35,12 +35,12 @@
   },
   "Sharing": {
     "no_recipe_id": "레시피 ID가 제공되지 않았습니다",
-    "view_recipe_message": "이 레시피를 보려면 모바일 기기에서 The Recipes 앱을 열어주세요.",
+    "view_recipe_message": "이 레시피를 보려면 모바일 기기에서 Recipes 앱을 열어주세요.",
     "open_app_button": "앱에서 열기"
   },
   "Footer": {
     "tagline": "나만의 디지털 요리 도우미",
-    "section_recipes": "The Recipes",
+    "section_recipes": "Recipes",
     "link_features": "기능",
     "link_development": "개발",
     "section_contact": "연락처",
@@ -52,6 +52,6 @@
     "theme_toggle_to_dark": "다크 모드로 전환",
     "theme_toggle_to_system": "시스템 모드로 전환",
     "theme_toggle_to_light": "라이트 모드로 전환",
-    "copyright": "© {{year}} The Recipes. 모든 권리 보유."
+    "copyright": "© {{year}} Recipes. 모든 권리 보유."
   }
 }

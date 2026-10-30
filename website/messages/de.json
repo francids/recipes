@@ -35,12 +35,12 @@
   },
   "Sharing": {
     "no_recipe_id": "Keine Rezept-ID angegeben",
-    "view_recipe_message": "Um dieses Rezept zu sehen, öffnen Sie die App The Recipes auf Ihrem Mobilgerät.",
+    "view_recipe_message": "Um dieses Rezept zu sehen, öffnen Sie die App Recipes auf Ihrem Mobilgerät.",
     "open_app_button": "In App öffnen"
   },
   "Footer": {
     "tagline": "Dein digitaler Kochassistent",
-    "section_recipes": "The Recipes",
+    "section_recipes": "Recipes",
     "link_features": "Funktionen",
     "link_development": "Entwicklung",
     "section_contact": "Kontakt",
@@ -52,6 +52,6 @@
     "theme_toggle_to_dark": "Zum dunklen Modus wechseln",
     "theme_toggle_to_system": "Zum Systemmodus wechseln",
     "theme_toggle_to_light": "Zum hellen Modus wechseln",
-    "copyright": "© {{year}} The Recipes. Alle Rechte vorbehalten."
+    "copyright": "© {{year}} Recipes. Alle Rechte vorbehalten."
   }
 }

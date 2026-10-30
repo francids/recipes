@@ -23,7 +23,7 @@
   },
   "CTASection": {
     "title": "¡Ya disponible!",
-    "description": "The Recipes App ya está disponible para Android. Descarga la aplicación y empieza a organizar tus recetas favoritas hoy mismo.",
+    "description": "Recipes App ya está disponible para Android. Descarga la aplicación y empieza a organizar tus recetas favoritas hoy mismo.",
     "download_now": "Descargar ahora",
     "source_code": "Código fuente",
     "discover_features": "Descubrir funciones"
@@ -35,12 +35,12 @@
   },
   "Sharing": {
     "no_recipe_id": "No se proporcionó ID de receta",
-    "view_recipe_message": "Para ver esta receta, abre la aplicación The Recipes en tu dispositivo móvil.",
+    "view_recipe_message": "Para ver esta receta, abre la aplicación Recipes en tu dispositivo móvil.",
     "open_app_button": "Abrir en la app"
   },
   "Footer": {
     "tagline": "Tu asistente culinario digital",
-    "section_recipes": "The Recipes",
+    "section_recipes": "Recipes",
     "link_features": "Características",
     "link_development": "Desarrollo",
     "section_contact": "Contacto",
@@ -52,6 +52,6 @@
     "theme_toggle_to_dark": "Cambiar a modo oscuro",
     "theme_toggle_to_system": "Cambiar a modo sistema",
     "theme_toggle_to_light": "Cambiar a modo claro",
-    "copyright": "© {{year}} The Recipes. Todos los derechos reservados."
+    "copyright": "© {{year}} Recipes. Todos los derechos reservados."
   }
 }
