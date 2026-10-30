@@ -1,25 +1,29 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import {
-  detectUserLocale,
   createTranslationHelper,
+  resolveLocale,
   type Locale,
 } from "../utils/i18n.ts";
 import LanguageSelect from "./LanguageSelect.astro";
 
-const locale: Locale = detectUserLocale(Astro.request);
+const locale: Locale = resolveLocale(Astro.currentLocale);
 const t = await createTranslationHelper(locale);
 const pathname = Astro.url.pathname;
+const homeUrl = getRelativeLocaleUrl(locale);
+const privacyUrl = getRelativeLocaleUrl(locale, "privacy");
+const isHome = pathname === homeUrl || pathname === `${homeUrl}/`;
 ---
 
 <nav
   class={`flex justify-between items-center px-8 py-4 static z-50 transition-all duration-300 bg-white dark:bg-zinc-900 ${
-    pathname !== "/"
+    !isHome
       ? "border-b border-zinc-300 dark:border-zinc-700"
       : "border-b border-main/25 dark:border-amber-500/25"
   }`}
 >
   <div class="flex items-center gap-4 select-none">
-    <a href="/" class="flex items-center select-none">
+    <a href={homeUrl} class="flex items-center select-none">
       <img src="/Logo.svg" alt="Recipes App" width={40} height={40} />
     </a>
     <LanguageSelect />
@@ -27,13 +31,13 @@ const pathname = Astro.url.pathname;
 
   <div class="hidden md:flex gap-4 items-center select-none">
     <a
-      href="/"
+      href={homeUrl}
       class="px-4 py-2 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-200 font-semibold text-sm transition-all duration-300 active:scale-95 hover:bg-zinc-200 dark:hover:bg-zinc-700/20 hover:shadow-sm select-none"
     >
       {t("Navbar.home")}
     </a>
     <a
-      href="/privacy"
+      href={privacyUrl}
       class="px-4 py-2 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-200 font-semibold text-sm transition-all duration-300 active:scale-95 hover:bg-zinc-200 dark:hover:bg-zinc-700/20 hover:shadow-sm select-none"
     >
       {t("Navbar.privacy")}
@@ -79,13 +83,13 @@ const pathname = Astro.url.pathname;
     class="fixed top-17.5 left-0 right-0 flex flex-col gap-4 m-0 p-6 shadow-lg rounded-b-lg md:hidden transition-opacity duration-300 ease-in-out opacity-0 pointer-events-none bg-white dark:bg-zinc-800 border-t border-zinc-200 dark:border-zinc-700 z-40"
   >
     <a
-      href="/"
+      href={homeUrl}
       class="font-medium py-2 text-zinc-800 dark:text-zinc-100 hover:text-orange-600 dark:hover:text-orange-400 mobile-menu-link"
     >
       {t("Navbar.home")}
     </a>
     <a
-      href="/privacy"
+      href={privacyUrl}
       class="font-medium py-2 text-zinc-800 dark:text-zinc-100 hover:text-orange-600 dark:hover:text-orange-400 mobile-menu-link"
     >
       {t("Navbar.privacy")}

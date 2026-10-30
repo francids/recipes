@@ -1,3 +1,6 @@
+import { i18n } from "astro:config/client";
+import { toCodes } from "astro:i18n";
+
 export type Locale =
   | "de"
   | "en"
@@ -13,18 +16,16 @@ export interface Translations {
   [key: string]: string | Translations;
 }
 
-const defaultLocale: Locale = "en";
-const supportedLocales: Locale[] = [
-  "de",
-  "en",
-  "es",
-  "fr",
-  "it",
-  "ja",
-  "ko",
-  "pt",
-  "zh",
-];
+export const defaultLocale = i18n!.defaultLocale as Locale;
+export const supportedLocales = toCodes(i18n!.locales) as Locale[];
+
+export function isLocale(value: string | undefined): value is Locale {
+  return value !== undefined && supportedLocales.includes(value as Locale);
+}
+
+export function resolveLocale(locale: string | undefined): Locale {
+  return isLocale(locale) ? locale : defaultLocale;
+}
 
 const translationsCache = new Map<Locale, Translations>();
 
@@ -46,43 +47,6 @@ async function loadTranslations(locale: Locale): Promise<Translations> {
     }
     return {};
   }
-}
-
-export function detectUserLocale(request: Request): Locale {
-  const cookieHeader = request.headers.get("cookie");
-  if (cookieHeader) {
-    const cookies = cookieHeader.split(";");
-    for (const cookie of cookies) {
-      const [name, value] = cookie.trim().split("=");
-      if (
-        name === "locale" &&
-        value &&
-        supportedLocales.includes(value as Locale)
-      ) {
-        return value as Locale;
-      }
-    }
-  }
-
-  const acceptLanguage = request.headers.get("accept-language");
-  if (acceptLanguage) {
-    const languages = acceptLanguage
-      .split(",")
-      .map((lang) => lang.split(";")[0].trim().toLowerCase());
-
-    for (const lang of languages) {
-      if (supportedLocales.includes(lang as Locale)) {
-        return lang as Locale;
-      }
-
-      const langCode = lang.split("-")[0] as Locale;
-      if (supportedLocales.includes(langCode)) {
-        return langCode;
-      }
-    }
-  }
-
-  return defaultLocale;
 }
 
 function getNestedTranslation(
@@ -132,5 +96,3 @@ export async function createTranslationHelper(
     return result;
   };
 }
-
-export { supportedLocales, defaultLocale };

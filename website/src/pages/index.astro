@@ -1,14 +1,5 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import HeroSection from "../components/HeroSection.astro";
-import FeaturesSection from "../components/FeaturesSection.astro";
-import CTASection from "../components/CTASection.astro";
----
+import { defaultLocale } from "../utils/i18n";
 
-<Layout>
-  <main>
-    <HeroSection />
-    <FeaturesSection />
-    <CTASection />
-  </main>
-</Layout>
+return Astro.redirect(`/${defaultLocale}`, 302);
+---

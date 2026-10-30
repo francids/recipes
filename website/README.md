@@ -5,8 +5,9 @@ Este sitio web sirve como punto de entrada para la aplicación Recipes, presenta
 ## Funcionalidades
 
 - **Landing Page**: Página principal que presenta la aplicación, sus características y enlaces para acceder a descargar la aplicación.
-- **Redirección de recetas compartidas (`/sharing`)**: Gestiona los enlaces de recetas compartidas, intentando abrir la aplicación móvil directamente mediante Deep Links.
-- **Política de Privacidad (`/privacy`)**: Página dedicada a mostrar la política de privacidad y los términos de uso de la aplicación.
+- **Redirección de recetas compartidas (`/[locale]/sharing`)**: Gestiona los enlaces de recetas compartidas, intentando abrir la aplicación móvil directamente mediante Deep Links. La antigua ruta `/sharing` redirige a `/en/sharing` para mantener compatibilidad con enlaces ya compartidos.
+- **Política de Privacidad (`/[locale]/privacy`)**: Página dedicada a mostrar la política de privacidad y los términos de uso de la aplicación.
+- **Idiomas**: El sitio usa el enrutado i18n nativo de Astro. Todas las páginas están siempre bajo un prefijo de idioma (`/en`, `/es`, `/de`, etc.). La raíz `/` redirige al idioma por defecto.
 
 ## Tecnologías utilizadas
 
@@ -25,7 +26,7 @@ Para desarrollar o modificar el sitio web:
 
 ## Despliegue en Cloudflare Workers
 
-El sitio usa el adaptador `@astrojs/cloudflare` y se renderiza en el servidor para detectar el idioma del visitante desde la cabecera `Accept-Language` y las cookies.
+El sitio usa el adaptador `@astrojs/cloudflare`. Los idiomas se gestionan con la configuración `i18n` nativa de Astro definida en `astro.config.ts`, por lo que cada página tiene siempre un prefijo de idioma.
 
 1. Inicia sesión en Cloudflare (solo la primera vez): `npx wrangler login`
 2. Compila y despliega: `npm run deploy`

@@ -1,11 +1,17 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import {
-  detectUserLocale,
+  resolveLocale,
   supportedLocales,
   type Locale,
 } from "../utils/i18n.ts";
 
-const locale: Locale = detectUserLocale(Astro.request);
+const locale: Locale = resolveLocale(Astro.currentLocale);
+const pathname = Astro.url.pathname;
+const pathWithoutLocale =
+  pathname.replace(new RegExp(`^/${locale}(?=/|$)`), "") || "/";
+const path = pathWithoutLocale === "/" ? "" : pathWithoutLocale.slice(1);
+const search = Astro.url.search;
 
 const languageFlags: Record<Locale, string> = {
   es: "ES",
@@ -78,13 +84,14 @@ const currentName = languageNames[locale];
       {
         supportedLocales.map((langCode) => (
           <li>
-            <button
-              class={`flex justify-start items-center w-full gap-0 text-left px-4 py-2 text-sm language-option ${
+            <a
+              href={`${getRelativeLocaleUrl(langCode, path)}${search}`}
+              hreflang={langCode}
+              class={`flex justify-start items-center w-full gap-0 text-left px-4 py-2 text-sm ${
                 langCode === locale
                   ? "bg-orange-100 dark:bg-orange-900/40 text-orange-600 dark:text-orange-400 font-medium"
                   : "text-zinc-700 dark:text-zinc-300 hover:bg-orange-50 dark:hover:bg-orange-900/20 hover:text-orange-600 dark:hover:text-orange-400"
               }`}
-              data-language={langCode}
             >
               <img
                 src={`/flags/${languageFlags[langCode]}.svg`}
@@ -95,7 +102,7 @@ const currentName = languageNames[locale];
                 loading="lazy"
               />
               <span>{languageNames[langCode]}</span>
-            </button>
+            </a>
           </li>
         ))
       }
@@ -108,7 +115,6 @@ const currentName = languageNames[locale];
   const toggle = document.getElementById("language-toggle");
   const dropdown = document.getElementById("language-dropdown");
   const arrow = document.getElementById("language-arrow");
-  const options = document.querySelectorAll(".language-option");
 
   let isOpen = false;
 
@@ -133,17 +139,6 @@ const currentName = languageNames[locale];
   }
 
   toggle?.addEventListener("click", toggleDropdown);
-
-  options.forEach((option) => {
-    option.addEventListener("click", (e) => {
-      const target = e.currentTarget as HTMLButtonElement;
-      const language = target.dataset.language;
-      if (language) {
-        document.cookie = `locale=${language};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax`;
-        window.location.reload();
-      }
-    });
-  });
 
   document.addEventListener("click", (e) => {
     if (selector && !selector.contains(e.target as Node)) {

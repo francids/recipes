@@ -5,6 +5,14 @@ import cloudflare from "@astrojs/cloudflare";
 export default defineConfig({
   output: "server",
   session: false,
+  i18n: {
+    defaultLocale: "en",
+    locales: ["de", "en", "es", "fr", "it", "ja", "ko", "pt", "zh"],
+    routing: {
+      prefixDefaultLocale: true,
+      redirectToDefaultLocale: true,
+    },
+  },
   vite: {
     plugins: [
       // @ts-ignore

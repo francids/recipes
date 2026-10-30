@@ -1,12 +1,14 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import {
-  detectUserLocale,
   createTranslationHelper,
+  resolveLocale,
   type Locale,
 } from "../utils/i18n.ts";
 
-const locale: Locale = detectUserLocale(Astro.request);
+const locale: Locale = resolveLocale(Astro.currentLocale);
 const t = await createTranslationHelper(locale);
+const homeUrl = getRelativeLocaleUrl(locale);
 ---
 
 <footer
@@ -35,13 +37,13 @@ const t = await createTranslationHelper(locale);
           {t("Footer.section_recipes")}
         </h3>
         <a
-          href="/#features"
+          href={`${homeUrl}#features`}
           class="block text-zinc-600 dark:text-zinc-400 dark:dark:text-zinc-300 mb-2.5 no-underline hover:text-orange-600 dark:hover:text-orange-500 transition-colors"
         >
           {t("Footer.link_features")}
         </a>
         <a
-          href="/#cta"
+          href={`${homeUrl}#cta`}
           class="block text-zinc-600 dark:text-zinc-400 dark:dark:text-zinc-300 mb-2.5 no-underline hover:text-orange-600 dark:hover:text-orange-500 transition-colors"
         >
           {t("Footer.link_development")}

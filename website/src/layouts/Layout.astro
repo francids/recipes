@@ -2,7 +2,7 @@
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
 import ScrollTopButton from "../components/ScrollTopButton.astro";
-import { detectUserLocale } from "../utils/i18n";
+import { resolveLocale } from "../utils/i18n";
 import "../styles/global.css";
 
 export interface Props {
@@ -10,13 +10,7 @@ export interface Props {
   description?: string;
 }
 
-const currentLang = detectUserLocale(Astro.request);
-Astro.cookies.set("locale", currentLang, {
-  httpOnly: false,
-  path: "/",
-  maxAge: 60 * 60 * 24 * 365,
-  sameSite: "lax",
-});
+const currentLang = resolveLocale(Astro.currentLocale);
 
 interface Translation {
   description: string;

@@ -1,12 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import {
-  detectUserLocale,
   createTranslationHelper,
+  resolveLocale,
   type Locale,
 } from "../utils/i18n.ts";
 
-const locale: Locale = detectUserLocale(Astro.request);
+const locale: Locale = resolveLocale(Astro.currentLocale);
 const t = await createTranslationHelper(locale);
 ---
 

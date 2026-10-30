@@ -1,11 +1,15 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { createTranslationHelper, detectUserLocale, type Locale } from "@/utils/i18n";
+import {
+  createTranslationHelper,
+  resolveLocale,
+  type Locale,
+} from "@/utils/i18n";
 
 const url = new URL(Astro.request.url);
 const recipeId = url.searchParams.get("id");
 
-const locale: Locale = detectUserLocale(Astro.request);
+const locale: Locale = resolveLocale(Astro.currentLocale);
 const t = await createTranslationHelper(locale);
 ---
 

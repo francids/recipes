@@ -8,11 +8,11 @@ import LightRecipeScreen from "../assets/light-recipe-screen.webp";
 import DarkRecipeScreen from "../assets/dark-recipe-screen.webp";
 import {
   createTranslationHelper,
-  detectUserLocale,
+  resolveLocale,
   type Locale,
 } from "@/utils/i18n";
 
-const locale: Locale = detectUserLocale(Astro.request);
+const locale: Locale = resolveLocale(Astro.currentLocale);
 const t = await createTranslationHelper(locale);
 ---
 
