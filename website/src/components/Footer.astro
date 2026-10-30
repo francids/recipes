@@ -1,5 +1,5 @@
 ---
-import { getRelativeLocaleUrl } from "astro:i18n";
+import type { Theme } from "../types/theme";
 import {
   createTranslationHelper,
   resolveLocale,
@@ -8,157 +8,161 @@ import {
 
 const locale: Locale = resolveLocale(Astro.currentLocale);
 const t = await createTranslationHelper(locale);
-const homeUrl = getRelativeLocaleUrl(locale);
+
+const storedTheme = Astro.cookies.get("theme")?.value;
+const currentTheme: Theme =
+  storedTheme === "light" || storedTheme === "dark" || storedTheme === "system"
+    ? storedTheme
+    : "system";
 ---
 
 <footer
-  class="bg-zinc-100/75 dark:bg-zinc-900 dark:dark:bg-zinc-950 text-zinc-800 dark:text-white py-16 px-8"
+  class="border-t border-zinc-200/80 bg-zinc-50/80 px-6 py-8 text-zinc-600 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-400"
 >
   <div
-    class="flex justify-between flex-wrap gap-10 max-w-7xl mx-auto mb-10 text-left"
+    class="mx-auto flex max-w-7xl flex-col-reverse items-center justify-between gap-6 sm:flex-row"
   >
-    <div class="flex-1 min-w-62.5 flex flex-col items-start">
-      <div
-        class="w-37.5 mb-5 text-zinc-800 dark:text-white select-none pointer-events-none"
-      >
-        <img src="/Logo.svg" alt="Recipes App Logo" width={100} height={24} />
-      </div>
-      <p
-        class="text-zinc-600 dark:text-zinc-400 dark:dark:text-zinc-300 text-lg"
-      >
-        {t("Footer.tagline")}
-      </p>
-    </div>
-    <div class="flex gap-10 flex-wrap">
-      <div class="min-w-37.5">
-        <h3
-          class="text-orange-600 dark:text-orange-500 mb-5 text-lg font-semibold"
-        >
-          {t("Footer.section_recipes")}
-        </h3>
-        <a
-          href={`${homeUrl}#features`}
-          class="block text-zinc-600 dark:text-zinc-400 dark:dark:text-zinc-300 mb-2.5 no-underline hover:text-orange-600 dark:hover:text-orange-500 transition-colors"
-        >
-          {t("Footer.link_features")}
-        </a>
-        <a
-          href={`${homeUrl}#cta`}
-          class="block text-zinc-600 dark:text-zinc-400 dark:dark:text-zinc-300 mb-2.5 no-underline hover:text-orange-600 dark:hover:text-orange-500 transition-colors"
-        >
-          {t("Footer.link_development")}
-        </a>
-      </div>
-      <div class="min-w-37.5">
-        <h3
-          class="text-orange-600 dark:text-orange-500 mb-5 text-lg font-semibold"
-        >
-          {t("Footer.section_contact")}
-        </h3>
-        <a
-          href="https://github.com/francids/recipes"
-          class="block text-zinc-600 dark:text-zinc-400 dark:dark:text-zinc-300 mb-2.5 no-underline hover:text-orange-600 dark:hover:text-orange-500 transition-colors"
-        >
-          GitHub
-        </a>
-      </div>
-      <div class="min-w-37.5">
-        <h3
-          class="text-orange-600 dark:text-orange-500 mb-5 text-lg font-semibold"
-        >
-          {t("Footer.section_preferences")}
-        </h3>
-        <div class="flex items-center justify-start gap-2.5 mt-2.5">
-          <span
-            class="text-zinc-600 dark:text-zinc-400 dark:dark:text-zinc-300 text-base"
-          >
-            {t("Footer.theme_label")}
-          </span>
-          <button
-            id="theme-toggle"
-            class="relative inline-block w-15 h-7.5 bg-zinc-300 dark:bg-zinc-700 dark:dark:bg-zinc-800 rounded-full border-none cursor-pointer overflow-hidden transition-colors"
-            data-theme="system"
-          >
-            <div
-              id="theme-toggle-indicator"
-              class="absolute top-0.5 left-0.5 w-6.5 h-6.5 flex items-center justify-center rounded-full transition-transform ease-in-out duration-300 bg-orange-500"
-            >
-              <span
-                class="text-sm flex items-center justify-center select-none pointer-events-none"
-              >
-                💻
-              </span>
-            </div>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div
-    class="pt-8 border-t border-zinc-100 dark:border-zinc-800 dark:dark:border-zinc-700 text-zinc-500 dark:text-zinc-500 dark:dark:text-zinc-400 text-sm w-4/5 sm:w-full sm:text-center"
-  >
-    <p>
+    <p class="text-center text-sm sm:text-left">
       {
         t("Footer.copyright", undefined, {
           year: new Date().getFullYear().toString(),
         })
       }
     </p>
+
+    <div class="flex items-center gap-3">
+      <span
+        class="hidden text-xs font-medium tracking-wide text-zinc-500 sm:inline dark:text-zinc-400"
+      >
+        {t("Footer.theme_label")}
+      </span>
+      <div
+        id="theme-toggle"
+        role="group"
+        aria-label={t("Footer.theme_label")}
+        class="inline-flex items-center gap-0.5 rounded-md border border-zinc-200/80 bg-white/80 p-1 shadow-sm dark:border-zinc-700/60 dark:bg-zinc-900/80"
+      >
+        <button
+          type="button"
+          data-theme="light"
+          aria-label={t("Footer.theme_light")}
+          title={t("Footer.theme_light")}
+          aria-pressed={currentTheme === "light"}
+          class="flex size-8 cursor-pointer items-center justify-center rounded-md text-zinc-500 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/60 aria-pressed:bg-orange-500 aria-pressed:text-white aria-pressed:shadow-sm not-aria-pressed:hover:bg-zinc-100 not-aria-pressed:hover:text-zinc-900 dark:text-zinc-400 dark:not-aria-pressed:hover:bg-zinc-800 dark:not-aria-pressed:hover:text-zinc-100"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="size-4.5"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          data-theme="dark"
+          aria-label={t("Footer.theme_dark")}
+          title={t("Footer.theme_dark")}
+          aria-pressed={currentTheme === "dark"}
+          class="flex size-8 cursor-pointer items-center justify-center rounded-md text-zinc-500 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/60 aria-pressed:bg-orange-500 aria-pressed:text-white aria-pressed:shadow-sm not-aria-pressed:hover:bg-zinc-100 not-aria-pressed:hover:text-zinc-900 dark:text-zinc-400 dark:not-aria-pressed:hover:bg-zinc-800 dark:not-aria-pressed:hover:text-zinc-100"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="size-4.5"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          data-theme="system"
+          aria-label={t("Footer.theme_system")}
+          title={t("Footer.theme_system")}
+          aria-pressed={currentTheme === "system"}
+          class="flex size-8 cursor-pointer items-center justify-center rounded-md text-zinc-500 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/60 aria-pressed:bg-orange-500 aria-pressed:text-white aria-pressed:shadow-sm not-aria-pressed:hover:bg-zinc-100 not-aria-pressed:hover:text-zinc-900 dark:text-zinc-400 dark:not-aria-pressed:hover:bg-zinc-800 dark:not-aria-pressed:hover:text-zinc-100"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="size-4.5"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+            <line x1="8" x2="16" y1="21" y2="21"></line>
+            <line x1="12" x2="12" y1="17" y2="21"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
   </div>
 </footer>
 
 <script>
-  interface ThemeState {
-    theme: "light" | "dark" | "system";
+  type Theme = "light" | "dark" | "system";
+
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeOptions = Array.from(
+    themeToggle?.querySelectorAll<HTMLButtonElement>("[data-theme]") ?? [],
+  );
+
+  function syncThemeSelection(theme: Theme) {
+    themeOptions.forEach((option) => {
+      option.setAttribute(
+        "aria-pressed",
+        String(option.dataset.theme === theme),
+      );
+    });
   }
 
-  const themeToggle = document.getElementById(
-    "theme-toggle",
-  ) as HTMLButtonElement;
-  const themeIndicator = document.getElementById(
-    "theme-toggle-indicator",
-  ) as HTMLDivElement;
+  function initThemeToggle() {
+    if (!window.themeManager) return;
 
-  function updateThemeButton(state: ThemeState) {
-    const { theme } = state;
+    syncThemeSelection(window.themeManager.getState().theme);
+    window.themeManager.subscribe(({ theme }) => syncThemeSelection(theme));
 
-    const icons = { light: "☀️", dark: "🌙", system: "💻" };
-    const positions = {
-      light: "translate-x-0",
-      dark: "translate-x-[30px]",
-      system: "translate-x-[15px]",
-    };
-    const bgColors = {
-      light: "bg-orange-500",
-      dark: "bg-zinc-500",
-      system: "bg-blue-500",
-    };
-
-    const icon = themeIndicator.querySelector("span");
-    if (icon) {
-      icon.textContent = icons[theme];
-    }
-
-    themeIndicator.classList.remove(
-      "translate-x-0",
-      "translate-x-[15px]",
-      "translate-x-[30px]",
-      "bg-orange-500",
-      "bg-zinc-500",
-      "bg-blue-500",
-    );
-
-    themeIndicator.classList.add(positions[theme], bgColors[theme]);
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    if (typeof window !== "undefined" && window.themeManager) {
-      updateThemeButton(window.themeManager.getState());
-      window.themeManager.subscribe(updateThemeButton);
-
-      themeToggle?.addEventListener("click", () => {
-        window.themeManager?.toggleTheme();
+    themeOptions.forEach((option) => {
+      option.addEventListener("click", () => {
+        window.themeManager.setTheme(option.dataset.theme as Theme);
       });
-    }
-  });
+    });
+  }
+
+  if (document.readyState === "complete") {
+    initThemeToggle();
+  } else {
+    document.addEventListener("DOMContentLoaded", initThemeToggle, {
+      once: true,
+    });
+  }
 </script>
