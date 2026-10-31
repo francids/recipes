@@ -93,7 +93,7 @@ const theme = Astro.cookies.get("theme")?.value || "system";
 <html lang={currentLang}>
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
@@ -174,7 +174,7 @@ const theme = Astro.cookies.get("theme")?.value || "system";
         scrollButton.classList.remove(
           "opacity-0",
           "invisible",
-          "translate-y-4"
+          "translate-y-4",
         );
         scrollButton.classList.add("opacity-100", "visible", "translate-y-0");
       } else {
@@ -182,7 +182,7 @@ const theme = Astro.cookies.get("theme")?.value || "system";
         scrollButton.classList.remove(
           "opacity-100",
           "visible",
-          "translate-y-0"
+          "translate-y-0",
         );
       }
     }

@@ -1,4 +1,4 @@
-<img src="./assets/Logo.svg" width="100">
+<img src="./assets/icon.svg" width="100">
 
 # Recipes
 
