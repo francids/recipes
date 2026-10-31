@@ -6,7 +6,7 @@ Este sitio web sirve como punto de entrada para la aplicación Recipes, presenta
 
 - **Landing Page**: Página principal que presenta la aplicación, sus características y enlaces para acceder a descargar la aplicación.
 - **Redirección de recetas compartidas (`/[locale]/sharing`)**: Gestiona los enlaces de recetas compartidas, intentando abrir la aplicación móvil directamente mediante Deep Links. La antigua ruta `/sharing` redirige a `/en/sharing` para mantener compatibilidad con enlaces ya compartidos.
-- **Política de Privacidad (`/[locale]/privacy`)**: Página dedicada a mostrar la política de privacidad y los términos de uso de la aplicación.
+- **Política de Privacidad (`/[locale]/privacy`)**: Página dedicada a mostrar la política de privacidad y los términos de uso de la aplicación. La versión en Markdown está disponible en `/[locale]/privacy.md`.
 - **Idiomas**: El sitio usa el enrutado i18n nativo de Astro. Todas las páginas están siempre bajo un prefijo de idioma (`/en`, `/es`, `/de`, etc.). La raíz `/` redirige al idioma por defecto.
 
 ## Tecnologías utilizadas

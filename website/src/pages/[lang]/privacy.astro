@@ -1,14 +1,12 @@
 ---
 import Layout from "@/layouts/Layout.astro";
-import { defaultLocale, resolveLocale } from "@/utils/i18n.ts";
-import { getEntry, render } from "astro:content";
+import { resolveLocale } from "@/utils/i18n.ts";
+import { getPrivacyEntry } from "@/utils/privacy.ts";
+import { render } from "astro:content";
 
 const locale = resolveLocale(Astro.currentLocale);
 
-let privacyEntry = await getEntry("privacy", locale);
-if (!privacyEntry) {
-  privacyEntry = await getEntry("privacy", defaultLocale);
-}
+const privacyEntry = await getPrivacyEntry(locale);
 
 let pageTitle = "Privacy Policy";
 let Content = null;
