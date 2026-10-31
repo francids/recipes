@@ -54,6 +54,17 @@ export function resolveLocaleFromAcceptLanguage(
   return undefined;
 }
 
+export function resolvePreferredLocale(
+  cookieLocale: string | undefined,
+  acceptLanguage: string | null | undefined,
+): Locale {
+  return (
+    (isLocale(cookieLocale) ? cookieLocale : undefined) ??
+    resolveLocaleFromAcceptLanguage(acceptLanguage) ??
+    defaultLocale
+  );
+}
+
 const translationsCache = new Map<Locale, Translations>();
 
 async function loadTranslations(locale: Locale): Promise<Translations> {
