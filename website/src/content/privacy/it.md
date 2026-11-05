@@ -5,8 +5,6 @@ lastUpdated: 2025-07-03
 
 # **Informativa sulla Privacy di Recipes**
 
-**Ultimo aggiornamento:** 3 luglio 2025
-
 Grazie per utilizzare "Recipes". La tua privacy è importante per noi. Questa Informativa sulla Privacy spiega in modo semplice quali informazioni raccogliamo e come le utilizziamo.
 
 ### **Riepilogo Principale**

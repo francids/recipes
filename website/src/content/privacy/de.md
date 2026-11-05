@@ -5,8 +5,6 @@ lastUpdated: 2025-07-03
 
 # **Datenschutzrichtlinie von Recipes**
 
-**Letzte Aktualisierung:** 3. Juli 2025
-
 Vielen Dank für die Nutzung von "Recipes". Deine Privatsphäre ist uns wichtig. Diese Datenschutzrichtlinie erklärt auf einfache Weise, welche Informationen wir sammeln und wie wir sie verwenden.
 
 ### **Hauptübersicht**

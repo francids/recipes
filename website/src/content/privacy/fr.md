@@ -5,8 +5,6 @@ lastUpdated: 2025-07-03
 
 # **Politique de Confidentialité de Recipes**
 
-**Dernière mise à jour:** 3 juillet 2025
-
 Merci d'utiliser "Recipes". Votre vie privée est importante pour nous. Cette Politique de Confidentialité explique simplement quelles informations nous collectons et comment nous les utilisons.
 
 ### **Résumé Principal**

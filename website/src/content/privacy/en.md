@@ -5,8 +5,6 @@ lastUpdated: 2025-07-03
 
 # **Recipes Privacy Policy**
 
-**Last updated:** July 3, 2025
-
 Thank you for using "Recipes". Your privacy is important to us. This Privacy Policy explains in simple terms what information we collect and how we use it.
 
 ### **Main Summary**
