@@ -1,29 +1,26 @@
 {
   "Navbar": {
-    "feature4_title": "Condividi ricette tramite link",
-    "feature4_description": "Genera link unici per condividere le tue ricette preferite. Gli utenti possono accedere al link da qualsiasi dispositivo e l'app si aprirà automaticamente mostrando la ricetta completa con tutti gli ingredienti e le istruzioni.",
-    "feature5_title": "Generazione ricette con IA",
-    "feature5_description": "Scatta una foto di qualsiasi piatto e la nostra intelligenza artificiale analizzerà l'immagine per generare una ricetta completa. L'IA identifica gli ingredienti visibili e suggerisce metodi di preparazione basati sull'analisi visiva del piatto.", "home": "Home",
+    "home": "Home",
     "privacy": "Privacy",
     "menu": "Menu"
   },
   "HeroSection": {
     "title": "Il tuo ricettario digitale",
-    "description": "Conserva, organizza e trova facilmente tutte le tue ricette preferite in un unico posto. Ora disponibile per Android!",
+    "description": "Conserva, organizza e trova facilmente tutte le tue ricette preferite in un unico posto.",
     "download": "Scarica ora"
   },
   "FeaturesSection": {
     "title": "Cosa ti offriamo",
     "feature1_title": "Funziona localmente per impostazione predefinita",
-    "feature1_description": "L'app funziona offline sul tuo dispositivo. Accedi opzionalmente per funzionalità AI e condivisione.",
+    "feature1_description": "Funziona offline sul dispositivo. Accedi solo per usare l'IA o la condivisione.",
     "feature3_title": "Modalità scura",
-    "feature3_description": "Bellissimo tema scuro progettato specificamente per cucinare in ambienti con scarsa illuminazione e preparazione notturna dei pasti.",
-    "feature4_title": "Prossimamente: Condividi",
-    "feature4_description": "Presto potrai condividere le tue creazioni culinarie con amici e familiari.",
-    "feature5_title": "Prossimamente: AI per le ricette",
-    "feature5_description": "Generazione automatica di ricette da immagini tramite AI.",
-    "feature6_title": "Supporto Multilingue",
-    "feature6_description": "L'app è disponibile in più lingue incluso italiano, inglese, spagnolo, francese e altre per utenti di tutto il mondo."
+    "feature3_description": "Tema scuro pensato per cucinare comodamente in ambienti con poca luce.",
+    "feature4_title": "Condividi ricette tramite link",
+    "feature4_description": "Crea link per condividere le tue ricette e aprirle direttamente nell'app.",
+    "feature5_title": "Generazione ricette con IA",
+    "feature5_description": "Scatta una foto di qualsiasi piatto per generarne automaticamente la ricetta.",
+    "feature6_title": "Supporto multilingue",
+    "feature6_description": "Disponibile in più lingue, tra cui italiano, inglese, spagnolo e francese."
   },
   "CTASection": {
     "title": "Disponibile ora!",
@@ -50,9 +47,9 @@
     "section_contact": "Contatto",
     "section_preferences": "Preferenze",
     "theme_label": "Tema corrente:",
-    "theme_light": "Modalità chiara",
-    "theme_dark": "Modalità scura",
-    "theme_system": "Modalità di sistema",
+    "theme_light": "Chiaro",
+    "theme_dark": "Scuro",
+    "theme_system": "Sistema",
     "theme_toggle_to_dark": "Passa alla modalità scura",
     "theme_toggle_to_system": "Passa alla modalità di sistema",
     "theme_toggle_to_light": "Passa alla modalità chiara",

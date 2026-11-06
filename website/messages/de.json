@@ -6,21 +6,21 @@
   },
   "HeroSection": {
     "title": "Dein digitales Rezeptbuch",
-    "description": "Speichere, organisiere und finde all deine Lieblingsrezepte ganz einfach an einem Ort. Jetzt für Android verfügbar!",
+    "description": "Speichere, organisiere und finde all deine Lieblingsrezepte ganz einfach an einem Ort.",
     "download": "Jetzt herunterladen"
   },
   "FeaturesSection": {
     "title": "Was wir bieten",
     "feature1_title": "Funktioniert standardmäßig lokal",
-    "feature1_description": "Die App funktioniert offline auf deinem Gerät. Optional anmelden für KI-Funktionen und Teilen.",
+    "feature1_description": "Funktioniert offline auf deinem Gerät. Anmeldung nur für KI oder Teilen nötig.",
     "feature3_title": "Dunkelmodus",
-    "feature3_description": "Wunderschönes dunkles Design speziell für das Kochen bei schlechten Lichtverhältnissen und nächtliche Essenszubereitung entwickelt.",
+    "feature3_description": "Dunkles Design für entspanntes Kochen bei wenig Licht.",
     "feature4_title": "Rezepte per Link teilen",
-    "feature4_description": "Erstelle einzigartige Links zum Teilen deiner Lieblingsrezepte. Benutzer können den Link von jedem Gerät aus aufrufen und die App öffnet sich automatisch mit dem vollständigen Rezept inklusive aller Zutaten und Anweisungen.",
+    "feature4_description": "Erstelle Links, um deine Rezepte zu teilen und direkt in der App zu öffnen.",
     "feature5_title": "KI-Rezeptgenerierung",
-    "feature5_description": "Mache ein Foto von einem beliebigen Gericht und unsere künstliche Intelligenz analysiert das Bild, um ein vollständiges Rezept zu erstellen. Die KI identifiziert sichtbare Zutaten und schlägt Zubereitungsmethoden basierend auf der visuellen Analyse des Gerichts vor.",
+    "feature5_description": "Fotografiere ein Gericht, um automatisch das passende Rezept zu erstellen.",
     "feature6_title": "Mehrsprachige Unterstützung",
-    "feature6_description": "Die App ist in mehreren Sprachen verfügbar, einschließlich Deutsch, Englisch, Spanisch, Französisch und mehr für Benutzer weltweit."
+    "feature6_description": "Verfügbar in mehreren Sprachen, darunter Deutsch, Englisch, Spanisch und Französisch."
   },
   "CTASection": {
     "title": "Jetzt verfügbar!",
@@ -47,9 +47,9 @@
     "section_contact": "Kontakt",
     "section_preferences": "Einstellungen",
     "theme_label": "Aktuelles Design:",
-    "theme_light": "Heller Modus",
-    "theme_dark": "Dunkler Modus",
-    "theme_system": "Systemmodus",
+    "theme_light": "Hell",
+    "theme_dark": "Dunkel",
+    "theme_system": "System",
     "theme_toggle_to_dark": "Zum dunklen Modus wechseln",
     "theme_toggle_to_system": "Zum Systemmodus wechseln",
     "theme_toggle_to_light": "Zum hellen Modus wechseln",

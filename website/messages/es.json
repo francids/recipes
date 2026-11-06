@@ -6,21 +6,21 @@
   },
   "HeroSection": {
     "title": "Tu libro de recetas digital",
-    "description": "Almacena, organiza y encuentra fácilmente todas tus recetas favoritas en un solo lugar. ¡Ya disponible para Android!",
+    "description": "Almacena, organiza y encuentra fácilmente todas tus recetas favoritas en un solo lugar.",
     "download": "Descargar ahora"
   },
   "FeaturesSection": {
     "title": "Lo que te ofrecemos",
     "feature1_title": "Funciona localmente por defecto",
-    "feature1_description": "La aplicación funciona sin conexión en tu dispositivo. Opcionalmente inicia sesión para habilitar funciones de IA y compartir.",
+    "feature1_description": "Funciona sin conexión en tu dispositivo. Inicia sesión solo para usar IA o compartir.",
     "feature3_title": "Modo oscuro",
-    "feature3_description": "Hermoso tema oscuro diseñado específicamente para cocinar en ambientes con poca luz y preparación nocturna de comidas.",
+    "feature3_description": "Tema oscuro pensado para cocinar cómodamente en ambientes con poca luz.",
     "feature4_title": "Compartir recetas por enlace",
-    "feature4_description": "Genera enlaces únicos para compartir tus recetas favoritas. Los usuarios pueden acceder al enlace desde cualquier dispositivo y la aplicación se abrirá automáticamente mostrando la receta completa con todos sus ingredientes e instrucciones.",
+    "feature4_description": "Crea enlaces para compartir tus recetas y abrirlas directamente en la aplicación.",
     "feature5_title": "Generación de recetas con IA",
-    "feature5_description": "Toma una foto de cualquier plato y nuestra inteligencia artificial analizará la imagen para generar una receta completa. La IA identifica ingredientes visibles y sugiere métodos de preparación basados en el análisis visual del plato.",
-    "feature6_title": "Soporte Multi-idioma",
-    "feature6_description": "La aplicación está disponible en varios idiomas incluyendo español, inglés, francés, alemán y más para usuarios de todo el mundo."
+    "feature5_description": "Toma una foto de cualquier plato para generar su receta automáticamente.",
+    "feature6_title": "Soporte multi-idioma",
+    "feature6_description": "Disponible en varios idiomas, incluyendo español, inglés, francés y alemán."
   },
   "CTASection": {
     "title": "¡Ya disponible!",
@@ -47,9 +47,9 @@
     "section_contact": "Contacto",
     "section_preferences": "Preferencias",
     "theme_label": "Tema actual:",
-    "theme_light": "Modo claro",
-    "theme_dark": "Modo oscuro",
-    "theme_system": "Modo sistema",
+    "theme_light": "Claro",
+    "theme_dark": "Oscuro",
+    "theme_system": "Sistema",
     "theme_toggle_to_dark": "Cambiar a modo oscuro",
     "theme_toggle_to_system": "Cambiar a modo sistema",
     "theme_toggle_to_light": "Cambiar a modo claro",

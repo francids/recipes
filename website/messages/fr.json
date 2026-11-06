@@ -6,21 +6,21 @@
   },
   "HeroSection": {
     "title": "Votre livre de recettes numérique",
-    "description": "Stockez, organisez et retrouvez facilement toutes vos recettes préférées au même endroit. Maintenant disponible pour Android !",
+    "description": "Stockez, organisez et retrouvez facilement toutes vos recettes préférées au même endroit.",
     "download": "Télécharger maintenant"
   },
   "FeaturesSection": {
     "title": "Ce que nous offrons",
     "feature1_title": "Fonctionne localement par défaut",
-    "feature1_description": "L'application fonctionne hors ligne sur votre appareil. Connectez-vous optionnellement pour les fonctionnalités IA et partage.",
+    "feature1_description": "Fonctionne hors ligne sur votre appareil. Connectez-vous uniquement pour l'IA ou le partage.",
     "feature3_title": "Mode sombre",
-    "feature3_description": "Magnifique thème sombre conçu spécifiquement pour cuisiner dans des environnements peu éclairés et la préparation nocturne des repas.",
+    "feature3_description": "Thème sombre pensé pour cuisiner confortablement dans les environnements peu éclairés.",
     "feature4_title": "Partager des recettes par lien",
-    "feature4_description": "Générez des liens uniques pour partager vos recettes préférées. Les utilisateurs peuvent accéder au lien depuis n'importe quel appareil et l'application s'ouvrira automatiquement en affichant la recette complète avec tous les ingrédients et instructions.",
+    "feature4_description": "Créez des liens pour partager vos recettes et les ouvrir directement dans l'application.",
     "feature5_title": "Génération de recettes par IA",
-    "feature5_description": "Prenez une photo de n'importe quel plat et notre intelligence artificielle analysera l'image pour générer une recette complète. L'IA identifie les ingrédients visibles et suggère des méthodes de préparation basées sur l'analyse visuelle du plat.",
-    "feature6_title": "Support Multilingue",
-    "feature6_description": "L'application est disponible en plusieurs langues incluant français, anglais, espagnol, allemand et plus pour les utilisateurs du monde entier."
+    "feature5_description": "Prenez en photo n'importe quel plat pour générer sa recette automatiquement.",
+    "feature6_title": "Support multilingue",
+    "feature6_description": "Disponible en plusieurs langues, dont le français, l'anglais, l'espagnol et l'allemand."
   },
   "CTASection": {
     "title": "Disponible maintenant !",
@@ -47,9 +47,9 @@
     "section_contact": "Contact",
     "section_preferences": "Préférences",
     "theme_label": "Thème actuel :",
-    "theme_light": "Mode clair",
-    "theme_dark": "Mode sombre",
-    "theme_system": "Mode système",
+    "theme_light": "Clair",
+    "theme_dark": "Sombre",
+    "theme_system": "Système",
     "theme_toggle_to_dark": "Passer en mode sombre",
     "theme_toggle_to_system": "Passer en mode système",
     "theme_toggle_to_light": "Passer en mode clair",

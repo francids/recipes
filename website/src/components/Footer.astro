@@ -14,6 +14,14 @@ const currentTheme: Theme =
   storedTheme === "light" || storedTheme === "dark" || storedTheme === "system"
     ? storedTheme
     : "system";
+
+const themeLabels: Record<Theme, string> = {
+  light: t("Footer.theme_light"),
+  dark: t("Footer.theme_dark"),
+  system: t("Footer.theme_system"),
+};
+
+const themes: Theme[] = ["light", "dark", "system"];
 ---
 
 <footer
@@ -30,25 +38,17 @@ const currentTheme: Theme =
       }
     </p>
 
-    <div class="flex items-center gap-3">
-      <span
-        class="hidden text-xs font-medium tracking-wide text-zinc-500 sm:inline dark:text-zinc-400"
-      >
-        {t("Footer.theme_label")}
-      </span>
-      <div
+    <div class="relative select-none" id="theme-selector">
+      <button
         id="theme-toggle"
-        role="group"
+        type="button"
         aria-label={t("Footer.theme_label")}
-        class="inline-flex items-center gap-0.5 rounded-md border border-zinc-200/80 bg-white/80 p-1 dark:border-zinc-700/60 dark:bg-zinc-900/80"
+        aria-expanded="false"
+        class="inline-flex cursor-pointer items-center gap-2 rounded-md bg-zinc-100 px-4 py-2 text-sm font-semibold text-zinc-900 transition-all duration-300 select-none hover:bg-zinc-200 hover:shadow-sm active:scale-95 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700/20"
       >
-        <button
-          type="button"
-          data-theme="light"
-          aria-label={t("Footer.theme_light")}
-          title={t("Footer.theme_light")}
-          aria-pressed={currentTheme === "light"}
-          class="flex size-8 cursor-pointer items-center justify-center rounded-md text-zinc-500 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/60 aria-pressed:bg-orange-500 aria-pressed:text-white not-aria-pressed:hover:bg-zinc-100 not-aria-pressed:hover:text-zinc-900 dark:text-zinc-400 dark:not-aria-pressed:hover:bg-zinc-800 dark:not-aria-pressed:hover:text-zinc-100"
+        <span
+          data-current-icon="light"
+          class={currentTheme === "light" ? "inline-flex" : "hidden"}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -58,9 +58,8 @@ const currentTheme: Theme =
             stroke-width="1.8"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="size-4.5"
+            class="size-4"
             aria-hidden="true"
-            focusable="false"
           >
             <circle cx="12" cy="12" r="4"></circle>
             <path d="M12 2v2"></path>
@@ -72,15 +71,10 @@ const currentTheme: Theme =
             <path d="m6.34 17.66-1.41 1.41"></path>
             <path d="m19.07 4.93-1.41 1.41"></path>
           </svg>
-        </button>
-
-        <button
-          type="button"
-          data-theme="dark"
-          aria-label={t("Footer.theme_dark")}
-          title={t("Footer.theme_dark")}
-          aria-pressed={currentTheme === "dark"}
-          class="flex size-8 cursor-pointer items-center justify-center rounded-md text-zinc-500 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/60 aria-pressed:bg-orange-500 aria-pressed:text-white not-aria-pressed:hover:bg-zinc-100 not-aria-pressed:hover:text-zinc-900 dark:text-zinc-400 dark:not-aria-pressed:hover:bg-zinc-800 dark:not-aria-pressed:hover:text-zinc-100"
+        </span>
+        <span
+          data-current-icon="dark"
+          class={currentTheme === "dark" ? "inline-flex" : "hidden"}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -90,21 +84,15 @@ const currentTheme: Theme =
             stroke-width="1.8"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="size-4.5"
+            class="size-4"
             aria-hidden="true"
-            focusable="false"
           >
             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
           </svg>
-        </button>
-
-        <button
-          type="button"
-          data-theme="system"
-          aria-label={t("Footer.theme_system")}
-          title={t("Footer.theme_system")}
-          aria-pressed={currentTheme === "system"}
-          class="flex size-8 cursor-pointer items-center justify-center rounded-md text-zinc-500 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500/60 aria-pressed:bg-orange-500 aria-pressed:text-white not-aria-pressed:hover:bg-zinc-100 not-aria-pressed:hover:text-zinc-900 dark:text-zinc-400 dark:not-aria-pressed:hover:bg-zinc-800 dark:not-aria-pressed:hover:text-zinc-100"
+        </span>
+        <span
+          data-current-icon="system"
+          class={currentTheme === "system" ? "inline-flex" : "hidden"}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -114,15 +102,113 @@ const currentTheme: Theme =
             stroke-width="1.8"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="size-4.5"
+            class="size-4"
             aria-hidden="true"
-            focusable="false"
           >
             <rect width="20" height="14" x="2" y="3" rx="2"></rect>
             <line x1="8" x2="16" y1="21" y2="21"></line>
             <line x1="12" x2="12" y1="17" y2="21"></line>
           </svg>
-        </button>
+        </span>
+
+        <span id="theme-current-label">{themeLabels[currentTheme]}</span>
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="ml-0.5 text-zinc-500 transition-transform duration-200 dark:text-zinc-400"
+          id="theme-arrow"
+        >
+          <path d="M12 5v14m-7-7l7 7 7-7"></path>
+        </svg>
+      </button>
+
+      <div
+        id="theme-dropdown"
+        class="pointer-events-none absolute right-0 bottom-full z-50 mb-1 min-w-44 overflow-hidden rounded-md border border-zinc-200 bg-white opacity-0 shadow-lg transition-opacity duration-200 dark:border-zinc-700 dark:bg-zinc-800"
+      >
+        <ul class="py-1">
+          {
+            themes.map((themeOption) => (
+              <li>
+                <button
+                  type="button"
+                  data-theme={themeOption}
+                  data-label={themeLabels[themeOption]}
+                  class={`flex w-full cursor-pointer items-center gap-2.5 px-4 py-2 text-left text-sm transition-colors ${
+                    themeOption === currentTheme
+                      ? "bg-zinc-100 font-semibold text-zinc-900 dark:bg-zinc-700/60 dark:text-zinc-100"
+                      : "text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-700/30 dark:hover:text-zinc-100"
+                  }`}
+                >
+                  {themeOption === "light" && (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="size-4 shrink-0"
+                      aria-hidden="true"
+                    >
+                      <circle cx="12" cy="12" r="4" />
+                      <path d="M12 2v2" />
+                      <path d="M12 20v2" />
+                      <path d="m4.93 4.93 1.41 1.41" />
+                      <path d="m17.66 17.66 1.41 1.41" />
+                      <path d="M2 12h2" />
+                      <path d="M20 12h2" />
+                      <path d="m6.34 17.66-1.41 1.41" />
+                      <path d="m19.07 4.93-1.41 1.41" />
+                    </svg>
+                  )}
+                  {themeOption === "dark" && (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="size-4 shrink-0"
+                      aria-hidden="true"
+                    >
+                      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                    </svg>
+                  )}
+                  {themeOption === "system" && (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="size-4 shrink-0"
+                      aria-hidden="true"
+                    >
+                      <rect width="20" height="14" x="2" y="3" rx="2" />
+                      <line x1="8" x2="16" y1="21" y2="21" />
+                      <line x1="12" x2="12" y1="17" y2="21" />
+                    </svg>
+                  )}
+                  <span>{themeLabels[themeOption]}</span>
+                </button>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </div>
   </div>
@@ -131,17 +217,56 @@ const currentTheme: Theme =
 <script>
   type Theme = "light" | "dark" | "system";
 
-  const themeToggle = document.getElementById("theme-toggle");
+  const selector = document.getElementById("theme-selector");
+  const toggle = document.getElementById("theme-toggle");
+  const dropdown = document.getElementById("theme-dropdown");
+  const arrow = document.getElementById("theme-arrow");
+  const currentLabel = document.getElementById("theme-current-label");
+  const currentIcons = Array.from(
+    toggle?.querySelectorAll<HTMLElement>("[data-current-icon]") ?? [],
+  );
   const themeOptions = Array.from(
-    themeToggle?.querySelectorAll<HTMLButtonElement>("[data-theme]") ?? [],
+    dropdown?.querySelectorAll<HTMLButtonElement>("[data-theme]") ?? [],
   );
 
+  let isOpen = false;
+
+  function setDropdownOpen(next: boolean) {
+    isOpen = next;
+    if (dropdown && arrow && toggle) {
+      dropdown.style.opacity = isOpen ? "1" : "0";
+      dropdown.style.pointerEvents = isOpen ? "auto" : "none";
+      arrow.style.transform = isOpen ? "rotate(180deg)" : "rotate(0deg)";
+      toggle.setAttribute("aria-expanded", isOpen.toString());
+    }
+  }
+
+  toggle?.addEventListener("click", () => setDropdownOpen(!isOpen));
+
+  document.addEventListener("click", (e) => {
+    if (selector && !selector.contains(e.target as Node)) {
+      setDropdownOpen(false);
+    }
+  });
+
   function syncThemeSelection(theme: Theme) {
+    currentIcons.forEach((icon) => {
+      const isMatch = icon.dataset.currentIcon === theme;
+      icon.classList.toggle("inline-flex", isMatch);
+      icon.classList.toggle("hidden", !isMatch);
+    });
+
     themeOptions.forEach((option) => {
-      option.setAttribute(
-        "aria-pressed",
-        String(option.dataset.theme === theme),
-      );
+      const isSelected = option.dataset.theme === theme;
+      if (isSelected && currentLabel && option.dataset.label) {
+        currentLabel.textContent = option.dataset.label;
+      }
+
+      option.className = `flex w-full cursor-pointer items-center gap-2.5 px-4 py-2 text-left text-sm transition-colors ${
+        isSelected
+          ? "bg-zinc-100 font-semibold text-zinc-900 dark:bg-zinc-700/60 dark:text-zinc-100"
+          : "text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-700/30 dark:hover:text-zinc-100"
+      }`;
     });
   }
 
@@ -154,6 +279,7 @@ const currentTheme: Theme =
     themeOptions.forEach((option) => {
       option.addEventListener("click", () => {
         window.themeManager.setTheme(option.dataset.theme as Theme);
+        setDropdownOpen(false);
       });
     });
   }

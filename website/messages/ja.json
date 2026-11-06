@@ -6,21 +6,21 @@
   },
   "HeroSection": {
     "title": "あなたのデジタルレシピブック",
-    "description": "お気に入りのレシピをすべて1か所に保存、整理し、簡単に見つけられます。Androidで利用可能になりました！",
+    "description": "お気に入りのレシピをすべて1か所に保存、整理し、簡単に見つけられます。",
     "download": "今すぐダウンロード"
   },
   "FeaturesSection": {
     "title": "私たちの提供",
     "feature1_title": "デフォルトでローカル動作",
-    "feature1_description": "アプリはデバイス上でオフラインで動作します。オプションでログインしてAI機能と共有を有効化。",
+    "feature1_description": "デバイス上でオフラインで動作します。AIや共有を使う場合のみログインが必要です。",
     "feature3_title": "ダークモード",
-    "feature3_description": "暗い環境での料理や夜間の食事準備のために特別に設計された美しいダークテーマです。",
+    "feature3_description": "暗い場所でも快適に料理できるよう設計されたダークテーマ。",
     "feature4_title": "リンクでレシピを共有",
-    "feature4_description": "お気に入りのレシピを共有するためのユニークなリンクを生成します。ユーザーは任意のデバイスからリンクにアクセスでき、アプリが自動的に開いて全ての材料と手順を含む完全なレシピが表示されます。",
+    "feature4_description": "リンクを作成してレシピを共有し、アプリで直接開けます。",
     "feature5_title": "AIレシピ生成",
-    "feature5_description": "任意の料理の写真を撮ると、人工知能が画像を分析して完全なレシピを生成します。AIは見える材料を識別し、料理の視覚的分析に基づいて調理方法を提案します。",
+    "feature5_description": "料理の写真を撮るだけでレシピを自動生成します。",
     "feature6_title": "多言語サポート",
-    "feature6_description": "アプリは日本語、英語、スペイン語、フランス語など複数の言語で利用でき、世界中のユーザーに対応しています。"
+    "feature6_description": "日本語、英語、スペイン語、フランス語など複数の言語に対応しています。"
   },
   "CTASection": {
     "title": "今すぐ利用可能！",
@@ -47,9 +47,9 @@
     "section_contact": "連絡先",
     "section_preferences": "設定",
     "theme_label": "現在のテーマ：",
-    "theme_light": "ライトモード",
-    "theme_dark": "ダークモード",
-    "theme_system": "システムモード",
+    "theme_light": "ライト",
+    "theme_dark": "ダーク",
+    "theme_system": "システム",
     "theme_toggle_to_dark": "ダークモードに切り替え",
     "theme_toggle_to_system": "システムモードに切り替え",
     "theme_toggle_to_light": "ライトモードに切り替え",

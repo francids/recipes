@@ -4,19 +4,20 @@ import darkHexagonSvg from "../assets/dark-hexagon.svg";
 ---
 
 <div
-  class="absolute inset-0 z-0 overflow-hidden bg-linear-to-b from-main/5 to-white dark:from-main/10 dark:to-zinc-900"
+  class="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-linear-to-b from-main/5 via-main/2 to-white select-none dark:from-main/10 dark:via-main/5 dark:to-zinc-900"
 >
   <div
     id="bg-pattern"
-    class="absolute inset-0 opacity-10 dark:opacity-5 animate-scroll-bg transition-opacity duration-500"
+    class="lateral-pattern-mask absolute inset-0 opacity-25 transition-opacity duration-500 animate-scroll-bg dark:opacity-15"
     style={{
       backgroundSize: "125px",
       backgroundRepeat: "repeat",
     }}
   >
   </div>
+
   <div
-    class="absolute inset-0 bg-linear-to-b from-transparent via-white lg:via-white/80 to-white dark:via-zinc-900 lg:dark:via-zinc-900/80 dark:to-zinc-900"
+    class="absolute inset-x-0 bottom-0 h-48 bg-linear-to-t from-white via-white/70 to-transparent dark:from-zinc-900 dark:via-zinc-900/70"
   >
   </div>
 </div>
@@ -43,6 +44,21 @@ import darkHexagonSvg from "../assets/dark-hexagon.svg";
 </script>
 
 <style>
+  .lateral-pattern-mask {
+    -webkit-mask-image: radial-gradient(
+      ellipse 50% 65% at 50% 38%,
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0.65) 55%,
+      rgba(0, 0, 0, 1) 100%
+    );
+    mask-image: radial-gradient(
+      ellipse 50% 65% at 50% 38%,
+      rgba(0, 0, 0, 0.35) 0%,
+      rgba(0, 0, 0, 0.65) 55%,
+      rgba(0, 0, 0, 1) 100%
+    );
+  }
+
   @keyframes scroll-bg {
     0% {
       background-position: 0px 0px;
@@ -60,6 +76,7 @@ import darkHexagonSvg from "../assets/dark-hexagon.svg";
       background-position: 250px 250px;
     }
   }
+
   .animate-scroll-bg {
     animation: scroll-bg 40s linear infinite;
   }

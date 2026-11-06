@@ -8,15 +8,16 @@ const { feature } = Astro.props;
 ---
 
 <div
-  class="flex flex-col items-center w-full sm:w-80 bg-white dark:bg-zinc-800 px-8 py-12 rounded-md border-2 border-orange-200 dark:border-main transition-transform duration-300 md:hover:scale-105 hover:shadow-sm"
+  class="flex flex-col justify-center items-start text-left w-full rounded-lg border border-orange-200 bg-orange-50/30 dark:border-main/40 dark:bg-zinc-800/40 p-6 lg:p-8"
 >
-  <div class="text-5xl mb-5 text-orange-600 select-none">
-    {feature.icon}
-  </div>
-  <h3 class="text-xl font-bold mb-4 text-zinc-800 dark:text-zinc-100">
+  <h3
+    class="text-lg sm:text-xl font-semibold mb-2 text-zinc-900 dark:text-zinc-100"
+  >
     {feature.title}
   </h3>
-  <p class="text-zinc-600 dark:text-zinc-400 text-lg leading-relaxed">
+  <p
+    class="text-zinc-600 dark:text-zinc-400 text-sm sm:text-base leading-relaxed"
+  >
     {feature.description}
   </p>
 </div>

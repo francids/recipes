@@ -17,53 +17,29 @@ const t = await createTranslationHelper(locale);
 ---
 
 <section
-  class="text-zinc-900 dark:text-zinc-100 pt-20 md:pt-20 pb-16 px-8 text-center md:text-left relative overflow-hidden selection:bg-white/25"
+  class="text-zinc-900 dark:text-zinc-100 pt-20 pb-16 px-8 text-center relative overflow-hidden selection:bg-white/25"
 >
   <RecipeBackground />
   <div
-    class="max-w-7xl mx-auto flex xl:flex-row flex-col lg:items-center xl:justify-between gap-8 relative z-10"
+    class="max-w-7xl mx-auto flex flex-col items-center gap-12 relative z-10"
   >
-    <div class="lg:w-2/5 mb-4 lg:mb-12 xl:mb-32 text-center xl:text-left">
-      <div
-        class="flex items-center justify-center xl:justify-start mb-4 w-full"
-      >
+    <div class="max-w-md mx-auto text-center">
+      <div class="flex items-center justify-center mb-4 w-full">
         <Logotype class="w-20 h-8 text-main dark:text-amber-500" />
       </div>
-      <h1
-        class="md:leading-12 text-4xl md:text-5xl lg:text-5xl font-bold mb-4"
-        style={{ animationDelay: "0.2s" }}
-      >
+      <h1 class="md:leading-12 text-4xl md:text-5xl font-bold mb-4">
         {t("HeroSection.title")}
       </h1>
       <p
-        class="text-zinc-600 dark:text-zinc-400 md:leading-8 text-lg md:text-xl mb-8"
+        class="text-zinc-600 dark:text-zinc-400 md:leading-8 text-lg md:text-xl"
       >
         {t("HeroSection.description")}
       </p>
-      <a
-        href="https://github.com/francids/recipes/releases/latest/download/app-release.apk"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex justify-center items-center gap-2 px-8 py-4 rounded-md bg-main text-white font-semibold text-lg transition-all duration-300 active:scale-95 hover:bg-orange-500 hover:text-white select-none"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="24px"
-          viewBox="0 -960 960 960"
-          width="24px"
-          fill="currentColor"
-        >
-          <path
-            d="M40-240q9-107 65.5-197T256-580l-74-128q-6-9-3-19t13-15q8-5 18-2t16 12l74 128q86-36 180-36t180 36l74-128q6-9 16-12t18 2q10 5 13 15t-3 19l-74 128q94 53 150.5 143T920-240H40Zm240-110q21 0 35.5-14.5T330-400q0-21-14.5-35.5T280-450q-21 0-35.5 14.5T230-400q0 21 14.5 35.5T280-350Zm400 0q21 0 35.5-14.5T730-400q0-21-14.5-35.5T680-450q-21 0-35.5 14.5T630-400q0 21 14.5 35.5T680-350Z"
-          ></path>
-        </svg>
-        <span class="whitespace-nowrap">{t("HeroSection.download")}</span>
-      </a>
     </div>
 
-    <div class="flex flex-col items-center justify-center gap-8 lg:gap-0">
+    <div class="flex flex-col items-center justify-center">
       <div
-        class="flex justify-center md:justify-end items-center gap-6 md:gap-12 flex-wrap select-none"
+        class="flex justify-center items-center gap-6 md:gap-12 flex-wrap select-none"
       >
         <div
           class="w-56 md:w-72 transition-all duration-500 hover:-translate-y-2 hover:-rotate-1 -rotate-3 relative"
@@ -73,14 +49,16 @@ const t = await createTranslationHelper(locale);
             alt="App initial screen"
             width={320}
             height={640}
-            class="transition-opacity duration-300 rounded-lg block dark:hidden"
+            draggable="false"
+            class="transition-opacity duration-300 rounded-lg block dark:hidden select-none pointer-events-none"
           />
           <img
             src={DarkInicialScreen.src}
             alt="App initial screen"
             width={320}
             height={640}
-            class="transition-opacity duration-300 rounded-lg hidden dark:block"
+            draggable="false"
+            class="transition-opacity duration-300 rounded-lg hidden dark:block select-none pointer-events-none"
           />
         </div>
         <div
@@ -91,14 +69,16 @@ const t = await createTranslationHelper(locale);
             alt="App recipe screen"
             width={320}
             height={640}
-            class="transition-opacity duration-300 rounded-lg block dark:hidden"
+            draggable="false"
+            class="transition-opacity duration-300 rounded-lg block dark:hidden select-none pointer-events-none"
           />
           <img
             src={DarkRecipeScreen.src}
             alt="App recipe screen"
             width={320}
             height={640}
-            class="transition-opacity duration-300 rounded-lg hidden dark:block"
+            draggable="false"
+            class="transition-opacity duration-300 rounded-lg hidden dark:block select-none pointer-events-none"
           />
         </div>
       </div>

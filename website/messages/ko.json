@@ -6,21 +6,21 @@
   },
   "HeroSection": {
     "title": "나만의 디지털 레시피 북",
-    "description": "좋아하는 모든 레시피를 한 곳에 저장, 정리하고 쉽게 찾아보세요. 이제 Android에서 사용할 수 있습니다!",
+    "description": "좋아하는 모든 레시피를 한 곳에 저장, 정리하고 쉽게 찾아보세요.",
     "download": "지금 다운로드"
   },
   "FeaturesSection": {
     "title": "우리가 제공하는 것",
     "feature1_title": "기본적으로 로컬에서 작동",
-    "feature1_description": "앱은 기기에서 오프라인으로 작동합니다. 선택적으로 로그인하여 AI 기능과 공유를 활성화하세요.",
+    "feature1_description": "기기에서 오프라인으로 작동합니다. AI 및 공유 기능만 로그인이 필요합니다.",
     "feature3_title": "다크 모드",
-    "feature3_description": "어두운 환경에서의 요리와 야간 식사 준비를 위해 특별히 설계된 아름다운 다크 테마입니다.",
+    "feature3_description": "어두운 환경에서도 편안하게 요리할 수 있도록 설계된 다크 테마입니다.",
     "feature4_title": "링크로 레시피 공유",
-    "feature4_description": "좋아하는 레시피를 공유하기 위한 고유한 링크를 생성합니다. 사용자는 어떤 기기에서든 링크에 접근할 수 있으며 앱이 자동으로 열려 모든 재료와 지침이 포함된 완전한 레시피가 표시됩니다.",
+    "feature4_description": "링크를 생성해 레시피를 공유하고 앱에서 바로 열 수 있습니다.",
     "feature5_title": "AI 레시피 생성",
-    "feature5_description": "어떤 요리든 사진을 찍으면 인공지능이 이미지를 분석하여 완전한 레시피를 생성합니다. AI는 보이는 재료를 식별하고 요리의 시각적 분석을 바탕으로 조리 방법을 제안합니다.",
+    "feature5_description": "요리 사진을 찍어 레시피를 자동으로 생성합니다.",
     "feature6_title": "다국어 지원",
-    "feature6_description": "이 앱은 한국어, 영어, 스페인어, 프랑스어 등 여러 언어로 제공되어 전 세계 사용자를 지원합니다."
+    "feature6_description": "한국어, 영어, 스페인어, 프랑스어 등 다양한 언어를 지원합니다."
   },
   "CTASection": {
     "title": "지금 이용 가능!",
@@ -47,9 +47,9 @@
     "section_contact": "연락처",
     "section_preferences": "환경 설정",
     "theme_label": "현재 테마:",
-    "theme_light": "라이트 모드",
-    "theme_dark": "다크 모드",
-    "theme_system": "시스템 모드",
+    "theme_light": "라이트",
+    "theme_dark": "다크",
+    "theme_system": "시스템",
     "theme_toggle_to_dark": "다크 모드로 전환",
     "theme_toggle_to_system": "시스템 모드로 전환",
     "theme_toggle_to_light": "라이트 모드로 전환",

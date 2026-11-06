@@ -1,29 +1,26 @@
 {
   "Navbar": {
-    "feature4_title": "通过链接分享食谱",
-    "feature4_description": "生成独特的链接来分享您最喜欢的食谱。用户可以从任何设备访问链接，应用程序将自动打开并显示包含所有配料和说明的完整食谱。",
-    "feature5_title": "AI食谱生成",
-    "feature5_description": "拍摄任何菜品的照片，我们的人工智能将分析图像生成完整的食谱。AI识别可见的配料，并基于菜品的视觉分析建议制作方法。", "home": "首页",
+    "home": "首页",
     "privacy": "隐私",
     "menu": "菜单"
   },
   "HeroSection": {
     "title": "您的数字食谱书",
-    "description": "在一个地方存储、整理并轻松找到您所有喜爱的食谱。现已推出 Android 版本！",
+    "description": "在一个地方存储、整理并轻松找到您所有喜爱的食谱。",
     "download": "立即下载"
   },
   "FeaturesSection": {
     "title": "我们的提供",
     "feature1_title": "默认本地运行",
-    "feature1_description": "应用程序在您的设备上离线运行。可选择登录以启用AI功能和分享。",
+    "feature1_description": "在设备上离线运行，仅在使用 AI 或分享功能时才需登录。",
     "feature3_title": "深色模式",
-    "feature3_description": "专为在光线不足环境中烹饪和夜间备餐而特别设计的美丽深色主题。",
-    "feature4_title": "即将推出：分享",
-    "feature4_description": "您很快就能与朋友和家人分享您的烹饪创作。",
-    "feature5_title": "即将推出：AI 食谱",
-    "feature5_description": "使用 AI 从图像自动生成食谱。",
+    "feature3_description": "专为在暗光环境下舒适烹饪而设计的深色主题。",
+    "feature4_title": "通过链接分享食谱",
+    "feature4_description": "创建分享链接，并在应用中直接打开食谱。",
+    "feature5_title": "AI 食谱生成",
+    "feature5_description": "拍摄菜品照片即可自动生成食谱。",
     "feature6_title": "多语言支持",
-    "feature6_description": "该应用程序提供多种语言版本，包括中文、英文、西班牙文、法文等，满足全球用户需求。"
+    "feature6_description": "支持中文、英文、西班牙文、法文等多种语言。"
   },
   "CTASection": {
     "title": "现已推出！",
@@ -50,9 +47,9 @@
     "section_contact": "联系方式",
     "section_preferences": "偏好设置",
     "theme_label": "当前主题：",
-    "theme_light": "浅色模式",
-    "theme_dark": "深色模式",
-    "theme_system": "系统模式",
+    "theme_light": "浅色",
+    "theme_dark": "深色",
+    "theme_system": "系统",
     "theme_toggle_to_dark": "切换到深色模式",
     "theme_toggle_to_system": "切换到系统模式",
     "theme_toggle_to_light": "切换到浅色模式",

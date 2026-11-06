@@ -18,31 +18,26 @@ const t = await createTranslationHelper(locale);
 
 const features: Feature[] = [
   {
-    icon: "🤖",
     title: t("FeaturesSection.feature5_title"),
     description: t("FeaturesSection.feature5_description"),
     lightImage: LightAiComponent,
     darkImage: DarkAiComponent,
   },
   {
-    icon: "🔄",
     title: t("FeaturesSection.feature4_title"),
     description: t("FeaturesSection.feature4_description"),
     lightImage: LightShareComponent,
     darkImage: DarkShareComponent,
   },
   {
-    icon: "📱",
     title: t("FeaturesSection.feature1_title"),
     description: t("FeaturesSection.feature1_description"),
   },
   {
-    icon: "🌙",
     title: t("FeaturesSection.feature3_title"),
     description: t("FeaturesSection.feature3_description"),
   },
   {
-    icon: "🌐",
     title: t("FeaturesSection.feature6_title"),
     description: t("FeaturesSection.feature6_description"),
   },
@@ -51,34 +46,33 @@ const features: Feature[] = [
 
 <section
   id="features"
-  class="py-20 px-5 bg-white dark:bg-linear-to-b dark:from-zinc-900 dark:to-zinc-950 text-center flex flex-col items-center justify-center"
+  class="min-h-screen lg:h-screen py-12 px-6 md:px-8 bg-white dark:bg-zinc-900 flex flex-col justify-center"
 >
-  <h2 class="text-4xl font-bold mb-16 text-main relative">
-    {t("FeaturesSection.title")}
-    <span
-      class="absolute -bottom-6 left-1/2 transform -translate-x-1/2 w-16 sm:w-20 h-1 bg-main rounded-md shadow-sm"
-    ></span>
-  </h2>
+  <div class="max-w-7xl w-full mx-auto">
+    <h2
+      class="text-3xl md:text-4xl font-bold tracking-tight mb-8 text-main dark:text-amber-500 text-center md:text-left"
+    >
+      {t("FeaturesSection.title")}
+    </h2>
 
-  <div class="w-full xl:w-4/5 md:mb-8">
-    {
-      features.map((feature) => {
-        if (feature.darkImage && feature.lightImage) {
-          return <FullFeatureCard feature={feature} />;
-        }
-      })
-    }
-  </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      {
+        features.map((feature) => {
+          if (feature.darkImage && feature.lightImage) {
+            return <FullFeatureCard feature={feature} />;
+          }
+        })
+      }
+    </div>
 
-  <div
-    class="flex flex-wrap justify-center items-stretch gap-8 max-w-6xl mx-auto"
-  >
-    {
-      features.map((feature) => {
-        if (!feature.darkImage && !feature.lightImage) {
-          return <FeatureCard feature={feature} />;
-        }
-      })
-    }
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {
+        features.map((feature) => {
+          if (!feature.darkImage && !feature.lightImage) {
+            return <FeatureCard feature={feature} />;
+          }
+        })
+      }
+    </div>
   </div>
 </section>
