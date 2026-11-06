@@ -12,7 +12,8 @@ const t = await createTranslationHelper(locale);
 const pathname = Astro.url.pathname;
 const homeUrl = getRelativeLocaleUrl(locale);
 const privacyUrl = getRelativeLocaleUrl(locale, "privacy");
-const isHome = pathname === homeUrl || pathname === `${homeUrl}/`;
+const normalizePath = (path: string) => path.replace(/\/+$/, "") || "/";
+const isHome = normalizePath(pathname) === normalizePath(homeUrl);
 ---
 
 <div data-navbar>
