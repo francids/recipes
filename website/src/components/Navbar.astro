@@ -25,11 +25,15 @@ const isHome = normalizePath(pathname) === normalizePath(homeUrl);
     }`}
   >
     <div class="flex items-center gap-4 select-none">
-      <a
-        href={homeUrl}
-        class="flex items-center select-none pointer-events-none"
-      >
-        <img src="/icon.svg" alt="Recipes App" width={40} height={40} />
+      <a href={homeUrl} class="flex items-center select-none">
+        <img
+          src="/icon.svg"
+          alt="Recipes App"
+          width={40}
+          height={40}
+          draggable="false"
+          class="select-none"
+        />
       </a>
       <LanguageSelect />
     </div>
