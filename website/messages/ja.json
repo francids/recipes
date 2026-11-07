@@ -2,7 +2,14 @@
   "Navbar": {
     "home": "ホーム",
     "privacy": "プライバシー",
-    "menu": "メニュー"
+    "menu": "メニュー",
+    "theme_label": "現在のテーマ：",
+    "theme_light": "ライト",
+    "theme_dark": "ダーク",
+    "theme_system": "システム",
+    "theme_toggle_to_dark": "ダークモードに切り替え",
+    "theme_toggle_to_system": "システムモードに切り替え",
+    "theme_toggle_to_light": "ライトモードに切り替え"
   },
   "HeroSection": {
     "title": "あなたのデジタルレシピブック",
@@ -46,13 +53,6 @@
     "link_development": "開発",
     "section_contact": "連絡先",
     "section_preferences": "設定",
-    "theme_label": "現在のテーマ：",
-    "theme_light": "ライト",
-    "theme_dark": "ダーク",
-    "theme_system": "システム",
-    "theme_toggle_to_dark": "ダークモードに切り替え",
-    "theme_toggle_to_system": "システムモードに切り替え",
-    "theme_toggle_to_light": "ライトモードに切り替え",
     "copyright": "© {{year}} Francisco Mesa. 無断複写・転載を禁じます。"
   }
 }

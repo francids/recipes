@@ -1,0 +1,351 @@
+---
+import type { Theme } from "../types/theme";
+import {
+  createTranslationHelper,
+  resolveLocale,
+  type Locale,
+} from "../utils/i18n.ts";
+
+const locale: Locale = resolveLocale(Astro.currentLocale);
+const t = await createTranslationHelper(locale);
+
+const storedTheme = Astro.cookies.get("theme")?.value;
+const currentTheme: Theme =
+  storedTheme === "light" || storedTheme === "dark" || storedTheme === "system"
+    ? storedTheme
+    : "system";
+
+const themeLabels: Record<Theme, string> = {
+  light: t("Navbar.theme_light"),
+  dark: t("Navbar.theme_dark"),
+  system: t("Navbar.theme_system"),
+};
+
+const themes: Theme[] = ["light", "dark", "system"];
+---
+
+<div class="relative select-none" data-theme-selector>
+  <select
+    data-theme-native
+    aria-label={t("Navbar.theme_label")}
+    class="w-full cursor-pointer rounded-md border border-zinc-200 bg-zinc-100 px-4 py-3 text-base font-semibold text-zinc-900 md:hidden dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200"
+  >
+    {
+      themes.map((themeOption) => (
+        <option value={themeOption} selected={themeOption === currentTheme}>
+          {themeLabels[themeOption]}
+        </option>
+      ))
+    }
+  </select>
+
+  <button
+    data-theme-toggle
+    type="button"
+    aria-label={t("Navbar.theme_label")}
+    aria-expanded="false"
+    class="hidden cursor-pointer items-center gap-2 rounded-md bg-zinc-100 px-4 py-2 text-sm font-semibold text-zinc-900 transition-all duration-300 select-none hover:bg-zinc-200 hover:shadow-sm active:scale-95 md:inline-flex dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700/20"
+  >
+    <span
+      data-current-icon="light"
+      class={currentTheme === "light" ? "inline-flex" : "hidden"}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="size-4"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2"></path>
+        <path d="M12 20v2"></path>
+        <path d="m4.93 4.93 1.41 1.41"></path>
+        <path d="m17.66 17.66 1.41 1.41"></path>
+        <path d="M2 12h2"></path>
+        <path d="M20 12h2"></path>
+        <path d="m6.34 17.66-1.41 1.41"></path>
+        <path d="m19.07 4.93-1.41 1.41"></path>
+      </svg>
+    </span>
+    <span
+      data-current-icon="dark"
+      class={currentTheme === "dark" ? "inline-flex" : "hidden"}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="size-4"
+        aria-hidden="true"
+      >
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+      </svg>
+    </span>
+    <span
+      data-current-icon="system"
+      class={currentTheme === "system" ? "inline-flex" : "hidden"}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="size-4"
+        aria-hidden="true"
+      >
+        <rect width="20" height="14" x="2" y="3" rx="2"></rect>
+        <line x1="8" x2="16" y1="21" y2="21"></line>
+        <line x1="12" x2="12" y1="17" y2="21"></line>
+      </svg>
+    </span>
+
+    <span data-theme-current-label class="md:hidden"
+      >{themeLabels[currentTheme]}</span
+    >
+
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="ml-0.5 text-zinc-500 transition-transform duration-200 md:hidden dark:text-zinc-400"
+      data-theme-arrow
+    >
+      <path d="M12 5v14m-7-7l7 7 7-7"></path>
+    </svg>
+  </button>
+
+  <div
+    data-theme-dropdown
+    class="pointer-events-none absolute right-0 top-full z-50 mt-1 hidden min-w-44 overflow-hidden rounded-md border border-zinc-200 bg-white opacity-0 shadow-lg transition-opacity duration-200 md:block dark:border-zinc-700 dark:bg-zinc-800"
+  >
+    <ul class="py-1">
+      {
+        themes.map((themeOption) => (
+          <li>
+            <button
+              type="button"
+              data-theme={themeOption}
+              data-label={themeLabels[themeOption]}
+              class={`flex w-full cursor-pointer items-center gap-2.5 px-4 py-2 text-left text-sm transition-colors ${
+                themeOption === currentTheme
+                  ? "bg-zinc-100 font-semibold text-zinc-900 dark:bg-zinc-700/60 dark:text-zinc-100"
+                  : "text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-700/30 dark:hover:text-zinc-100"
+              }`}
+            >
+              {themeOption === "light" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="size-4 shrink-0"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2v2" />
+                  <path d="M12 20v2" />
+                  <path d="m4.93 4.93 1.41 1.41" />
+                  <path d="m17.66 17.66 1.41 1.41" />
+                  <path d="M2 12h2" />
+                  <path d="M20 12h2" />
+                  <path d="m6.34 17.66-1.41 1.41" />
+                  <path d="m19.07 4.93-1.41 1.41" />
+                </svg>
+              )}
+              {themeOption === "dark" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="size-4 shrink-0"
+                  aria-hidden="true"
+                >
+                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                </svg>
+              )}
+              {themeOption === "system" && (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="size-4 shrink-0"
+                  aria-hidden="true"
+                >
+                  <rect width="20" height="14" x="2" y="3" rx="2" />
+                  <line x1="8" x2="16" y1="21" y2="21" />
+                  <line x1="12" x2="12" y1="17" y2="21" />
+                </svg>
+              )}
+              <span>{themeLabels[themeOption]}</span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<script>
+  type Theme = "light" | "dark" | "system";
+
+  function setDropdownOpen(selector: HTMLElement, next: boolean) {
+    const toggle = selector.querySelector<HTMLButtonElement>(
+      "[data-theme-toggle]",
+    );
+    const dropdown = selector.querySelector<HTMLElement>(
+      "[data-theme-dropdown]",
+    );
+    const arrow = selector.querySelector<HTMLElement>("[data-theme-arrow]");
+
+    selector.dataset.open = String(next);
+
+    if (dropdown && arrow && toggle) {
+      dropdown.style.opacity = next ? "1" : "0";
+      dropdown.style.pointerEvents = next ? "auto" : "none";
+      arrow.style.transform = next ? "rotate(180deg)" : "rotate(0deg)";
+      toggle.setAttribute("aria-expanded", String(next));
+    }
+  }
+
+  function syncThemeSelection(selector: HTMLElement, theme: Theme) {
+    const currentLabel = selector.querySelector<HTMLElement>(
+      "[data-theme-current-label]",
+    );
+
+    selector
+      .querySelectorAll<HTMLElement>("[data-current-icon]")
+      .forEach((icon) => {
+        const isMatch = icon.dataset.currentIcon === theme;
+        icon.classList.toggle("inline-flex", isMatch);
+        icon.classList.toggle("hidden", !isMatch);
+      });
+
+    selector
+      .querySelectorAll<HTMLButtonElement>("[data-theme]")
+      .forEach((option) => {
+        const isSelected = option.dataset.theme === theme;
+        if (isSelected && currentLabel && option.dataset.label) {
+          currentLabel.textContent = option.dataset.label;
+        }
+
+        option.className = `flex w-full cursor-pointer items-center gap-2.5 px-4 py-2 text-left text-sm transition-colors ${
+          isSelected
+            ? "bg-zinc-100 font-semibold text-zinc-900 dark:bg-zinc-700/60 dark:text-zinc-100"
+            : "text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-700/30 dark:hover:text-zinc-100"
+        }`;
+      });
+
+    selector
+      .querySelectorAll<HTMLSelectElement>("[data-theme-native]")
+      .forEach((select) => {
+        select.value = theme;
+      });
+  }
+
+  function initThemeSelectors() {
+    if (!window.themeManager) return;
+
+    document
+      .querySelectorAll<HTMLElement>("[data-theme-selector]")
+      .forEach((selector) => {
+        if (selector.dataset.initialized) return;
+        selector.dataset.initialized = "true";
+
+        const toggle = selector.querySelector<HTMLButtonElement>(
+          "[data-theme-toggle]",
+        );
+        const nativeSelect = selector.querySelector<HTMLSelectElement>(
+          "[data-theme-native]",
+        );
+        const themeOptions = Array.from(
+          selector.querySelectorAll<HTMLButtonElement>("[data-theme]"),
+        );
+
+        if (!toggle && !nativeSelect) return;
+
+        setDropdownOpen(selector, false);
+        syncThemeSelection(selector, window.themeManager!.getState().theme);
+
+        toggle?.addEventListener("click", () => {
+          const next = selector.dataset.open !== "true";
+          document
+            .querySelectorAll<HTMLElement>("[data-theme-selector]")
+            .forEach((other) => setDropdownOpen(other, false));
+          setDropdownOpen(selector, next);
+        });
+
+        nativeSelect?.addEventListener("change", () => {
+          window.themeManager?.setTheme(nativeSelect.value as Theme);
+        });
+
+        themeOptions.forEach((option) => {
+          option.addEventListener("click", () => {
+            window.themeManager?.setTheme(option.dataset.theme as Theme);
+            setDropdownOpen(selector, false);
+          });
+        });
+      });
+  }
+
+  document.addEventListener("click", (event) => {
+    document
+      .querySelectorAll<HTMLElement>("[data-theme-selector]")
+      .forEach((selector) => {
+        if (!selector.contains(event.target as Node)) {
+          setDropdownOpen(selector, false);
+        }
+      });
+  });
+
+  let subscribed = false;
+
+  function init() {
+    initThemeSelectors();
+
+    if (!window.themeManager || subscribed) return;
+    subscribed = true;
+
+    window.themeManager.subscribe(({ theme }) => {
+      document
+        .querySelectorAll<HTMLElement>("[data-theme-selector]")
+        .forEach((selector) => syncThemeSelection(selector, theme));
+    });
+  }
+
+  if (document.readyState === "complete") {
+    init();
+  } else {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  }
+
+  document.addEventListener("astro:after-swap", initThemeSelectors);
+</script>

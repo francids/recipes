@@ -2,7 +2,14 @@
   "Navbar": {
     "home": "홈",
     "privacy": "개인정보보호",
-    "menu": "메뉴"
+    "menu": "메뉴",
+    "theme_label": "현재 테마:",
+    "theme_light": "라이트",
+    "theme_dark": "다크",
+    "theme_system": "시스템",
+    "theme_toggle_to_dark": "다크 모드로 전환",
+    "theme_toggle_to_system": "시스템 모드로 전환",
+    "theme_toggle_to_light": "라이트 모드로 전환"
   },
   "HeroSection": {
     "title": "나만의 디지털 레시피 북",
@@ -46,13 +53,6 @@
     "link_development": "개발",
     "section_contact": "연락처",
     "section_preferences": "환경 설정",
-    "theme_label": "현재 테마:",
-    "theme_light": "라이트",
-    "theme_dark": "다크",
-    "theme_system": "시스템",
-    "theme_toggle_to_dark": "다크 모드로 전환",
-    "theme_toggle_to_system": "시스템 모드로 전환",
-    "theme_toggle_to_light": "라이트 모드로 전환",
     "copyright": "© {{year}} Francisco Mesa. 모든 권리 보유."
   }
 }

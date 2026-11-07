@@ -2,7 +2,14 @@
   "Navbar": {
     "home": "Início",
     "privacy": "Privacidade",
-    "menu": "Menu"
+    "menu": "Menu",
+    "theme_label": "Tema atual:",
+    "theme_light": "Claro",
+    "theme_dark": "Escuro",
+    "theme_system": "Sistema",
+    "theme_toggle_to_dark": "Mudar para modo escuro",
+    "theme_toggle_to_system": "Mudar para modo sistema",
+    "theme_toggle_to_light": "Mudar para modo claro"
   },
   "HeroSection": {
     "title": "Seu livro de receitas digital",
@@ -46,13 +53,6 @@
     "link_development": "Desenvolvimento",
     "section_contact": "Contato",
     "section_preferences": "Preferências",
-    "theme_label": "Tema atual:",
-    "theme_light": "Claro",
-    "theme_dark": "Escuro",
-    "theme_system": "Sistema",
-    "theme_toggle_to_dark": "Mudar para modo escuro",
-    "theme_toggle_to_system": "Mudar para modo sistema",
-    "theme_toggle_to_light": "Mudar para modo claro",
     "copyright": "© {{year}} Francisco Mesa. Todos os direitos reservados."
   }
 }

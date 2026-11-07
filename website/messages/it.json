@@ -2,7 +2,14 @@
   "Navbar": {
     "home": "Home",
     "privacy": "Privacy",
-    "menu": "Menu"
+    "menu": "Menu",
+    "theme_label": "Tema corrente:",
+    "theme_light": "Chiaro",
+    "theme_dark": "Scuro",
+    "theme_system": "Sistema",
+    "theme_toggle_to_dark": "Passa alla modalità scura",
+    "theme_toggle_to_system": "Passa alla modalità di sistema",
+    "theme_toggle_to_light": "Passa alla modalità chiara"
   },
   "HeroSection": {
     "title": "Il tuo ricettario digitale",
@@ -46,13 +53,6 @@
     "link_development": "Sviluppo",
     "section_contact": "Contatto",
     "section_preferences": "Preferenze",
-    "theme_label": "Tema corrente:",
-    "theme_light": "Chiaro",
-    "theme_dark": "Scuro",
-    "theme_system": "Sistema",
-    "theme_toggle_to_dark": "Passa alla modalità scura",
-    "theme_toggle_to_system": "Passa alla modalità di sistema",
-    "theme_toggle_to_light": "Passa alla modalità chiara",
     "copyright": "© {{year}} Francisco Mesa. Tutti i diritti riservati."
   }
 }

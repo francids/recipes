@@ -2,7 +2,14 @@
   "Navbar": {
     "home": "Home",
     "privacy": "Privacy",
-    "menu": "Menu"
+    "menu": "Menu",
+    "theme_label": "Current theme:",
+    "theme_light": "Light",
+    "theme_dark": "Dark",
+    "theme_system": "System",
+    "theme_toggle_to_dark": "Switch to dark mode",
+    "theme_toggle_to_system": "Switch to system mode",
+    "theme_toggle_to_light": "Switch to light mode"
   },
   "HeroSection": {
     "title": "Your digital recipe book",
@@ -46,13 +53,6 @@
     "link_development": "Development",
     "section_contact": "Contact",
     "section_preferences": "Preferences",
-    "theme_label": "Current theme:",
-    "theme_light": "Light",
-    "theme_dark": "Dark",
-    "theme_system": "System",
-    "theme_toggle_to_dark": "Switch to dark mode",
-    "theme_toggle_to_system": "Switch to system mode",
-    "theme_toggle_to_light": "Switch to light mode",
     "copyright": "© {{year}} Francisco Mesa. All rights reserved."
   }
 }

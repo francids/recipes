@@ -2,7 +2,14 @@
   "Navbar": {
     "home": "首页",
     "privacy": "隐私",
-    "menu": "菜单"
+    "menu": "菜单",
+    "theme_label": "当前主题：",
+    "theme_light": "浅色",
+    "theme_dark": "深色",
+    "theme_system": "系统",
+    "theme_toggle_to_dark": "切换到深色模式",
+    "theme_toggle_to_system": "切换到系统模式",
+    "theme_toggle_to_light": "切换到浅色模式"
   },
   "HeroSection": {
     "title": "您的数字食谱书",
@@ -46,13 +53,6 @@
     "link_development": "开发",
     "section_contact": "联系方式",
     "section_preferences": "偏好设置",
-    "theme_label": "当前主题：",
-    "theme_light": "浅色",
-    "theme_dark": "深色",
-    "theme_system": "系统",
-    "theme_toggle_to_dark": "切换到深色模式",
-    "theme_toggle_to_system": "切换到系统模式",
-    "theme_toggle_to_light": "切换到浅色模式",
     "copyright": "© {{year}} Francisco Mesa。保留所有权利。"
   }
 }

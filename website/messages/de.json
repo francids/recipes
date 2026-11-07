@@ -2,7 +2,14 @@
   "Navbar": {
     "home": "Startseite",
     "privacy": "Datenschutz",
-    "menu": "Menü"
+    "menu": "Menü",
+    "theme_label": "Aktuelles Design:",
+    "theme_light": "Hell",
+    "theme_dark": "Dunkel",
+    "theme_system": "System",
+    "theme_toggle_to_dark": "Zum dunklen Modus wechseln",
+    "theme_toggle_to_system": "Zum Systemmodus wechseln",
+    "theme_toggle_to_light": "Zum hellen Modus wechseln"
   },
   "HeroSection": {
     "title": "Dein digitales Rezeptbuch",
@@ -46,13 +53,6 @@
     "link_development": "Entwicklung",
     "section_contact": "Kontakt",
     "section_preferences": "Einstellungen",
-    "theme_label": "Aktuelles Design:",
-    "theme_light": "Hell",
-    "theme_dark": "Dunkel",
-    "theme_system": "System",
-    "theme_toggle_to_dark": "Zum dunklen Modus wechseln",
-    "theme_toggle_to_system": "Zum Systemmodus wechseln",
-    "theme_toggle_to_light": "Zum hellen Modus wechseln",
     "copyright": "© {{year}} Francisco Mesa. Alle Rechte vorbehalten."
   }
 }
