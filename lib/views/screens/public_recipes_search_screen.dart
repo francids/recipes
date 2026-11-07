@@ -3,12 +3,12 @@ import "dart:async";
 import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/public_recipes_search_controller.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/views/screens/recipes_page.dart";
-import "package:the_recipes/views/screens/shared_recipe_screen.dart";
-import "package:the_recipes/views/widgets/form_field.dart";
-import "package:the_recipes/views/widgets/recipe_card.dart";
+import "package:recipes/controllers/public_recipes_search_controller.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/views/screens/recipes_page.dart";
+import "package:recipes/views/screens/shared_recipe_screen.dart";
+import "package:recipes/views/widgets/form_field.dart";
+import "package:recipes/views/widgets/recipe_card.dart";
 
 class PublicRecipesSearchScreen extends ConsumerStatefulWidget {
   const PublicRecipesSearchScreen({super.key});

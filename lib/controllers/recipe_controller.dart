@@ -5,11 +5,11 @@ import "package:flutter_easyloading/flutter_easyloading.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hive_ce_flutter/adapters.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/auth_controller.dart";
-import "package:the_recipes/hive_boxes.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/models/recipe.dart";
-import "package:the_recipes/services/sync_service.dart";
+import "package:recipes/controllers/auth_controller.dart";
+import "package:recipes/hive_boxes.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/models/recipe.dart";
+import "package:recipes/services/sync_service.dart";
 import "package:uuid/uuid.dart";
 
 class RecipeState {
@@ -107,7 +107,7 @@ class RecipeController extends Notifier<RecipeState> {
         ingredients: ingredients,
         directions: directions,
         preparationTime: preparationTime,
-        ownerId: authState.isLoggedIn ? authState.user!.$id : "",
+        ownerId: authState.isLoggedIn ? authState.user!.id : "",
         isPublic: false,
         cloudId: null,
       );
@@ -171,7 +171,7 @@ class RecipeController extends Notifier<RecipeState> {
         ingredients: sharedRecipe.ingredients,
         directions: sharedRecipe.directions,
         preparationTime: sharedRecipe.preparationTime,
-        ownerId: authState.isLoggedIn ? authState.user!.$id : "",
+        ownerId: authState.isLoggedIn ? authState.user!.id : "",
         isPublic: false,
         cloudId: null,
       );

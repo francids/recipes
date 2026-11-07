@@ -1,21 +1,18 @@
 import "dart:async";
-import "dart:convert";
 
-import "package:appwrite/appwrite.dart";
-import "package:appwrite/enums.dart" as enums;
-import "package:appwrite/models.dart" as models;
 import "package:flutter/foundation.dart";
 import "package:flutter_easyloading/flutter_easyloading.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hive_ce_flutter/hive_flutter.dart";
-import "package:http/http.dart" as http;
-import "package:the_recipes/appwrite_config.dart";
-import "package:the_recipes/hive_boxes.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/services/sync_service.dart";
+import "package:recipes/api/api_client.dart";
+import "package:recipes/hive_boxes.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/models/app_user.dart";
+import "package:recipes/services/sync_service.dart";
+import "package:url_launcher/url_launcher.dart";
 
 class AuthState {
-  final models.User? user;
+  final AppUser? user;
   final String? userProfileImageUrl;
   final bool autoSyncEnabled;
 
@@ -28,7 +25,7 @@ class AuthState {
   bool get isLoggedIn => user != null;
 
   AuthState copyWith({
-    models.User? user,
+    AppUser? user,
     String? userProfileImageUrl,
     bool? autoSyncEnabled,
     bool clearUser = false,
@@ -46,8 +43,9 @@ class AuthState {
 
 class AuthController extends Notifier<AuthState> {
   static const autoSyncKey = "autoSync";
-  final _account = AppwriteConfig.account;
-  final _functions = AppwriteConfig.functions;
+  static const sessionTokenKey = "api_session_token";
+
+  final _api = ApiClient.instance;
 
   @override
   AuthState build() {
@@ -57,11 +55,20 @@ class AuthController extends Notifier<AuthState> {
 
   Future<void> _initializeAuth() async {
     try {
-      final user = await _account.get();
-      await _loadUserProfileImage(user);
-      state = state.copyWith(user: user);
+      final token = _readSetting(sessionTokenKey) as String?;
+      if (token == null || token.isEmpty) return;
+
+      _api.setToken(token);
+      final user = AppUser.fromMap(await _api.me());
+      state = state.copyWith(
+        user: user,
+        userProfileImageUrl: user.picture,
+        clearProfileImage: user.picture == null,
+      );
     } catch (e) {
       debugPrint("No authenticated user: $e");
+      _api.setToken(null);
+      await _writeSetting(sessionTokenKey, null);
     }
   }
 
@@ -73,6 +80,25 @@ class AuthController extends Notifier<AuthState> {
     return box.get(autoSyncKey, defaultValue: false) as bool;
   }
 
+  dynamic _readSetting(String key) {
+    if (!Hive.isBoxOpen(settingsBox)) {
+      Hive.openBox(settingsBox);
+    }
+    return Hive.box(settingsBox).get(key);
+  }
+
+  Future<void> _writeSetting(String key, dynamic value) async {
+    if (!Hive.isBoxOpen(settingsBox)) {
+      await Hive.openBox(settingsBox);
+    }
+    final box = Hive.box(settingsBox);
+    if (value == null) {
+      await box.delete(key);
+    } else {
+      await box.put(key, value);
+    }
+  }
+
   Future<void> setAutoSyncEnabled(bool value) async {
     if (!Hive.isBoxOpen(settingsBox)) {
       await Hive.openBox(settingsBox);
@@ -82,72 +108,45 @@ class AuthController extends Notifier<AuthState> {
     state = state.copyWith(autoSyncEnabled: value);
   }
 
-  Future<void> _loadUserProfileImage(models.User user) async {
-    try {
-      final models.Preferences preferences = await _account.getPrefs();
-      final Map<String, dynamic> currentPrefs = preferences.data;
-      final userProfileImageUrl = currentPrefs["profileImageUrl"] as String?;
-      state = state.copyWith(userProfileImageUrl: userProfileImageUrl);
-    } catch (e) {
-      state = state.copyWith(userProfileImageUrl: null);
-      debugPrint("Error loading user profile image: $e");
-    }
-  }
-
-  Future<void> _storeUserProfileImage(String imageUrl) async {
-    try {
-      final preferences = await _account.getPrefs();
-      final Map<String, dynamic> currentPrefs = preferences.data;
-      currentPrefs["profileImageUrl"] = imageUrl;
-      await _account.updatePrefs(
-        prefs: Map<dynamic, dynamic>.from(currentPrefs),
-      );
-      state = state.copyWith(userProfileImageUrl: imageUrl);
-    } on AppwriteException catch (e) {
-      debugPrint(
-        "Error storing profile image URL in preferences: ${e.message}",
-      );
-    } catch (e) {
-      debugPrint("Unexpected error storing profile image URL: $e");
-    }
-  }
-
   Future<void> signInWithGoogle() async {
     try {
       unawaited(EasyLoading.show(status: "auth_controller.signing_in".tr));
-
-      await _account.createOAuth2Session(
-        provider: enums.OAuthProvider.google,
-        scopes: ["profile", "email", "openid"],
+      final launched = await launchUrl(
+        Uri.parse(_api.googleSignInUrl),
+        mode: LaunchMode.externalApplication,
       );
-
-      final user = await _account.get();
-      state = state.copyWith(user: user);
-
-      final session = await _account.getSession(sessionId: "current");
-      final providerAccessToken = session.providerAccessToken;
-
-      final response = await http.get(
-        Uri.parse("https://www.googleapis.com/oauth2/v3/userinfo"),
-        headers: {"Authorization": "Bearer $providerAccessToken"},
-      );
-
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> userData = jsonDecode(response.body);
-        final String? userImageUrl = userData["picture"];
-        if (userImageUrl != null) {
-          await _storeUserProfileImage(userImageUrl);
-        }
+      if (!launched) {
+        unawaited(EasyLoading.dismiss());
+        unawaited(EasyLoading.showError("auth_controller.sign_in_error".tr));
       }
-
-      unawaited(EasyLoading.dismiss());
-    } on AppwriteException catch (e) {
-      unawaited(EasyLoading.dismiss());
-      debugPrint("Appwrite error: ${e.code} - ${e.message}");
-      unawaited(EasyLoading.showError("auth_controller.sign_in_error".tr));
     } catch (e) {
       unawaited(EasyLoading.dismiss());
       debugPrint("General error: $e");
+      unawaited(EasyLoading.showError("auth_controller.sign_in_error".tr));
+    }
+  }
+
+  /// Called by the deep-link handler after the Google OAuth redirect.
+  Future<void> completeSignIn({String? token, String? error}) async {
+    unawaited(EasyLoading.dismiss());
+    if (error != null || token == null || token.isEmpty) {
+      unawaited(EasyLoading.showError("auth_controller.sign_in_error".tr));
+      return;
+    }
+
+    try {
+      _api.setToken(token);
+      final user = AppUser.fromMap(await _api.me());
+      await _writeSetting(sessionTokenKey, token);
+      state = state.copyWith(
+        user: user,
+        userProfileImageUrl: user.picture,
+        clearProfileImage: user.picture == null,
+      );
+    } catch (e) {
+      debugPrint("Error completing sign in: $e");
+      _api.setToken(null);
+      await _writeSetting(sessionTokenKey, null);
       unawaited(EasyLoading.showError("auth_controller.sign_in_error".tr));
     }
   }
@@ -159,7 +158,13 @@ class AuthController extends Notifier<AuthState> {
       }
       await setAutoSyncEnabled(false);
 
-      await _account.deleteSession(sessionId: "current");
+      try {
+        await _api.logout();
+      } catch (e) {
+        debugPrint("Error closing remote session: $e");
+      }
+      _api.setToken(null);
+      await _writeSetting(sessionTokenKey, null);
 
       state = state.copyWith(clearUser: true, clearProfileImage: true);
     } catch (e) {
@@ -178,15 +183,11 @@ class AuthController extends Notifier<AuthState> {
       );
 
       if (state.user != null) {
-        final syncService = SyncService(state);
-        await syncService.deleteAllUserRecipesFromCloud();
-
+        await SyncService.clearLocalRecipesOnSignOut();
+        await _api.deleteAccount();
         await setAutoSyncEnabled(false);
-
-        await _functions.createExecution(
-          functionId: "the-recipes-accounts",
-          path: "/delete",
-        );
+        _api.setToken(null);
+        await _writeSetting(sessionTokenKey, null);
 
         state = state.copyWith(clearUser: true, clearProfileImage: true);
         unawaited(EasyLoading.dismiss());

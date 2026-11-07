@@ -1,6 +1,6 @@
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hive_ce_flutter/hive_flutter.dart";
-import "package:the_recipes/hive_boxes.dart";
+import "package:recipes/hive_boxes.dart";
 
 class FavoritesState {
   final List<String> favoriteRecipeIds;

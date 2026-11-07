@@ -4,7 +4,7 @@ import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:image_picker/image_picker.dart";
 import "package:path/path.dart" as path;
 import "package:path_provider/path_provider.dart";
-import "package:the_recipes/controllers/recipe_controller.dart";
+import "package:recipes/controllers/recipe_controller.dart";
 
 class AddRecipeState {
   final String title;

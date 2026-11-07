@@ -6,11 +6,11 @@ import "package:hive_ce_flutter/adapters.dart";
 import "package:material_ui/material_ui.dart";
 import "package:path/path.dart" as path;
 import "package:path_provider/path_provider.dart";
-import "package:the_recipes/controllers/auth_controller.dart";
-import "package:the_recipes/hive_boxes.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/models/recipe.dart";
-import "package:the_recipes/views/widgets/ui_helpers.dart";
+import "package:recipes/controllers/auth_controller.dart";
+import "package:recipes/hive_boxes.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/models/recipe.dart";
+import "package:recipes/views/widgets/ui_helpers.dart";
 import "package:uuid/uuid.dart";
 
 class ImportService {
@@ -185,7 +185,7 @@ class ImportService {
           ingredients: List<String>.from(recipeData["ingredients"] ?? []),
           directions: List<String>.from(recipeData["directions"] ?? []),
           preparationTime: recipeData["preparationTime"] ?? 0,
-          ownerId: _authState.isLoggedIn ? _authState.user!.$id : "",
+          ownerId: _authState.isLoggedIn ? _authState.user!.id : "",
           isPublic: false,
           cloudId: null,
         );

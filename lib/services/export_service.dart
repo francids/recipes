@@ -5,9 +5,9 @@ import "package:archive/archive_io.dart";
 import "package:file_picker/file_picker.dart";
 import "package:flutter/foundation.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/models/recipe.dart";
-import "package:the_recipes/views/widgets/ui_helpers.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/models/recipe.dart";
+import "package:recipes/views/widgets/ui_helpers.dart";
 
 class ExportService {
   static Future<void> exportRecipes(

@@ -2,8 +2,8 @@ import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_animate/flutter_animate.dart";
 import "package:lottie/lottie.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/views/widgets/pressable_button.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/views/widgets/pressable_button.dart";
 
 class UIHelpers {
   static void showErrorSnackbar(String message, BuildContext context) {

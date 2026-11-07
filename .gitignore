@@ -51,3 +51,7 @@ env.g.dart
 # Firebase
 google-services.json
 firebase_options.dart
+
+# Cloudflare CLI caches
+/.cloudflare/
+/.wrangler/

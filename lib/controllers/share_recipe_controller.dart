@@ -1,10 +1,9 @@
-import "package:appwrite/appwrite.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:the_recipes/appwrite_config.dart";
-import "package:the_recipes/controllers/auth_controller.dart";
-import "package:the_recipes/controllers/recipe_controller.dart";
-import "package:the_recipes/models/recipe.dart";
+import "package:recipes/api/api_client.dart";
+import "package:recipes/controllers/auth_controller.dart";
+import "package:recipes/controllers/recipe_controller.dart";
+import "package:recipes/models/recipe.dart";
 
 class ShareRecipeState {
   final Map<String, bool> isLoadingMap;
@@ -17,8 +16,7 @@ class ShareRecipeState {
 }
 
 class ShareRecipeController extends Notifier<ShareRecipeState> {
-  final _tables = AppwriteConfig.tables;
-  final _storage = AppwriteConfig.storage;
+  final _api = ApiClient.instance;
 
   @override
   ShareRecipeState build() {
@@ -44,49 +42,14 @@ class ShareRecipeController extends Notifier<ShareRecipeState> {
   }
 
   Future<void> makeRecipePublic(String recipeId) async {
-    _setLoading(recipeId, true);
-    try {
-      final recipes = ref.read(recipeControllerProvider).recipes;
-      final recipe = recipes.where((r) => r.id == recipeId).firstOrNull;
-      if (recipe == null || recipe.cloudId == null) {
-        debugPrint("Recipe not found or has no cloudId: $recipeId");
-        return;
-      }
-
-      final authState = ref.read(authControllerProvider);
-      final cloudId = recipe.cloudId!;
-
-      await _tables.updateRow(
-        databaseId: AppwriteConfig.databaseId,
-        tableId: AppwriteConfig.recipesTableId,
-        rowId: cloudId,
-        data: {"isPublic": true},
-        permissions: [
-          Permission.read(Role.any()),
-          Permission.update(Role.user(authState.user!.$id)),
-          Permission.delete(Role.user(authState.user!.$id)),
-        ],
-      );
-      await _storage.updateFile(
-        bucketId: AppwriteConfig.bucketId,
-        fileId: cloudId,
-        permissions: [
-          Permission.read(Role.any()),
-          Permission.update(Role.user(authState.user!.$id)),
-          Permission.delete(Role.user(authState.user!.$id)),
-        ],
-      );
-      await ref
-          .read(recipeControllerProvider.notifier)
-          .updateLocalRecipe(recipeId, isPublic: true);
-    } catch (e) {
-      debugPrint("Error making recipe public: $e");
-    } finally {
-      _setLoading(recipeId, false);
-    }
+    await _setVisibility(recipeId, true);
   }
 
   Future<void> makeRecipePrivate(String recipeId) async {
+    await _setVisibility(recipeId, false);
+  }
+
+  Future<void> _setVisibility(String recipeId, bool isPublic) async {
     _setLoading(recipeId, true);
     try {
       final recipes = ref.read(recipeControllerProvider).recipes;
@@ -96,34 +59,17 @@ class ShareRecipeController extends Notifier<ShareRecipeState> {
         return;
       }
 
-      final authState = ref.read(authControllerProvider);
-      final cloudId = recipe.cloudId!;
+      if (!ref.read(authControllerProvider).isLoggedIn) {
+        debugPrint("A signed-in user is required to share recipes");
+        return;
+      }
 
-      await _tables.updateRow(
-        databaseId: AppwriteConfig.databaseId,
-        tableId: AppwriteConfig.recipesTableId,
-        rowId: cloudId,
-        data: {"isPublic": false},
-        permissions: [
-          Permission.read(Role.user(authState.user!.$id)),
-          Permission.update(Role.user(authState.user!.$id)),
-          Permission.delete(Role.user(authState.user!.$id)),
-        ],
-      );
-      await _storage.updateFile(
-        bucketId: AppwriteConfig.bucketId,
-        fileId: cloudId,
-        permissions: [
-          Permission.read(Role.user(authState.user!.$id)),
-          Permission.update(Role.user(authState.user!.$id)),
-          Permission.delete(Role.user(authState.user!.$id)),
-        ],
-      );
+      await _api.updateRecipe(recipe.cloudId!, {"isPublic": isPublic});
       await ref
           .read(recipeControllerProvider.notifier)
-          .updateLocalRecipe(recipeId, isPublic: false);
+          .updateLocalRecipe(recipeId, isPublic: isPublic);
     } catch (e) {
-      debugPrint("Error making recipe private: $e");
+      debugPrint("Error updating recipe visibility: $e");
     } finally {
       _setLoading(recipeId, false);
     }
@@ -144,23 +90,9 @@ class ShareRecipeController extends Notifier<ShareRecipeState> {
   }
 
   Future<Recipe> getSharedRecipe(String cloudId) async {
-    try {
-      final document = await _tables.getRow(
-        databaseId: AppwriteConfig.databaseId,
-        tableId: AppwriteConfig.recipesTableId,
-        rowId: cloudId,
-      );
-
-      final recipeData = document.data;
-      recipeData["image"] =
-          "${AppwriteConfig.endpoint}/storage/buckets/${AppwriteConfig.bucketId}/files/$cloudId/view?project=${AppwriteConfig.projectId}";
-      recipeData["cloudId"] = cloudId;
-
-      return Recipe.fromMap(recipeData);
-    } catch (e) {
-      debugPrint("Error fetching shared recipe: $e");
-      rethrow;
-    }
+    final data = await _api.getPublicRecipe(cloudId);
+    data["cloudId"] = cloudId;
+    return Recipe.fromMap(data);
   }
 
   String? getCloudId(String recipeId) {

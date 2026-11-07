@@ -2,11 +2,11 @@ import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:material_ui/material_ui.dart";
+import "package:recipes/controllers/recipe_controller.dart";
+import "package:recipes/controllers/share_recipe_controller.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/views/widgets/qr_bottom_sheet.dart";
 import "package:share_plus/share_plus.dart";
-import "package:the_recipes/controllers/recipe_controller.dart";
-import "package:the_recipes/controllers/share_recipe_controller.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/views/widgets/qr_bottom_sheet.dart";
 
 class ShareRecipeBottomSheet extends ConsumerWidget {
   const ShareRecipeBottomSheet({super.key, required this.recipeId});

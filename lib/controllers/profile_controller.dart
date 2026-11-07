@@ -2,15 +2,15 @@ import "package:file_picker/file_picker.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hive_ce_flutter/hive_flutter.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/auth_controller.dart";
-import "package:the_recipes/controllers/recipe_controller.dart";
-import "package:the_recipes/hive_boxes.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/models/recipe.dart";
-import "package:the_recipes/services/export_service.dart";
-import "package:the_recipes/services/import_service.dart";
-import "package:the_recipes/services/sync_service.dart";
-import "package:the_recipes/views/widgets/ui_helpers.dart";
+import "package:recipes/controllers/auth_controller.dart";
+import "package:recipes/controllers/recipe_controller.dart";
+import "package:recipes/hive_boxes.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/models/recipe.dart";
+import "package:recipes/services/export_service.dart";
+import "package:recipes/services/import_service.dart";
+import "package:recipes/services/sync_service.dart";
+import "package:recipes/views/widgets/ui_helpers.dart";
 
 class ProfileController {
   final Ref ref;
@@ -128,7 +128,7 @@ class ProfileController {
       for (var recipe in box.values) {
         if (recipe.ownerId == null ||
             recipe.ownerId!.isEmpty ||
-            recipe.ownerId != authState.user!.$id) {
+            recipe.ownerId != authState.user!.id) {
           final updatedRecipe = Recipe(
             id: recipe.id,
             title: recipe.title,
@@ -137,7 +137,7 @@ class ProfileController {
             ingredients: recipe.ingredients,
             directions: recipe.directions,
             preparationTime: recipe.preparationTime,
-            ownerId: authState.user!.$id,
+            ownerId: authState.user!.id,
             isPublic: recipe.isPublic,
             cloudId: recipe.cloudId,
           );
@@ -277,7 +277,7 @@ class ProfileController {
             ingredients: recipe.ingredients,
             directions: recipe.directions,
             preparationTime: recipe.preparationTime,
-            ownerId: authState.user!.$id,
+            ownerId: authState.user!.id,
             isPublic: recipe.isPublic,
             cloudId: recipe.cloudId,
           );

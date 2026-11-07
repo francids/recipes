@@ -23,11 +23,11 @@ Gracias por usar "Recipes". Tu privacidad es importante para nosotros. Esta Pol�
    - **Dirección de correo electrónico**
    - **Imagen de perfil**
 
-Esta información se utiliza únicamente para crear y gestionar tu cuenta dentro de la aplicación y se almacena de forma segura en Appwrite. Para más información sobre sus políticas de privacidad, visita https://appwrite.io/privacy.
+Esta información se utiliza únicamente para crear y gestionar tu cuenta dentro de la aplicación y se almacena de forma segura en Cloudflare. Para más información sobre sus políticas de privacidad, visita https://www.cloudflare.com/privacypolicy/.
 
 ### **¿Cómo usamos tu información?**
 
-- **Para la funcionalidad de la aplicación:** Usamos los datos de tu cuenta para identificarte y poder sincronizar tus recetas en la nube (Appwrite), permitiéndote tener un respaldo y acceso desde múltiples dispositivos.
+- **Para la funcionalidad de la aplicación:** Usamos los datos de tu cuenta para identificarte y poder sincronizar tus recetas en la nube (Cloudflare), permitiéndote tener un respaldo y acceso desde múltiples dispositivos.
 - **No hacemos nada más con tus datos:** No venderemos, distribuiremos ni cederemos tu información personal a terceros. No te enviaremos correos electrónicos de marketing ni promociones.
 
 ### **Control sobre tus datos y eliminación de cuenta**

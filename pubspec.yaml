@@ -1,4 +1,4 @@
-name: the_recipes
+name: recipes
 description: "Aplicación de recetas de cocina"
 publish_to: "none"
 version: 2.0.0+4
@@ -25,7 +25,7 @@ dependencies:
   uuid: ^4.5.1
   file_picker: ^13.3.0
   http: ^1.5.0
-  appwrite: ^28.1.0
+  url_launcher: ^6.3.2
   pretty_qr_code: ^3.5.0
   share_plus: ^13.3.1
   app_links: ^7.0.0

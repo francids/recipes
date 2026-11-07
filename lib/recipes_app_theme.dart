@@ -2,9 +2,9 @@ import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter/services.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/custom_predictive_back_page_transitions_builder.dart";
+import "package:recipes/custom_predictive_back_page_transitions_builder.dart";
 
-class TheRecipeAppTheme {
+class RecipesAppTheme {
   static ThemeData theme = getTheme(false);
   static ThemeData darkTheme = getTheme(true);
 

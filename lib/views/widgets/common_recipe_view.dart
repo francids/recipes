@@ -3,8 +3,8 @@ import "dart:io";
 import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_animate/flutter_animate.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/models/recipe.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/models/recipe.dart";
 
 class CommonRecipeView extends StatelessWidget {
   const CommonRecipeView({super.key, required this.recipe});

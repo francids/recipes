@@ -1,7 +1,7 @@
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hive_ce_flutter/adapters.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/hive_boxes.dart";
+import "package:recipes/hive_boxes.dart";
 
 class ThemeState {
   final bool isDarkMode;

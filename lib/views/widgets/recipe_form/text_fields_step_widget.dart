@@ -1,9 +1,9 @@
 import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/add_recipe_controller.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/views/widgets/form_field.dart";
+import "package:recipes/controllers/add_recipe_controller.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/views/widgets/form_field.dart";
 
 class TextFieldsStepWidget extends ConsumerWidget {
   final VoidCallback? onChanged;

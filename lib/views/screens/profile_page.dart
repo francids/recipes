@@ -3,15 +3,15 @@ import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:lottie/lottie.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/auth_controller.dart";
-import "package:the_recipes/controllers/profile_controller.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/views/screens/favorites_recipes_screen.dart";
-import "package:the_recipes/views/screens/profile_info_screen.dart";
-import "package:the_recipes/views/screens/public_recipes_search_screen.dart";
-import "package:the_recipes/views/screens/shared_recipes_screen.dart";
-import "package:the_recipes/views/widgets/pressable_button.dart";
-import "package:the_recipes/views/widgets/ui_helpers.dart";
+import "package:recipes/controllers/auth_controller.dart";
+import "package:recipes/controllers/profile_controller.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/views/screens/favorites_recipes_screen.dart";
+import "package:recipes/views/screens/profile_info_screen.dart";
+import "package:recipes/views/screens/public_recipes_search_screen.dart";
+import "package:recipes/views/screens/shared_recipes_screen.dart";
+import "package:recipes/views/widgets/pressable_button.dart";
+import "package:recipes/views/widgets/ui_helpers.dart";
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});

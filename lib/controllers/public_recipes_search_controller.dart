@@ -1,7 +1,7 @@
 import "package:flutter_riverpod/flutter_riverpod.dart";
-import "package:the_recipes/controllers/auth_controller.dart";
-import "package:the_recipes/models/recipe.dart";
-import "package:the_recipes/services/sync_service.dart";
+import "package:recipes/controllers/auth_controller.dart";
+import "package:recipes/models/recipe.dart";
+import "package:recipes/services/sync_service.dart";
 
 class PublicRecipesSearchState {
   final List<Recipe> recipes;

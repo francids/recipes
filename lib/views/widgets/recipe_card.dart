@@ -2,9 +2,9 @@ import "dart:io";
 
 import "package:flutter_animate/flutter_animate.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/models/recipe.dart";
-import "package:the_recipes/views/screens/recipe_screen.dart";
-import "package:the_recipes/views/screens/recipes_page.dart";
+import "package:recipes/models/recipe.dart";
+import "package:recipes/views/screens/recipe_screen.dart";
+import "package:recipes/views/screens/recipes_page.dart";
 
 class RecipeCard extends StatelessWidget {
   const RecipeCard({

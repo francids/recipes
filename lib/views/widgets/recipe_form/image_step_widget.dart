@@ -5,12 +5,12 @@ import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:image_picker/image_picker.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/add_recipe_controller.dart";
-import "package:the_recipes/controllers/ai_recipe_controller.dart";
-import "package:the_recipes/controllers/auth_controller.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/views/widgets/pressable_button.dart";
-import "package:the_recipes/views/widgets/ui_helpers.dart";
+import "package:recipes/controllers/add_recipe_controller.dart";
+import "package:recipes/controllers/ai_recipe_controller.dart";
+import "package:recipes/controllers/auth_controller.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/views/widgets/pressable_button.dart";
+import "package:recipes/views/widgets/ui_helpers.dart";
 
 class ImageStepWidget extends ConsumerWidget {
   final ImagePicker _imagePicker = ImagePicker();

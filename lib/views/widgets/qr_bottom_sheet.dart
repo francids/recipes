@@ -1,7 +1,7 @@
 import "package:material_ui/material_ui.dart";
 import "package:pretty_qr_code/pretty_qr_code.dart";
+import "package:recipes/messages.dart";
 import "package:screen_brightness/screen_brightness.dart";
-import "package:the_recipes/messages.dart";
 
 class QrBottomSheet extends StatefulWidget {
   const QrBottomSheet({super.key, required this.url});

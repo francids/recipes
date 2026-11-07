@@ -2,13 +2,13 @@ import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/recipe_controller.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/views/screens/add_recipe_screen.dart";
-import "package:the_recipes/views/screens/profile_page.dart";
-import "package:the_recipes/views/screens/recipes_page.dart";
-import "package:the_recipes/views/screens/settings_screen.dart";
-import "package:the_recipes/views/widgets/pressable_button.dart";
+import "package:recipes/controllers/recipe_controller.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/views/screens/add_recipe_screen.dart";
+import "package:recipes/views/screens/profile_page.dart";
+import "package:recipes/views/screens/recipes_page.dart";
+import "package:recipes/views/screens/settings_screen.dart";
+import "package:recipes/views/widgets/pressable_button.dart";
 
 class InicialScreen extends ConsumerStatefulWidget {
   const InicialScreen({super.key});

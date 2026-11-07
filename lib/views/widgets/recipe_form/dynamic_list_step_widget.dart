@@ -1,11 +1,11 @@
 import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/add_recipe_controller.dart";
-import "package:the_recipes/gestures/drag_start_listener.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/views/widgets/form_field.dart";
-import "package:the_recipes/views/widgets/pressable_button.dart";
+import "package:recipes/controllers/add_recipe_controller.dart";
+import "package:recipes/gestures/drag_start_listener.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/views/widgets/form_field.dart";
+import "package:recipes/views/widgets/pressable_button.dart";
 
 class DynamicListStepWidget extends ConsumerStatefulWidget {
   final String type;

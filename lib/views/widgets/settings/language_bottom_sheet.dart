@@ -1,8 +1,8 @@
 import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/language_controller.dart";
-import "package:the_recipes/messages.dart";
+import "package:recipes/controllers/language_controller.dart";
+import "package:recipes/messages.dart";
 
 class LanguageBottomSheet extends ConsumerWidget {
   const LanguageBottomSheet({super.key});

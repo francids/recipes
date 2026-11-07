@@ -1,12 +1,12 @@
 import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/recipe_controller.dart";
-import "package:the_recipes/controllers/share_recipe_controller.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/models/recipe.dart";
-import "package:the_recipes/views/widgets/common_recipe_view.dart";
-import "package:the_recipes/views/widgets/ui_helpers.dart";
+import "package:recipes/controllers/recipe_controller.dart";
+import "package:recipes/controllers/share_recipe_controller.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/models/recipe.dart";
+import "package:recipes/views/widgets/common_recipe_view.dart";
+import "package:recipes/views/widgets/ui_helpers.dart";
 
 class SharedRecipeScreen extends ConsumerWidget {
   const SharedRecipeScreen({super.key, required this.recipe});

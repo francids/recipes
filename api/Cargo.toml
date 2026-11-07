@@ -1,0 +1,26 @@
+[package]
+name = "recipes-api"
+version = "0.1.0"
+edition = "2021"
+description = "Independent Rust API for Recipes, deployed on Cloudflare Workers"
+license = "MIT"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+base64 = "0.22"
+hex = "0.4"
+js-sys = "0.3"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+url = "2"
+uuid = { version = "1", features = ["v4", "js"] }
+wasm-bindgen = "0.2"
+worker = { version = "0.8.7", features = ["d1"] }
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = "s"

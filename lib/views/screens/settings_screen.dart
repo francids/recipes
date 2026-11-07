@@ -2,11 +2,11 @@ import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/profile_controller.dart";
-import "package:the_recipes/controllers/theme_controller.dart";
-import "package:the_recipes/env.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/views/widgets/settings/language_bottom_sheet.dart";
+import "package:recipes/controllers/profile_controller.dart";
+import "package:recipes/controllers/theme_controller.dart";
+import "package:recipes/env.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/views/widgets/settings/language_bottom_sheet.dart";
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});

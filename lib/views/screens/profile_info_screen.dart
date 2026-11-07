@@ -2,9 +2,9 @@ import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/auth_controller.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/views/widgets/ui_helpers.dart";
+import "package:recipes/controllers/auth_controller.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/views/widgets/ui_helpers.dart";
 
 class ProfileInfoScreen extends ConsumerWidget {
   const ProfileInfoScreen({super.key});
@@ -82,7 +82,7 @@ class ProfileInfoScreen extends ConsumerWidget {
                           _buildInfoListTile(
                             context,
                             title: "profile_info_screen.user_id".tr,
-                            value: user.$id,
+                            value: user.id,
                             icon: CupertinoIcons.number,
                             isSelectable: true,
                           ),

@@ -2,13 +2,13 @@ import "package:cupertino_ui/cupertino_ui.dart";
 import "package:flutter_animate/flutter_animate.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/add_recipe_controller.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/views/widgets/pressable_button.dart";
-import "package:the_recipes/views/widgets/recipe_form/dynamic_list_step_widget.dart";
-import "package:the_recipes/views/widgets/recipe_form/image_step_widget.dart";
-import "package:the_recipes/views/widgets/recipe_form/text_fields_step_widget.dart";
-import "package:the_recipes/views/widgets/ui_helpers.dart";
+import "package:recipes/controllers/add_recipe_controller.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/views/widgets/pressable_button.dart";
+import "package:recipes/views/widgets/recipe_form/dynamic_list_step_widget.dart";
+import "package:recipes/views/widgets/recipe_form/image_step_widget.dart";
+import "package:recipes/views/widgets/recipe_form/text_fields_step_widget.dart";
+import "package:recipes/views/widgets/ui_helpers.dart";
 
 class AddRecipeScreen extends ConsumerStatefulWidget {
   const AddRecipeScreen({super.key});

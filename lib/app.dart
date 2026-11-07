@@ -2,25 +2,25 @@ import "package:app_links/app_links.dart";
 import "package:flutter_easyloading/flutter_easyloading.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:material_ui/material_ui.dart";
-import "package:the_recipes/controllers/auth_controller.dart";
-import "package:the_recipes/controllers/language_controller.dart";
-import "package:the_recipes/controllers/share_recipe_controller.dart";
-import "package:the_recipes/controllers/theme_controller.dart";
-import "package:the_recipes/messages.dart";
-import "package:the_recipes/the_recipe_app_theme.dart";
-import "package:the_recipes/views/screens/inicial_screen.dart";
-import "package:the_recipes/views/screens/recipe_screen.dart";
-import "package:the_recipes/views/screens/shared_recipe_screen.dart";
-import "package:the_recipes/views/widgets/ui_helpers.dart";
+import "package:recipes/controllers/auth_controller.dart";
+import "package:recipes/controllers/language_controller.dart";
+import "package:recipes/controllers/share_recipe_controller.dart";
+import "package:recipes/controllers/theme_controller.dart";
+import "package:recipes/messages.dart";
+import "package:recipes/recipes_app_theme.dart";
+import "package:recipes/views/screens/inicial_screen.dart";
+import "package:recipes/views/screens/recipe_screen.dart";
+import "package:recipes/views/screens/shared_recipe_screen.dart";
+import "package:recipes/views/widgets/ui_helpers.dart";
 
-class TheRecipesApp extends ConsumerStatefulWidget {
-  const TheRecipesApp({super.key});
+class RecipesApp extends ConsumerStatefulWidget {
+  const RecipesApp({super.key});
 
   @override
-  ConsumerState<TheRecipesApp> createState() => _TheRecipesAppState();
+  ConsumerState<RecipesApp> createState() => _RecipesAppState();
 }
 
-class _TheRecipesAppState extends ConsumerState<TheRecipesApp>
+class _RecipesAppState extends ConsumerState<RecipesApp>
     with WidgetsBindingObserver {
   final _appLinks = AppLinks();
 
@@ -52,6 +52,17 @@ class _TheRecipesAppState extends ConsumerState<TheRecipesApp>
   }
 
   Future<void> _handleDeepLink(Uri uri) async {
+    final isAuthLink = uri.host == "auth" || uri.pathSegments.contains("auth");
+    if (isAuthLink) {
+      await ref
+          .read(authControllerProvider.notifier)
+          .completeSignIn(
+            token: uri.queryParameters["token"],
+            error: uri.queryParameters["error"],
+          );
+      return;
+    }
+
     final bool isSharingLink =
         (uri.host == "sharing" ||
             uri.pathSegments.contains("recipe") ||
@@ -122,8 +133,8 @@ class _TheRecipesAppState extends ConsumerState<TheRecipesApp>
       onGenerateTitle: (context) => Messages.appName,
       debugShowCheckedModeBanner: false,
       color: Colors.deepOrange,
-      theme: TheRecipeAppTheme.theme,
-      darkTheme: TheRecipeAppTheme.darkTheme,
+      theme: RecipesAppTheme.theme,
+      darkTheme: RecipesAppTheme.darkTheme,
       themeMode: themeMode,
       home: const InicialScreen(),
       builder: (context, child) {

@@ -1,8 +1,8 @@
 import "package:flutter/foundation.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 import "package:hive_ce_flutter/adapters.dart";
-import "package:the_recipes/hive_boxes.dart";
-import "package:the_recipes/views/screens/recipes_page.dart";
+import "package:recipes/hive_boxes.dart";
+import "package:recipes/views/screens/recipes_page.dart";
 
 class ViewOptionController extends Notifier<ViewOption> {
   static const viewOptionKey = "view_option_key";

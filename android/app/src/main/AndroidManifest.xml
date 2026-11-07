@@ -39,23 +39,14 @@
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="the-recipes"/>
+                <data android:scheme="recipes"/>
             </intent-filter>
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:scheme="the-recipes" android:host="sharing"/>
-            </intent-filter>
-        </activity>
-        
-        <activity android:exported="true" android:name="com.linusu.flutter_web_auth_2.CallbackActivity" >
-            <intent-filter android:label="flutter_web_auth_2">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="appwrite-callback-the-recipes" />
+                <data android:scheme="recipes" android:host="sharing"/>
             </intent-filter>
         </activity>
 
