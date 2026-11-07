@@ -26,18 +26,25 @@ Para desarrollar o modificar el sitio web:
 
 ## Despliegue en Cloudflare Workers
 
-El sitio usa el adaptador `@astrojs/cloudflare`. Los idiomas se gestionan con la configuración `i18n` nativa de Astro definida en `astro.config.ts`, por lo que cada página tiene siempre un prefijo de idioma.
+El sitio usa el adaptador `@astrojs/cloudflare` y la CLI `cf`. Los idiomas se gestionan con la configuración `i18n` nativa de Astro definida en `astro.config.ts`, por lo que cada página tiene siempre un prefijo de idioma.
 
-1. Inicia sesión en Cloudflare (solo la primera vez): `npx wrangler login`
+1. Inicia sesión en Cloudflare (solo la primera vez): `npx cf auth login`
 2. Compila y despliega: `npm run deploy`
 
-También puedes previsualizar el Worker localmente con el runtime de Cloudflare:
+También puedes validar la compilación y el despliegue sin publicar nada:
+
+```sh
+npm run build
+npx cf deploy --dry-run
+```
+
+Y previsualizar el Worker localmente con el runtime de Cloudflare:
 
 ```sh
 npm run build
 npm run preview
 ```
 
-La configuración del Worker está en `wrangler.jsonc`. Para publicar en el dominio de producción, añade una sección `routes` con el dominio. Si el proyecto usa otro nombre de Worker, cambia el campo `name`.
+La configuración del Worker está en `cloudflare.config.ts`. Para publicar en otro dominio, cambia la lista `domains`. Si el proyecto usa otro nombre de Worker, cambia el campo `name`.
 
 > El adaptador configura automáticamente el binding de assets (`ASSETS`). El sitio no usa sesiones ni optimización de imágenes en tiempo de ejecución, por lo que no provisiona KV ni el binding de Cloudflare Images.

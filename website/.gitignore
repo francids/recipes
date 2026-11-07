@@ -6,8 +6,8 @@ dist/
 # dependencies
 node_modules/
 
-# cloudflare workers
-.wrangler/
+# cloudflare
+.cloudflare/
 .dev.vars
 worker-configuration.d.ts
 
