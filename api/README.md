@@ -49,10 +49,11 @@ CLI `cf` (`npm run dev`, `npm run build`, `npm run deploy`). `wrangler.config.ts
 solo conserva el comando de compilación de Rust para el bundler de Wrangler que
 usa `cf` internamente; no hay `wrangler.jsonc`.
 
-La app Flutter usa esa URL por defecto. Para apuntar a otra instancia:
+La app Android usa esa URL por defecto. Para apuntar a otra instancia:
 
 ```sh
-flutter run --dart-define=API_BASE_URL=http://localhost:8787
+cd android
+./gradlew assembleDebug -PAPI_BASE_URL=http://10.0.2.2:8787
 ```
 
 ## Endpoints
