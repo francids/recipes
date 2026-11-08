@@ -1,4 +1,7 @@
-@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@file:OptIn(
+    androidx.compose.material3.ExperimentalMaterial3Api::class,
+    androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class,
+)
 
 package com.francids.recipes.ui.screens
 
@@ -6,8 +9,11 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +22,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,38 +32,34 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.PhotoCamera
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -102,7 +106,7 @@ fun AddRecipeScreen(
         }
     }
 
-    BackHandler(onBack = ::closeWithConfirmation)
+    BackHandler { closeWithConfirmation() }
 
     val imagePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -113,62 +117,66 @@ fun AddRecipeScreen(
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            TopAppBar(
-                title = { Text(viewModel.tr("add_recipe_screen.title")) },
-                navigationIcon = {
-                    IconButton(onClick = ::closeWithConfirmation) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                ),
+            BackTopBar(
+                title = viewModel.tr("add_recipe_screen.title"),
+                onBack = { closeWithConfirmation() },
             )
         },
         bottomBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, top = 8.dp, bottom = 24.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceContainer,
+                tonalElevation = 3.dp,
             ) {
-                if (currentStep > 0) {
-                    TextButton(onClick = { currentStep-- }) {
-                        Text(viewModel.tr("add_recipe_screen.previous"))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .navigationBarsPadding()
+                        .imePadding()
+                        .padding(horizontal = 20.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (currentStep > 0) {
+                        TextButton(onClick = { currentStep-- }) {
+                            Text(viewModel.tr("add_recipe_screen.previous"))
+                        }
+                    } else {
+                        Spacer(Modifier.width(1.dp))
                     }
-                } else {
-                    Spacer(Modifier.width(1.dp))
-                }
 
-                if (currentStep < 3) {
-                    Button(
-                        enabled = isValid,
-                        onClick = {
-                            if (isValid) {
-                                currentStep++
-                            } else {
-                                viewModel.showMessage(
-                                    viewModel.tr("add_recipe_screen.error_complete_fields"),
-                                    true,
-                                )
-                            }
-                        },
-                    ) {
-                        Text(viewModel.tr("add_recipe_screen.next"))
-                    }
-                } else {
-                    Button(
-                        enabled = isValid,
-                        onClick = {
-                            viewModel.saveDraft { saved ->
-                                if (saved) onBack()
-                            }
-                        },
-                    ) {
-                        Icon(Icons.Filled.Check, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(Modifier.width(6.dp))
-                        Text(viewModel.tr("add_recipe_screen.save"))
+                    if (currentStep < 3) {
+                        Button(
+                            enabled = isValid,
+                            onClick = {
+                                if (isValid) {
+                                    currentStep++
+                                } else {
+                                    viewModel.showMessage(
+                                        viewModel.tr("add_recipe_screen.error_complete_fields"),
+                                        true,
+                                    )
+                                }
+                            },
+                        ) {
+                            Text(viewModel.tr("add_recipe_screen.next"))
+                        }
+                    } else {
+                        Button(
+                            enabled = isValid,
+                            onClick = {
+                                viewModel.saveDraft { saved ->
+                                    if (saved) onBack()
+                                }
+                            },
+                        ) {
+                            Icon(
+                                Icons.Filled.Check,
+                                contentDescription = null,
+                                modifier = Modifier.size(18.dp),
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(viewModel.tr("add_recipe_screen.save"))
+                        }
                     }
                 }
             }
@@ -182,61 +190,77 @@ fun AddRecipeScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                    .padding(horizontal = 20.dp, vertical = 12.dp),
             ) {
-                Text(
-                    text = stepTitles[currentStep],
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                )
-                Text(
-                    text = viewModel.tr(
-                        "add_recipe_screen.step_counter",
-                        currentStep + 1,
-                        4,
-                    ),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Bottom,
+                ) {
+                    Text(
+                        text = stepTitles[currentStep],
+                        style = MaterialTheme.typography.headlineSmall,
+                    )
+                    Text(
+                        text = viewModel.tr(
+                            "add_recipe_screen.step_counter",
+                            currentStep + 1,
+                            4,
+                        ),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                Spacer(Modifier.height(12.dp))
+                LinearWavyProgressIndicator(
+                    progress = { (currentStep + 1) / 4f },
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
 
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 16.dp)
-                    .padding(bottom = 24.dp),
-            ) {
-                when (currentStep) {
-                    0 -> ImageStep(
-                        viewModel = viewModel,
-                        onPickImage = {
-                            imagePicker.launch(
-                                PickVisualMediaRequest(
-                                    ActivityResultContracts.PickVisualMedia.ImageOnly,
-                                ),
-                            )
-                        },
-                    )
+            val motionScheme = MaterialTheme.motionScheme
+            AnimatedContent(
+                targetState = currentStep,
+                transitionSpec = {
+                    fadeIn(animationSpec = motionScheme.fastEffectsSpec()) togetherWith
+                        fadeOut(animationSpec = motionScheme.fastEffectsSpec())
+                },
+                label = "recipe-step",
+                modifier = Modifier.weight(1f),
+            ) { step ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                        .padding(horizontal = 20.dp, vertical = 8.dp),
+                ) {
+                    when (step) {
+                        0 -> ImageStep(
+                            viewModel = viewModel,
+                            onPickImage = {
+                                imagePicker.launch(
+                                    PickVisualMediaRequest(
+                                        ActivityResultContracts.PickVisualMedia.ImageOnly,
+                                    ),
+                                )
+                            },
+                        )
 
-                    1 -> DetailsStep(viewModel)
-                    2 -> DynamicListStep(
-                        viewModel = viewModel,
-                        type = "ingredients",
-                        label = viewModel.tr("add_recipe_screen.ingredient"),
-                        items = draft.ingredients,
-                        onItemsChange = viewModel::updateDraftIngredients,
-                    )
+                        1 -> DetailsStep(viewModel)
+                        2 -> DynamicListStep(
+                            viewModel = viewModel,
+                            label = viewModel.tr("add_recipe_screen.ingredient"),
+                            items = draft.ingredients,
+                            onItemsChange = viewModel::updateDraftIngredients,
+                        )
 
-                    else -> DynamicListStep(
-                        viewModel = viewModel,
-                        type = "directions",
-                        label = viewModel.tr("add_recipe_screen.step"),
-                        items = draft.directions,
-                        onItemsChange = viewModel::updateDraftDirections,
-                    )
+                        else -> DynamicListStep(
+                            viewModel = viewModel,
+                            label = viewModel.tr("add_recipe_screen.step"),
+                            items = draft.directions,
+                            onItemsChange = viewModel::updateDraftDirections,
+                        )
+                    }
                 }
             }
         }
@@ -263,42 +287,40 @@ private fun ImageStep(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(
-            modifier = Modifier
-                .size(220.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .clickable(onClick = onPickImage),
+        Card(
+            onClick = onPickImage,
+            modifier = Modifier.size(240.dp),
+            shape = MaterialTheme.shapes.extraLarge,
+            border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         ) {
-            if (draft.imagePath.isBlank()) {
-                Card(
-                    border = BorderStroke(3.dp, MaterialTheme.colorScheme.primary),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surface,
-                    ),
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    Box(
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(MaterialTheme.shapes.extraLarge),
+                contentAlignment = Alignment.Center,
+            ) {
+                if (draft.imagePath.isBlank()) {
+                    Icon(
+                        Icons.Outlined.PhotoCamera,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(56.dp),
+                    )
+                } else {
+                    RecipeImage(
+                        path = draft.imagePath,
+                        contentDescription = null,
                         modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Icon(
-                            Icons.Outlined.PhotoCamera,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.size(48.dp),
-                        )
-                    }
+                    )
                 }
-            } else {
-                RecipeImage(
-                    path = draft.imagePath,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                )
             }
         }
 
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(20.dp))
         Text(
             text = viewModel.tr("image_step.tap_to_select"),
             style = MaterialTheme.typography.bodyMedium,
@@ -375,7 +397,6 @@ private fun DetailsStep(viewModel: AppViewModel) {
 @Composable
 private fun DynamicListStep(
     viewModel: AppViewModel,
-    type: String,
     label: String,
     items: List<String>,
     onItemsChange: (List<String>) -> Unit,
@@ -397,73 +418,79 @@ private fun DynamicListStep(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth().padding(24.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp),
             )
         }
 
         items.forEachIndexed { index, value ->
-            Row(
+            Surface(
+                shape = MaterialTheme.shapes.medium,
+                color = MaterialTheme.colorScheme.surfaceContainerLow,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
+                    .padding(vertical = 6.dp),
             ) {
-                Column {
-                    IconButton(
-                        enabled = index > 0,
-                        onClick = {
+                Column(modifier = Modifier.padding(12.dp)) {
+                    OutlinedTextField(
+                        value = value,
+                        onValueChange = { text ->
                             val updated = items.toMutableList()
-                            val previous = updated.removeAt(index)
-                            updated.add(index - 1, previous)
+                            updated[index] = text
                             onItemsChange(updated)
                         },
-                    ) {
-                        Icon(
-                            Icons.Filled.KeyboardArrowUp,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
-                        )
-                    }
-                    IconButton(
-                        enabled = index < items.lastIndex,
-                        onClick = {
-                            val updated = items.toMutableList()
-                            val next = updated.removeAt(index)
-                            updated.add(index + 1, next)
-                            onItemsChange(updated)
-                        },
-                    ) {
-                        Icon(
-                            Icons.Filled.KeyboardArrowDown,
-                            contentDescription = null,
-                            modifier = Modifier.size(20.dp),
-                        )
-                    }
-                }
-
-                OutlinedTextField(
-                    value = value,
-                    onValueChange = { text ->
-                        val updated = items.toMutableList()
-                        updated[index] = text
-                        onItemsChange(updated)
-                    },
-                    modifier = Modifier.weight(1f),
-                    placeholder = { Text("$label ${index + 1}") },
-                    singleLine = true,
-                    shape = RoundedCornerShape(12.dp),
-                )
-
-                IconButton(
-                    onClick = {
-                        onItemsChange(items.toMutableList().apply { removeAt(index) })
-                    },
-                ) {
-                    Icon(
-                        Icons.Filled.Delete,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.fillMaxWidth(),
+                        placeholder = { Text("$label ${index + 1}") },
+                        singleLine = true,
+                        shape = MaterialTheme.shapes.small,
                     )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                    ) {
+                        IconButton(
+                            enabled = index > 0,
+                            onClick = {
+                                val updated = items.toMutableList()
+                                val previous = updated.removeAt(index)
+                                updated.add(index - 1, previous)
+                                onItemsChange(updated)
+                            },
+                        ) {
+                            Icon(
+                                Icons.Filled.KeyboardArrowUp,
+                                contentDescription = null,
+                            )
+                        }
+                        IconButton(
+                            enabled = index < items.lastIndex,
+                            onClick = {
+                                val updated = items.toMutableList()
+                                val next = updated.removeAt(index)
+                                updated.add(index + 1, next)
+                                onItemsChange(updated)
+                            },
+                        ) {
+                            Icon(
+                                Icons.Filled.KeyboardArrowDown,
+                                contentDescription = null,
+                            )
+                        }
+                        IconButton(
+                            onClick = {
+                                onItemsChange(
+                                    items.toMutableList().apply { removeAt(index) },
+                                )
+                            },
+                        ) {
+                            Icon(
+                                Icons.Filled.Delete,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    }
                 }
             }
         }

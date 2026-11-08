@@ -1,20 +1,24 @@
-@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@file:OptIn(
+    androidx.compose.material3.ExperimentalMaterial3Api::class,
+    androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class,
+)
 
 package com.francids.recipes.ui.screens
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalFloatingToolbar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -42,7 +47,6 @@ fun RecipeDetailScreen(
     onBack: () -> Unit,
 ) {
     val recipe = viewModel.recipeById(recipeId)
-    var menuExpanded by remember { mutableStateOf(false) }
     var showShareSheet by remember { mutableStateOf(false) }
 
     if (recipe == null) {
@@ -55,7 +59,10 @@ fun RecipeDetailScreen(
             },
         ) { padding ->
             Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-                EmptyState(viewModel.tr("recipe_controller.recipe_not_found"))
+                EmptyState(
+                    title = viewModel.tr("recipe_controller.recipe_not_found"),
+                    icon = Icons.Outlined.Share,
+                )
             }
         }
         return
@@ -65,7 +72,12 @@ fun RecipeDetailScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
-                title = { Text(viewModel.tr("recipe_screen.title")) },
+                title = {
+                    Text(
+                        viewModel.tr("recipe_screen.title"),
+                        style = MaterialTheme.typography.titleLargeEmphasized,
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
@@ -74,7 +86,20 @@ fun RecipeDetailScreen(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background,
                 ),
-                actions = {
+            )
+        },
+        bottomBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()
+                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                HorizontalFloatingToolbar(
+                    expanded = true,
+                    contentPadding = PaddingValues(horizontal = 8.dp, vertical = 4.dp),
+                ) {
                     IconButton(onClick = { viewModel.toggleFavorite(recipe.id) }) {
                         Icon(
                             imageVector = if (viewModel.isFavorite(recipe.id)) {
@@ -82,9 +107,11 @@ fun RecipeDetailScreen(
                             } else {
                                 Icons.Filled.FavoriteBorder
                             },
-                            contentDescription = null,
-                            tint = if (viewModel.isFavorite(recipe.id)) Color.Red else {
-                                MaterialTheme.colorScheme.onSurface
+                            contentDescription = viewModel.tr("recipes_page.favorites_filter"),
+                            tint = if (viewModel.isFavorite(recipe.id)) {
+                                MaterialTheme.colorScheme.primary
+                            } else {
+                                MaterialTheme.colorScheme.onSurfaceVariant
                             },
                         )
                     }
@@ -98,54 +125,43 @@ fun RecipeDetailScreen(
                                     Icons.Outlined.Share
                                 },
                                 contentDescription = viewModel.tr("recipe_screen.share_recipe"),
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
                         }
                     }
 
-                    Box {
-                        IconButton(onClick = { menuExpanded = true }) {
-                            Icon(
-                                Icons.Default.MoreVert,
-                                contentDescription = viewModel.tr("inicial_screen.menu_tooltip"),
+                    IconButton(
+                        onClick = {
+                            viewModel.showConfirmation(
+                                ConfirmRequest(
+                                    title = viewModel.tr("recipe_screen.delete_confirmation_title"),
+                                    message = viewModel.tr("recipe_screen.delete_confirmation_message"),
+                                    confirmLabel = viewModel.tr("recipe_screen.delete_button"),
+                                    cancelLabel = viewModel.tr("recipe_screen.cancel_button"),
+                                    destructive = true,
+                                    onConfirm = {
+                                        viewModel.deleteRecipe(recipe, onFinished = onBack)
+                                    },
+                                ),
                             )
-                        }
-                        DropdownMenu(
-                            expanded = menuExpanded,
-                            onDismissRequest = { menuExpanded = false },
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text(viewModel.tr("recipe_screen.menu_item_delete")) },
-                                leadingIcon = {
-                                    Icon(Icons.Default.Delete, contentDescription = null)
-                                },
-                                onClick = {
-                                    menuExpanded = false
-                                    viewModel.showConfirmation(
-                                        ConfirmRequest(
-                                            title = viewModel.tr("recipe_screen.delete_confirmation_title"),
-                                            message = viewModel.tr("recipe_screen.delete_confirmation_message"),
-                                            confirmLabel = viewModel.tr("recipe_screen.delete_button"),
-                                            cancelLabel = viewModel.tr("recipe_screen.cancel_button"),
-                                            destructive = true,
-                                            onConfirm = {
-                                                viewModel.deleteRecipe(recipe, onFinished = onBack)
-                                            },
-                                        ),
-                                    )
-                                },
-                            )
-                        }
+                        },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = viewModel.tr("recipe_screen.menu_item_delete"),
+                            tint = MaterialTheme.colorScheme.error,
+                        )
                     }
-                },
-            )
+                }
+            }
         },
     ) { padding ->
-        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-            RecipeContent(
-                recipe = recipe,
-                language = viewModel.language,
-            )
-        }
+        RecipeContent(
+            recipe = recipe,
+            language = viewModel.language,
+            modifier = Modifier.padding(padding),
+            bottomPadding = 24.dp,
+        )
     }
 
     if (showShareSheet) {
@@ -164,7 +180,12 @@ fun BackTopBar(
     actions: @Composable androidx.compose.foundation.layout.RowScope.() -> Unit = {},
 ) {
     TopAppBar(
-        title = { Text(title) },
+        title = {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLargeEmphasized,
+            )
+        },
         navigationIcon = {
             IconButton(onClick = onBack) {
                 Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)

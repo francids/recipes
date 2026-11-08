@@ -20,7 +20,7 @@
 La aplicación móvil está desarrollada de forma nativa para Android con:
 
 - **Kotlin**
-- **Jetpack Compose** y **Material 3**
+- **Jetpack Compose** y **Material 3 Expressive**
 - **Navigation Compose**
 - **Coil** para la carga de imágenes
 - **OkHttp** para la API
@@ -28,6 +28,9 @@ La aplicación móvil está desarrollada de forma nativa para Android con:
 - Persistencia local en JSON y almacenamiento privado de la aplicación
 
 No se requiere Flutter ni un runtime multiplataforma para compilar o ejecutar la app.
+
+El sistema de diseño, la paleta, la tipografía, los componentes expresivos elegidos y las
+comprobaciones de contraste y accesibilidad se documentan en [`android/DESIGN.md`](android/DESIGN.md).
 
 La API está desarrollada en [Rust](https://www.rust-lang.org/) con [`workers-rs`](https://github.com/cloudflare/workers-rs) y desplegada en [Cloudflare Workers](https://workers.cloudflare.com/). Usa [D1](https://developers.cloudflare.com/d1/) para los datos, [R2](https://developers.cloudflare.com/r2/) para las imágenes, Google OAuth para el inicio de sesión y Gemini para generar recetas a partir de fotos.
 

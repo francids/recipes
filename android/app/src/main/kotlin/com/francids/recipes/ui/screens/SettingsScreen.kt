@@ -1,8 +1,9 @@
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+
 package com.francids.recipes.ui.screens
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,8 +23,6 @@ import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -38,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import com.francids.recipes.BuildConfig
 import com.francids.recipes.data.ConfirmRequest
 import com.francids.recipes.ui.AppViewModel
+import com.francids.recipes.ui.components.SettingsRow
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -75,177 +75,143 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .padding(padding),
             contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item {
-                Text(
-                    viewModel.tr("settings_screen.appearance_section"),
-                    style = MaterialTheme.typography.displayMedium,
-                )
+                SectionHeader(viewModel.tr("settings_screen.appearance_section"))
             }
             item {
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                ) {
-                    Column {
-                        ListItem(
-                            headlineContent = {
-                                Text(
-                                    viewModel.tr("settings_screen.dark_theme"),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                )
-                            },
-                            supportingContent = {
-                                Text(
-                                    viewModel.tr("settings_screen.dark_theme_description"),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            },
-                            leadingContent = {
-                                Icon(
-                                    imageVector = if (viewModel.darkTheme) {
-                                        Icons.Outlined.DarkMode
-                                    } else {
-                                        Icons.Outlined.LightMode
+                SettingsCard {
+                    SettingsRow(
+                        icon = if (viewModel.darkTheme) {
+                            Icons.Outlined.DarkMode
+                        } else {
+                            Icons.Outlined.LightMode
+                        },
+                        title = viewModel.tr("settings_screen.dark_theme"),
+                        supporting = viewModel.tr("settings_screen.dark_theme_description"),
+                        enabled = !viewModel.followSystemTheme,
+                        trailing = {
+                            Switch(
+                                checked = viewModel.darkTheme,
+                                enabled = !viewModel.followSystemTheme,
+                                onCheckedChange = viewModel::updateDarkTheme,
+                            )
+                        },
+                        iconContainerColor = if (viewModel.followSystemTheme) {
+                            MaterialTheme.colorScheme.surfaceContainerHighest
+                        } else {
+                            MaterialTheme.colorScheme.primaryContainer
+                        },
+                        iconContentColor = if (viewModel.followSystemTheme) {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        } else {
+                            MaterialTheme.colorScheme.onPrimaryContainer
+                        },
+                    )
+                    HorizontalCardDivider()
+                    SettingsRow(
+                        icon = Icons.Outlined.Contrast,
+                        title = viewModel.tr("settings_screen.system_theme"),
+                        supporting = viewModel.tr("settings_screen.system_theme_description"),
+                        trailing = {
+                            Switch(
+                                checked = viewModel.followSystemTheme,
+                                onCheckedChange = viewModel::updateFollowSystemTheme,
+                            )
+                        },
+                        iconContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                        iconContentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                    )
+                }
+            }
+
+            item {
+                Spacer(Modifier.height(8.dp))
+                SectionHeader(viewModel.tr("settings_screen.language_section"))
+            }
+            item {
+                SettingsCard {
+                    SettingsRow(
+                        icon = Icons.Outlined.Language,
+                        title = viewModel.tr("settings_screen.language"),
+                        supporting = viewModel.tr("settings_screen.language_description"),
+                        onClick = { showLanguageSheet = true },
+                        showChevron = true,
+                    )
+                }
+            }
+
+            item {
+                Spacer(Modifier.height(8.dp))
+                SectionHeader(viewModel.tr("profile_page.data_section"))
+            }
+            item {
+                SettingsCard {
+                    SettingsRow(
+                        icon = Icons.Outlined.Download,
+                        title = viewModel.tr("profile_page.export_recipes"),
+                        supporting = viewModel.tr("profile_page.export_recipes_description"),
+                        onClick = {
+                            viewModel.showConfirmation(
+                                ConfirmRequest(
+                                    title = viewModel.tr("profile_page.export_confirmation_title"),
+                                    message = viewModel.tr("profile_page.export_confirmation_message"),
+                                    confirmLabel = viewModel.tr("ui_helpers.confirm"),
+                                    cancelLabel = viewModel.tr("ui_helpers.cancel"),
+                                    onConfirm = {
+                                        val stamp = SimpleDateFormat(
+                                            "yyyyMMdd_HHmmss",
+                                            Locale.US,
+                                        ).format(Date())
+                                        exportLauncher.launch("recipes_export_$stamp.zip")
                                     },
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                )
-                            },
-                            trailingContent = {
-                                Switch(
-                                    checked = viewModel.darkTheme,
-                                    enabled = !viewModel.followSystemTheme,
-                                    onCheckedChange = viewModel::updateDarkTheme,
-                                )
-                            },
-                        )
-                        HorizontalCardDivider()
-                        ListItem(
-                            headlineContent = {
-                                Text(
-                                    viewModel.tr("settings_screen.system_theme"),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                )
-                            },
-                            supportingContent = {
-                                Text(
-                                    viewModel.tr("settings_screen.system_theme_description"),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            },
-                            leadingContent = {
-                                Icon(
-                                    Icons.Outlined.Contrast,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                )
-                            },
-                            trailingContent = {
-                                Switch(
-                                    checked = viewModel.followSystemTheme,
-                                    onCheckedChange = viewModel::updateFollowSystemTheme,
-                                )
-                            },
-                        )
-                    }
+                                ),
+                            )
+                        },
+                        showChevron = true,
+                    )
+                    HorizontalCardDivider()
+                    SettingsRow(
+                        icon = Icons.Outlined.Upload,
+                        title = viewModel.tr("profile_page.import_recipes"),
+                        supporting = viewModel.tr("profile_page.import_recipes_description"),
+                        onClick = {
+                            viewModel.showConfirmation(
+                                ConfirmRequest(
+                                    title = viewModel.tr("profile_page.import_confirmation_title"),
+                                    message = viewModel.tr("profile_page.import_confirmation_message"),
+                                    confirmLabel = viewModel.tr("ui_helpers.confirm"),
+                                    cancelLabel = viewModel.tr("ui_helpers.cancel"),
+                                    onConfirm = {
+                                        importLauncher.launch(
+                                            arrayOf(
+                                                "application/zip",
+                                                "application/octet-stream",
+                                                "*/*",
+                                            ),
+                                        )
+                                    },
+                                ),
+                            )
+                        },
+                        showChevron = true,
+                    )
                 }
             }
 
             item {
-                Text(
-                    viewModel.tr("settings_screen.language_section"),
-                    style = MaterialTheme.typography.displayMedium,
-                )
+                Spacer(Modifier.height(8.dp))
+                SectionHeader(viewModel.tr("settings_screen.about_section"))
             }
             item {
-                SettingsActionCard(
-                    title = viewModel.tr("settings_screen.language"),
-                    subtitle = viewModel.tr("settings_screen.language_description"),
-                    icon = Icons.Outlined.Language,
-                    onClick = { showLanguageSheet = true },
-                )
-            }
-
-            item {
-                Text(
-                    viewModel.tr("profile_page.data_section"),
-                    style = MaterialTheme.typography.displayMedium,
-                )
-            }
-            item {
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-                ) {
-                    Column {
-                        SettingsActionCard(
-                            title = viewModel.tr("profile_page.export_recipes"),
-                            subtitle = viewModel.tr("profile_page.export_recipes_description"),
-                            icon = Icons.Outlined.Download,
-                            onClick = {
-                                viewModel.showConfirmation(
-                                    ConfirmRequest(
-                                        title = viewModel.tr("profile_page.export_confirmation_title"),
-                                        message = viewModel.tr("profile_page.export_confirmation_message"),
-                                        confirmLabel = viewModel.tr("ui_helpers.confirm"),
-                                        cancelLabel = viewModel.tr("ui_helpers.cancel"),
-                                        onConfirm = {
-                                            val stamp = SimpleDateFormat(
-                                                "yyyyMMdd_HHmmss",
-                                                Locale.US,
-                                            ).format(Date())
-                                            exportLauncher.launch("recipes_export_$stamp.zip")
-                                        },
-                                    ),
-                                )
-                            },
-                        )
-                        HorizontalCardDivider()
-                        SettingsActionCard(
-                            title = viewModel.tr("profile_page.import_recipes"),
-                            subtitle = viewModel.tr("profile_page.import_recipes_description"),
-                            icon = Icons.Outlined.Upload,
-                            onClick = {
-                                viewModel.showConfirmation(
-                                    ConfirmRequest(
-                                        title = viewModel.tr("profile_page.import_confirmation_title"),
-                                        message = viewModel.tr("profile_page.import_confirmation_message"),
-                                        confirmLabel = viewModel.tr("ui_helpers.confirm"),
-                                        cancelLabel = viewModel.tr("ui_helpers.cancel"),
-                                        onConfirm = {
-                                            importLauncher.launch(
-                                                arrayOf(
-                                                    "application/zip",
-                                                    "application/octet-stream",
-                                                    "*/*",
-                                                ),
-                                            )
-                                        },
-                                    ),
-                                )
-                            },
-                        )
-                    }
+                SettingsCard {
+                    SettingsRow(
+                        icon = Icons.Outlined.Info,
+                        title = viewModel.tr("settings_screen.version"),
+                        supporting = BuildConfig.VERSION_NAME,
+                    )
                 }
-            }
-
-            item {
-                Text(
-                    viewModel.tr("settings_screen.about_section"),
-                    style = MaterialTheme.typography.displayMedium,
-                )
-            }
-            item {
-                SettingsActionCard(
-                    title = viewModel.tr("settings_screen.version"),
-                    subtitle = BuildConfig.VERSION_NAME,
-                    icon = Icons.Outlined.Info,
-                    onClick = {},
-                )
             }
             item { Spacer(Modifier.height(16.dp)) }
         }
@@ -256,5 +222,28 @@ fun SettingsScreen(
             viewModel = viewModel,
             onDismiss = { showLanguageSheet = false },
         )
+    }
+}
+
+@Composable
+private fun SectionHeader(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleLargeEmphasized,
+        modifier = Modifier.padding(start = 4.dp, top = 4.dp),
+    )
+}
+
+@Composable
+private fun SettingsCard(content: @Composable () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+    ) {
+        Column { content() }
     }
 }

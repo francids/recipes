@@ -1,6 +1,9 @@
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+
 package com.francids.recipes.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,11 +12,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Download
+import androidx.compose.material.icons.outlined.FolderShared
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,48 +26,7 @@ import com.francids.recipes.data.ViewOption
 import com.francids.recipes.ui.AppViewModel
 import com.francids.recipes.ui.components.EmptyState
 import com.francids.recipes.ui.components.RecipeCard
-
-@Composable
-fun FavoritesScreen(
-    viewModel: AppViewModel,
-    onBack: () -> Unit,
-    onOpenRecipe: (String) -> Unit,
-) {
-    val favoriteRecipes = viewModel.recipes.filter { it.id in viewModel.favorites }
-
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            BackTopBar(
-                title = viewModel.tr("favorites_recipes_screen.title"),
-                onBack = onBack,
-            )
-        },
-    ) { padding ->
-        if (favoriteRecipes.isEmpty()) {
-            EmptyState(
-                text = viewModel.tr("favorites_recipes_screen.no_favorites"),
-                modifier = Modifier.padding(padding),
-            )
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-                contentPadding = PaddingValues(16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                items(favoriteRecipes, key = { it.id }) { recipe ->
-                    RecipeCard(
-                        recipe = recipe,
-                        viewOption = ViewOption.LIST,
-                        onClick = { onOpenRecipe(recipe.id) },
-                    )
-                }
-            }
-        }
-    }
-}
+import com.francids.recipes.ui.components.RecipeContent
 
 @Composable
 fun SharedRecipesScreen(
@@ -83,10 +46,16 @@ fun SharedRecipesScreen(
         },
     ) { padding ->
         if (publicRecipes.isEmpty()) {
-            EmptyState(
-                text = viewModel.tr("shared_recipes_screen.no_public_recipes"),
-                modifier = Modifier.padding(padding),
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+            ) {
+                EmptyState(
+                    title = viewModel.tr("shared_recipes_screen.no_public_recipes"),
+                    icon = Icons.Outlined.FolderShared,
+                )
+            }
         } else {
             LazyColumn(
                 modifier = Modifier
@@ -99,6 +68,8 @@ fun SharedRecipesScreen(
                     RecipeCard(
                         recipe = recipe,
                         viewOption = ViewOption.LIST,
+                        isFavorite = recipe.id in viewModel.favorites,
+                        language = viewModel.language,
                         onClick = { onOpenRecipe(recipe.id) },
                     )
                 }
@@ -162,17 +133,23 @@ fun SharedRecipeScreen(
         },
     ) { padding ->
         if (recipe == null) {
-            EmptyState(
-                text = viewModel.tr("shared_recipe.not_found_error"),
-                modifier = Modifier.padding(padding),
-            )
-        } else {
-            androidx.compose.foundation.layout.Box(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(padding),
             ) {
-                com.francids.recipes.ui.components.RecipeContent(
+                EmptyState(
+                    title = viewModel.tr("shared_recipe.not_found_error"),
+                    icon = Icons.Outlined.Share,
+                )
+            }
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+            ) {
+                RecipeContent(
                     recipe = recipe,
                     language = viewModel.language,
                 )

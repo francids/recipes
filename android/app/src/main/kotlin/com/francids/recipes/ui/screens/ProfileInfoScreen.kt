@@ -1,3 +1,5 @@
+@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+
 package com.francids.recipes.ui.screens
 
 import androidx.compose.foundation.clickable
@@ -31,6 +33,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,11 +42,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.francids.recipes.data.AppUser
 import com.francids.recipes.data.ConfirmRequest
 import com.francids.recipes.ui.AppViewModel
+import com.francids.recipes.ui.components.EmptyState
 import com.francids.recipes.ui.components.RecipeImage
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -70,30 +73,13 @@ fun ProfileInfoScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(padding)
-                    .padding(24.dp),
-                contentAlignment = Alignment.Center,
+                    .padding(padding),
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        Icons.Outlined.Error,
-                        contentDescription = null,
-                        modifier = Modifier.size(72.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Spacer(Modifier.height(16.dp))
-                    Text(
-                        viewModel.tr("profile_info_screen.not_signed_in"),
-                        style = MaterialTheme.typography.displayMedium,
-                    )
-                    Spacer(Modifier.height(8.dp))
-                    Text(
-                        viewModel.tr("profile_info_screen.sign_in_to_view"),
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
+                EmptyState(
+                    title = viewModel.tr("profile_info_screen.not_signed_in"),
+                    message = viewModel.tr("profile_info_screen.sign_in_to_view"),
+                    icon = Icons.Outlined.Error,
+                )
             }
             return@Scaffold
         }
@@ -105,13 +91,10 @@ fun ProfileInfoScreen(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            item { ProfileAvatar(user, viewModel) }
+            item { ProfileAvatar(user) }
 
             item {
-                Text(
-                    viewModel.tr("profile_info_screen.personal_info"),
-                    style = MaterialTheme.typography.displayMedium,
-                )
+                SectionLabel(viewModel.tr("profile_info_screen.personal_info"))
             }
             item {
                 InfoCard {
@@ -140,10 +123,7 @@ fun ProfileInfoScreen(
             }
 
             item {
-                Text(
-                    viewModel.tr("profile_info_screen.account_details"),
-                    style = MaterialTheme.typography.displayMedium,
-                )
+                SectionLabel(viewModel.tr("profile_info_screen.account_details"))
             }
             item {
                 InfoCard {
@@ -159,19 +139,21 @@ fun ProfileInfoScreen(
                         } else {
                             Icons.Outlined.Error
                         },
-                        valueColor = if (user.emailVerification) {
-                            Color(0xFF2E7D32)
+                        iconContainerColor = if (user.emailVerification) {
+                            MaterialTheme.colorScheme.secondaryContainer
                         } else {
-                            Color(0xFFEF6C00)
+                            MaterialTheme.colorScheme.errorContainer
+                        },
+                        iconContentColor = if (user.emailVerification) {
+                            MaterialTheme.colorScheme.onSecondaryContainer
+                        } else {
+                            MaterialTheme.colorScheme.onErrorContainer
                         },
                     )
                     CardDivider()
                     InfoRow(
                         title = viewModel.tr("profile_info_screen.account_created"),
-                        value = formatRelativeDate(
-                            user.registration,
-                            viewModel,
-                        ),
+                        value = formatRelativeDate(user.registration, viewModel),
                         icon = Icons.Outlined.CalendarMonth,
                     )
                     CardDivider()
@@ -184,9 +166,8 @@ fun ProfileInfoScreen(
             }
 
             item {
-                Text(
-                    viewModel.tr("profile_info_screen.danger_zone"),
-                    style = MaterialTheme.typography.displayMedium,
+                SectionLabel(
+                    text = viewModel.tr("profile_info_screen.danger_zone"),
                     color = MaterialTheme.colorScheme.error,
                 )
             }
@@ -211,32 +192,40 @@ fun ProfileInfoScreen(
                             )
                         },
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.35f),
+                        containerColor = MaterialTheme.colorScheme.errorContainer,
+                        contentColor = MaterialTheme.colorScheme.onErrorContainer,
                     ),
+                    shape = MaterialTheme.shapes.large,
                     elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 ) {
                     Row(
                         modifier = Modifier.padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Icon(
-                            Icons.Filled.Delete,
-                            contentDescription = null,
-                            tint = MaterialTheme.colorScheme.error,
-                        )
+                        Surface(
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.12f),
+                            contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                            modifier = Modifier.size(40.dp),
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    Icons.Filled.Delete,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(20.dp),
+                                )
+                            }
+                        }
                         Spacer(Modifier.width(16.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
                                 viewModel.tr("profile_info_screen.delete_account"),
-                                style = MaterialTheme.typography.bodyLarge,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.titleMediumEmphasized,
                             )
-                            Spacer(Modifier.height(4.dp))
+                            Spacer(Modifier.height(2.dp))
                             Text(
                                 viewModel.tr("profile_info_screen.delete_account_warning"),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.error,
                             )
                         }
                     }
@@ -248,43 +237,70 @@ fun ProfileInfoScreen(
 }
 
 @Composable
-private fun ProfileAvatar(user: AppUser, viewModel: AppViewModel) {
+private fun ProfileAvatar(user: AppUser) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         contentAlignment = Alignment.Center,
     ) {
-        Box(
-            modifier = Modifier
-                .size(120.dp)
-                .clip(CircleShape),
-            contentAlignment = Alignment.Center,
+        Surface(
+            shape = CircleShape,
+            color = MaterialTheme.colorScheme.primaryContainer,
+            modifier = Modifier.size(136.dp),
         ) {
-            if (user.picture.isNullOrBlank()) {
-                Icon(
-                    Icons.Outlined.Person,
-                    contentDescription = null,
-                    modifier = Modifier.size(64.dp),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
-            } else {
-                RecipeImage(
-                    path = user.picture,
-                    contentDescription = user.name,
-                    modifier = Modifier.fillMaxSize(),
-                )
+            Box(
+                modifier = Modifier
+                    .padding(6.dp)
+                    .clip(CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                if (user.picture.isNullOrBlank()) {
+                    Surface(
+                        shape = CircleShape,
+                        color = MaterialTheme.colorScheme.surface,
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                Icons.Outlined.Person,
+                                contentDescription = null,
+                                modifier = Modifier.size(64.dp),
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                    }
+                } else {
+                    RecipeImage(
+                        path = user.picture,
+                        contentDescription = user.name,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
+private fun SectionLabel(text: String, color: Color = MaterialTheme.colorScheme.onBackground) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleLargeEmphasized,
+        color = color,
+        modifier = Modifier.padding(start = 4.dp, top = 4.dp),
+    )
+}
+
+@Composable
 private fun InfoCard(content: @Composable () -> Unit) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        shape = RoundedCornerShape(10.dp),
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
     ) {
         Column { content() }
     }
@@ -295,7 +311,8 @@ private fun InfoRow(
     title: String,
     value: String,
     icon: ImageVector,
-    valueColor: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    iconContainerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+    iconContentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
 ) {
     Row(
         modifier = Modifier
@@ -303,12 +320,32 @@ private fun InfoRow(
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+        Surface(
+            shape = CircleShape,
+            color = iconContainerColor,
+            contentColor = iconContentColor,
+            modifier = Modifier.size(40.dp),
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                )
+            }
+        }
         Spacer(Modifier.width(16.dp))
         Column {
-            Text(title, style = MaterialTheme.typography.bodyLarge)
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+            )
             Spacer(Modifier.height(2.dp))
-            Text(value, style = MaterialTheme.typography.bodySmall, color = valueColor)
+            Text(
+                text = value,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }

@@ -1,10 +1,11 @@
-@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@file:OptIn(
+    androidx.compose.material3.ExperimentalMaterial3Api::class,
+    androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class,
+)
 
 package com.francids.recipes.ui.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,47 +23,47 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.GridView
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.automirrored.outlined.Logout
+import androidx.compose.material.icons.automirrored.outlined.Sort
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.GridView
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.CloudUpload
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.FolderShared
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.PersonAdd
 import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.RestaurantMenu
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.automirrored.outlined.Sort
-import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.ButtonGroup
+import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
+import androidx.compose.material3.MediumExtendedFloatingActionButton
+import androidx.compose.material3.LargeFlexibleTopAppBar
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ShortNavigationBar
+import androidx.compose.material3.ShortNavigationBarItem
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -75,8 +76,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.francids.recipes.R
 import com.francids.recipes.data.SortOption
@@ -85,6 +88,7 @@ import com.francids.recipes.ui.AppViewModel
 import com.francids.recipes.ui.components.EmptyState
 import com.francids.recipes.ui.components.RecipeCard
 import com.francids.recipes.ui.components.RecipeImage
+import com.francids.recipes.ui.components.SettingsRow
 
 @Composable
 fun HomeScreen(
@@ -92,32 +96,31 @@ fun HomeScreen(
     onAddRecipe: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenRecipe: (String) -> Unit,
-    onOpenFavorites: () -> Unit,
     onOpenProfileInfo: () -> Unit,
     onOpenPublicSearch: () -> Unit,
     onOpenSharedRecipes: () -> Unit,
 ) {
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     var menuExpanded by remember { mutableStateOf(false) }
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val titles = listOf(
+        viewModel.tr("inicial_screen.title"),
+        viewModel.tr("favorites_recipes_screen.title"),
+        viewModel.tr("profile_page.title"),
+    )
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
-            TopAppBar(
+            LargeFlexibleTopAppBar(
                 title = {
                     Text(
-                        text = if (selectedTab == 0) {
-                            viewModel.tr("inicial_screen.title")
-                        } else {
-                            viewModel.tr("profile_page.title")
-                        },
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
+                        text = titles[selectedTab],
+                        style = MaterialTheme.typography.headlineLargeEmphasized,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                ),
                 actions = {
                     Box {
                         IconButton(onClick = { menuExpanded = true }) {
@@ -153,45 +156,100 @@ fun HomeScreen(
                         }
                     }
                 },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                ),
+                scrollBehavior = scrollBehavior,
             )
         },
         floatingActionButton = {
-            if (selectedTab == 0) {
-                FloatingActionButton(
+            if (selectedTab == 0 && viewModel.recipes.isNotEmpty()) {
+                MediumExtendedFloatingActionButton(
                     onClick = onAddRecipe,
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
-                    shape = RoundedCornerShape(10.dp),
                 ) {
-                    Icon(Icons.Default.Add, contentDescription = viewModel.tr("inicial_screen.fab_tooltip_add"))
+                    Icon(Icons.Filled.Add, contentDescription = null)
+                    Spacer(Modifier.width(12.dp))
+                    Text(
+                        text = viewModel.tr("inicial_screen.fab_tooltip_add"),
+                        style = MaterialTheme.typography.titleMedium,
+                    )
                 }
             }
         },
         bottomBar = {
-            NavigationBar(containerColor = MaterialTheme.colorScheme.surface) {
-                NavigationBarItem(
+            ShortNavigationBar {
+                ShortNavigationBarItem(
                     selected = selectedTab == 0,
                     onClick = { selectedTab = 0 },
-                    icon = { Icon(Icons.Outlined.Home, contentDescription = null) },
+                    icon = {
+                        Icon(
+                            imageVector = if (selectedTab == 0) {
+                                Icons.Filled.Home
+                            } else {
+                                Icons.Outlined.Home
+                            },
+                            contentDescription = null,
+                        )
+                    },
                     label = { Text(viewModel.tr("inicial_screen.title")) },
                 )
-                NavigationBarItem(
+                ShortNavigationBarItem(
                     selected = selectedTab == 1,
                     onClick = { selectedTab = 1 },
-                    icon = { Icon(Icons.Outlined.Person, contentDescription = null) },
+                    icon = {
+                        Icon(
+                            imageVector = if (selectedTab == 1) {
+                                Icons.Filled.Favorite
+                            } else {
+                                Icons.Outlined.FavoriteBorder
+                            },
+                            contentDescription = null,
+                        )
+                    },
+                    label = { Text(viewModel.tr("recipes_page.favorites_filter")) },
+                )
+                ShortNavigationBarItem(
+                    selected = selectedTab == 2,
+                    onClick = { selectedTab = 2 },
+                    icon = {
+                        Icon(
+                            imageVector = if (selectedTab == 2) {
+                                Icons.Filled.Person
+                            } else {
+                                Icons.Outlined.Person
+                            },
+                            contentDescription = null,
+                        )
+                    },
                     label = { Text(viewModel.tr("profile_page.title")) },
                 )
             }
         },
     ) { padding ->
-        Box(modifier = Modifier.fillMaxSize().padding(padding)) {
-            if (selectedTab == 0) {
-                RecipesPage(viewModel = viewModel, onOpenRecipe = onOpenRecipe)
-            } else {
-                ProfilePage(
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
+        ) {
+            when (selectedTab) {
+                0 -> RecipesPage(
+                    viewModel = viewModel,
+                    onOpenRecipe = onOpenRecipe,
+                    onAddRecipe = onAddRecipe,
+                )
+
+                1 -> FavoritesPage(
+                    viewModel = viewModel,
+                    onOpenRecipe = onOpenRecipe,
+                    onExploreRecipes = { selectedTab = 0 },
+                )
+
+                else -> ProfilePage(
                     viewModel = viewModel,
                     onOpenProfileInfo = onOpenProfileInfo,
-                    onOpenFavorites = onOpenFavorites,
+                    onOpenFavorites = { selectedTab = 1 },
                     onOpenPublicSearch = onOpenPublicSearch,
                     onOpenSharedRecipes = onOpenSharedRecipes,
                 )
@@ -201,102 +259,70 @@ fun HomeScreen(
 }
 
 @Composable
-private fun RecipesPage(viewModel: AppViewModel, onOpenRecipe: (String) -> Unit) {
+private fun RecipesPage(
+    viewModel: AppViewModel,
+    onOpenRecipe: (String) -> Unit,
+    onAddRecipe: () -> Unit,
+) {
     var sortOption by rememberSaveable { mutableStateOf(SortOption.NONE) }
-    var showFavoritesOnly by rememberSaveable { mutableStateOf(false) }
 
-    val displayedRecipes = remember(
-        viewModel.recipes,
-        viewModel.favorites,
-        sortOption,
-        showFavoritesOnly,
-    ) {
-        val filtered = if (showFavoritesOnly) {
-            viewModel.recipes.filter { it.id in viewModel.favorites }
-        } else {
-            viewModel.recipes
-        }
+    val displayedRecipes = remember(viewModel.recipes, sortOption) {
         when (sortOption) {
-            SortOption.TITLE -> filtered.sortedBy { it.title.lowercase() }
-            SortOption.DURATION -> filtered.sortedBy { it.preparationTime }
-            SortOption.NONE -> filtered
+            SortOption.TITLE -> viewModel.recipes.sortedBy { it.title.lowercase() }
+            SortOption.DURATION -> viewModel.recipes.sortedBy { it.preparationTime }
+            SortOption.NONE -> viewModel.recipes
         }
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
         if (viewModel.recipes.isNotEmpty()) {
-            Row(
+            val sortLabel = when (sortOption) {
+                SortOption.TITLE -> viewModel.tr("recipes_page.sort_title")
+                SortOption.DURATION -> viewModel.tr("recipes_page.sort_duration")
+                SortOption.NONE -> viewModel.tr("recipes_page.sort_by_label")
+            }
+            val sortIcon = when (sortOption) {
+                SortOption.NONE -> Icons.AutoMirrored.Outlined.Sort
+                SortOption.TITLE -> Icons.AutoMirrored.Outlined.Sort
+                SortOption.DURATION -> Icons.Outlined.Schedule
+            }
+
+            ButtonGroup(
+                overflowIndicator = { state ->
+                    ButtonGroupDefaults.OverflowIndicator(menuState = state)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                if (!viewModel.isLoggedIn) {
-                    FilterChip(
-                        selected = showFavoritesOnly,
-                        onClick = { showFavoritesOnly = !showFavoritesOnly },
-                        label = { Text(viewModel.tr("recipes_page.favorites_filter")) },
-                        leadingIcon = {
-                            Icon(
-                                if (showFavoritesOnly) Icons.Filled.Favorite
-                                else Icons.Filled.FavoriteBorder,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp),
-                            )
-                        },
-                    )
-                }
-
-                val sortLabel = when (sortOption) {
-                    SortOption.TITLE -> viewModel.tr("recipes_page.sort_title")
-                    SortOption.DURATION -> viewModel.tr("recipes_page.sort_duration")
-                    SortOption.NONE -> viewModel.tr("recipes_page.sort_by_label")
-                }
-                FilterChip(
-                    selected = sortOption != SortOption.NONE,
-                    onClick = {
+                toggleableItem(
+                    checked = sortOption != SortOption.NONE,
+                    label = sortLabel,
+                    onCheckedChange = {
                         sortOption = when (sortOption) {
                             SortOption.NONE -> SortOption.TITLE
                             SortOption.TITLE -> SortOption.DURATION
                             SortOption.DURATION -> SortOption.NONE
                         }
                     },
-                    label = { Text(sortLabel) },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = when (sortOption) {
-                                SortOption.TITLE -> Icons.AutoMirrored.Outlined.Sort
-                                SortOption.DURATION -> Icons.Outlined.Schedule
-                                SortOption.NONE -> Icons.AutoMirrored.Outlined.Sort
-                            },
-                            contentDescription = null,
-                            modifier = Modifier.size(18.dp),
-                        )
-                    },
+                    icon = { Icon(sortIcon, contentDescription = null) },
                 )
-
-                FilterChip(
-                    selected = true,
-                    onClick = viewModel::toggleViewOption,
-                    label = {
-                        Text(
-                            if (viewModel.viewOption == ViewOption.LIST) {
-                                viewModel.tr("recipes_page.view_list")
-                            } else {
-                                viewModel.tr("recipes_page.view_grid")
-                            },
-                        )
+                toggleableItem(
+                    checked = viewModel.viewOption == ViewOption.GRID,
+                    label = if (viewModel.viewOption == ViewOption.LIST) {
+                        viewModel.tr("recipes_page.view_list")
+                    } else {
+                        viewModel.tr("recipes_page.view_grid")
                     },
-                    leadingIcon = {
+                    onCheckedChange = { viewModel.toggleViewOption() },
+                    icon = {
                         Icon(
                             imageVector = if (viewModel.viewOption == ViewOption.LIST) {
                                 Icons.AutoMirrored.Filled.List
                             } else {
-                                Icons.Default.GridView
+                                Icons.Filled.GridView
                             },
                             contentDescription = null,
-                            modifier = Modifier.size(18.dp),
                         )
                     },
                 )
@@ -305,19 +331,27 @@ private fun RecipesPage(viewModel: AppViewModel, onOpenRecipe: (String) -> Unit)
 
         when {
             viewModel.recipes.isEmpty() -> EmptyState(
-                text = viewModel.tr("inicial_screen.empty_list"),
+                title = viewModel.tr("inicial_screen.empty_list"),
+                icon = Icons.Outlined.RestaurantMenu,
                 modifier = Modifier.weight(1f),
-            )
-
-            displayedRecipes.isEmpty() -> EmptyState(
-                text = viewModel.tr("recipes_page.no_favorites"),
-                modifier = Modifier.weight(1f),
+                action = {
+                    FilledTonalButton(onClick = onAddRecipe) {
+                        Icon(Icons.Filled.Add, contentDescription = null)
+                        Spacer(Modifier.width(8.dp))
+                        Text(viewModel.tr("inicial_screen.fab_tooltip_add"))
+                    }
+                },
             )
 
             viewModel.viewOption == ViewOption.GRID -> LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
+                columns = GridCells.Adaptive(minSize = 160.dp),
                 modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 100.dp),
+                contentPadding = PaddingValues(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 8.dp,
+                    bottom = 120.dp,
+                ),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
@@ -325,6 +359,8 @@ private fun RecipesPage(viewModel: AppViewModel, onOpenRecipe: (String) -> Unit)
                     RecipeCard(
                         recipe = recipe,
                         viewOption = ViewOption.GRID,
+                        isFavorite = recipe.id in viewModel.favorites,
+                        language = viewModel.language,
                         onClick = { onOpenRecipe(recipe.id) },
                     )
                 }
@@ -332,16 +368,62 @@ private fun RecipesPage(viewModel: AppViewModel, onOpenRecipe: (String) -> Unit)
 
             else -> LazyColumn(
                 modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 100.dp),
+                contentPadding = PaddingValues(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 8.dp,
+                    bottom = 120.dp,
+                ),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 items(displayedRecipes, key = { it.id }) { recipe ->
                     RecipeCard(
                         recipe = recipe,
                         viewOption = ViewOption.LIST,
+                        isFavorite = recipe.id in viewModel.favorites,
+                        language = viewModel.language,
                         onClick = { onOpenRecipe(recipe.id) },
                     )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun FavoritesPage(
+    viewModel: AppViewModel,
+    onOpenRecipe: (String) -> Unit,
+    onExploreRecipes: () -> Unit,
+) {
+    val favoriteRecipes = viewModel.recipes.filter { it.id in viewModel.favorites }
+
+    if (favoriteRecipes.isEmpty()) {
+        EmptyState(
+            title = viewModel.tr("favorites_recipes_screen.no_favorites"),
+            icon = Icons.Outlined.FavoriteBorder,
+            action = {
+                FilledTonalButton(onClick = onExploreRecipes) {
+                    Icon(Icons.Outlined.RestaurantMenu, contentDescription = null)
+                    Spacer(Modifier.width(8.dp))
+                    Text(viewModel.tr("inicial_screen.title"))
+                }
+            },
+        )
+    } else {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp, 8.dp, 16.dp, 100.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            items(favoriteRecipes, key = { it.id }) { recipe ->
+                RecipeCard(
+                    recipe = recipe,
+                    viewOption = ViewOption.LIST,
+                    isFavorite = true,
+                    language = viewModel.language,
+                    onClick = { onOpenRecipe(recipe.id) },
+                )
             }
         }
     }
@@ -360,19 +442,19 @@ private fun ProfilePage(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
+                .padding(32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
             Image(
                 painter = painterResource(R.drawable.recipe_logo),
                 contentDescription = null,
-                modifier = Modifier.size(96.dp),
+                modifier = Modifier.size(104.dp),
             )
             Spacer(Modifier.height(24.dp))
             Text(
                 text = viewModel.tr("profile_page.sign_in_required"),
-                style = MaterialTheme.typography.displayMedium,
+                style = MaterialTheme.typography.headlineMediumEmphasized,
             )
             Spacer(Modifier.height(8.dp))
             Text(
@@ -380,11 +462,9 @@ private fun ProfilePage(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Spacer(Modifier.height(16.dp))
-            androidx.compose.material3.Button(
-                onClick = viewModel::signInWithGoogle,
-            ) {
-                Icon(Icons.Outlined.Person, contentDescription = null)
+            Spacer(Modifier.height(24.dp))
+            androidx.compose.material3.Button(onClick = viewModel::signInWithGoogle) {
+                Icon(Icons.Outlined.PersonAdd, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
                 Text(viewModel.tr("profile_page.sign_in_with_google"))
             }
@@ -399,209 +479,156 @@ private fun ProfilePage(
     ) {
         item {
             Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(onClick = onOpenProfileInfo),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                onClick = onOpenProfileInfo,
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.extraLarge,
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                ),
                 elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
             ) {
                 Row(
                     modifier = Modifier.padding(20.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .size(64.dp)
-                            .clip(CircleShape),
-                    ) {
-                        if (user.picture.isNullOrBlank()) {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                Icon(Icons.Outlined.Person, contentDescription = null)
+                    if (user.picture.isNullOrBlank()) {
+                        Surface(
+                            shape = CircleShape,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.12f),
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.size(64.dp),
+                        ) {
+                            Box(contentAlignment = Alignment.Center) {
+                                Icon(
+                                    Icons.Outlined.Person,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(32.dp),
+                                )
                             }
-                        } else {
-                            RecipeImage(
-                                path = user.picture,
-                                contentDescription = user.name,
-                                modifier = Modifier.fillMaxSize(),
-                            )
                         }
+                    } else {
+                        RecipeImage(
+                            path = user.picture,
+                            contentDescription = user.name,
+                            modifier = Modifier
+                                .size(64.dp)
+                                .clip(CircleShape),
+                        )
                     }
                     Spacer(Modifier.width(16.dp))
-                    Column {
+                    Column(modifier = Modifier.weight(1f)) {
                         Text(
                             text = user.name.ifBlank {
                                 viewModel.tr("profile_page.unknown_user")
                             },
-                            style = MaterialTheme.typography.displayMedium,
+                            style = MaterialTheme.typography.titleLargeEmphasized,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                         )
                         Spacer(Modifier.height(4.dp))
                         Text(
                             text = user.email,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
+                    Icon(
+                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = null,
+                    )
                 }
             }
         }
 
         item {
-            SettingsActionCard(
-                title = viewModel.tr("profile_page.favorite_recipes"),
-                subtitle = viewModel.tr("profile_page.favorite_recipes_description"),
-                icon = Icons.Outlined.FavoriteBorder,
-                onClick = onOpenFavorites,
+            Text(
+                text = viewModel.tr("profile_page.data_section"),
+                style = MaterialTheme.typography.titleLargeEmphasized,
+                modifier = Modifier.padding(start = 4.dp, top = 8.dp),
             )
         }
 
         item {
-            Card(
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-            ) {
-                Column {
-                    ListItem(
-                        headlineContent = {
-                            Text(
-                                viewModel.tr("profile_page.backup_recipes"),
-                                style = MaterialTheme.typography.bodyLarge,
-                            )
-                        },
-                        supportingContent = {
-                            Text(
-                                viewModel.tr("profile_page.backup_recipes_description"),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        },
-                        leadingContent = {
-                            Icon(
-                                Icons.Outlined.CloudUpload,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
-                            )
-                        },
-                        trailingContent = {
-                            Switch(
-                                checked = viewModel.autoSync,
-                                onCheckedChange = viewModel::toggleAutoSync,
-                            )
-                        },
-                    )
-
-                    if (viewModel.autoSync) {
-                        HorizontalCardDivider()
-                        ListItem(
-                            modifier = Modifier.clickable(onClick = onOpenSharedRecipes),
-                            headlineContent = {
-                                Text(
-                                    viewModel.tr("profile_page.shared_recipes"),
-                                    style = MaterialTheme.typography.bodyLarge,
-                                )
-                            },
-                            supportingContent = {
-                                Text(
-                                    viewModel.tr("profile_page.shared_recipes_description"),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
-                            },
-                            leadingContent = {
-                                Icon(
-                                    Icons.Outlined.Star,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                )
-                            },
+            ProfileCard {
+                SettingsRow(
+                    icon = Icons.Outlined.FavoriteBorder,
+                    title = viewModel.tr("profile_page.favorite_recipes"),
+                    supporting = viewModel.tr("profile_page.favorite_recipes_description"),
+                    onClick = onOpenFavorites,
+                    showChevron = true,
+                )
+                HorizontalCardDivider()
+                SettingsRow(
+                    icon = Icons.Outlined.CloudUpload,
+                    title = viewModel.tr("profile_page.backup_recipes"),
+                    supporting = viewModel.tr("profile_page.backup_recipes_description"),
+                    trailing = {
+                        Switch(
+                            checked = viewModel.autoSync,
+                            onCheckedChange = viewModel::toggleAutoSync,
                         )
-                    }
-
+                    },
+                )
+                if (viewModel.autoSync) {
                     HorizontalCardDivider()
-                    ListItem(
-                        modifier = Modifier.clickable(onClick = onOpenPublicSearch),
-                        headlineContent = {
-                            Text(
-                                viewModel.tr("profile_page.search_public_recipes"),
-                                style = MaterialTheme.typography.bodyLarge,
-                            )
-                        },
-                        supportingContent = {
-                            Text(
-                                viewModel.tr("profile_page.search_public_recipes_description"),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                        },
-                        leadingContent = {
-                            Icon(
-                                Icons.Outlined.Search,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.primary,
-                            )
-                        },
+                    SettingsRow(
+                        icon = Icons.Outlined.FolderShared,
+                        title = viewModel.tr("profile_page.shared_recipes"),
+                        supporting = viewModel.tr("profile_page.shared_recipes_description"),
+                        onClick = onOpenSharedRecipes,
+                        showChevron = true,
                     )
                 }
+                HorizontalCardDivider()
+                SettingsRow(
+                    icon = Icons.Outlined.Search,
+                    title = viewModel.tr("profile_page.search_public_recipes"),
+                    supporting = viewModel.tr("profile_page.search_public_recipes_description"),
+                    onClick = onOpenPublicSearch,
+                    showChevron = true,
+                )
             }
         }
 
         item {
-            SettingsActionCard(
-                title = viewModel.tr("profile_page.sign_out"),
-                subtitle = viewModel.tr("profile_page.sign_out_description"),
-                icon = Icons.AutoMirrored.Outlined.Logout,
-                onClick = {
-                    viewModel.showConfirmation(com.francids.recipes.data.ConfirmRequest(
-                        title = viewModel.tr("profile_page.sign_out_confirmation_title"),
-                        message = viewModel.tr("profile_page.sign_out_confirmation_message"),
-                        confirmLabel = viewModel.tr("ui_helpers.confirm"),
-                        cancelLabel = viewModel.tr("ui_helpers.cancel"),
-                        destructive = true,
-                        onConfirm = { viewModel.signOut() },
-                    ))
-                },
-            )
+            ProfileCard {
+                SettingsRow(
+                    icon = Icons.AutoMirrored.Outlined.Logout,
+                    title = viewModel.tr("profile_page.sign_out"),
+                    supporting = viewModel.tr("profile_page.sign_out_description"),
+                    onClick = {
+                        viewModel.showConfirmation(
+                            com.francids.recipes.data.ConfirmRequest(
+                                title = viewModel.tr("profile_page.sign_out_confirmation_title"),
+                                message = viewModel.tr("profile_page.sign_out_confirmation_message"),
+                                confirmLabel = viewModel.tr("ui_helpers.confirm"),
+                                cancelLabel = viewModel.tr("ui_helpers.cancel"),
+                                destructive = true,
+                                onConfirm = { viewModel.signOut() },
+                            ),
+                        )
+                    },
+                    iconContainerColor = MaterialTheme.colorScheme.errorContainer,
+                    iconContentColor = MaterialTheme.colorScheme.onErrorContainer,
+                )
+            }
         }
     }
 }
 
 @Composable
-fun SettingsActionCard(
-    title: String,
-    subtitle: String,
-    icon: ImageVector,
-    onClick: () -> Unit,
-) {
+private fun ProfileCard(content: @Composable () -> Unit) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
-        ListItem(
-            headlineContent = { Text(title, style = MaterialTheme.typography.bodyLarge) },
-            supportingContent = {
-                Text(
-                    subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            },
-            leadingContent = {
-                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-            },
-            trailingContent = {
-                Icon(
-                    Icons.Filled.ChevronRight,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(18.dp),
-                )
-            },
-        )
+        Column { content() }
     }
 }
 
@@ -612,4 +639,3 @@ fun HorizontalCardDivider() {
         color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
     )
 }
-
