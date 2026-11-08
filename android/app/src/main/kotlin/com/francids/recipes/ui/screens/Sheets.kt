@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +24,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.QrCode2
@@ -43,13 +44,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.francids.recipes.R
 import com.francids.recipes.ui.AppViewModel
 import com.francids.recipes.ui.components.AppCard
 import com.francids.recipes.ui.components.AppDivider
@@ -174,7 +178,7 @@ fun ShareRecipeSheet(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = { showQr = false }) {
                         Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
+                            Icons.AutoMirrored.Filled.ArrowBackIos,
                             contentDescription = null,
                             tint = palette.textPrimary,
                         )
@@ -306,16 +310,30 @@ private fun QrCode(url: String, contentDescription: String) {
             contentAlignment = Alignment.Center,
         ) {
             if (bitmap != null) {
-                Image(
-                    bitmap = bitmap.asImageBitmap(),
-                    contentDescription = contentDescription,
-                    contentScale = ContentScale.Fit,
+                Box(
                     modifier = Modifier
                         .size(240.dp)
                         .clip(RoundedCornerShape(8.dp))
                         .background(palette.surface)
+                        .border(1.dp, palette.border, RoundedCornerShape(8.dp))
                         .padding(12.dp),
-                )
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Image(
+                        bitmap = bitmap.asImageBitmap(),
+                        contentDescription = contentDescription,
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                    Image(
+                        painter = painterResource(R.drawable.recipe_logo),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(Color.White, RoundedCornerShape(6.dp))
+                            .padding(3.dp),
+                    )
+                }
             } else {
                 Text(
                     text = contentDescription,

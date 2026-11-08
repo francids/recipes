@@ -124,7 +124,7 @@ fun SettingsScreen(
             }
 
             item {
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(16.dp))
                 SectionHeading(viewModel.tr("settings_screen.language_section"))
             }
             item {
@@ -140,7 +140,7 @@ fun SettingsScreen(
             }
 
             item {
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(16.dp))
                 SectionHeading(viewModel.tr("profile_page.data_section"))
             }
             item {
@@ -157,6 +157,7 @@ fun SettingsScreen(
                                         message = viewModel.tr("profile_page.export_confirmation_message"),
                                         confirmLabel = viewModel.tr("ui_helpers.confirm"),
                                         cancelLabel = viewModel.tr("ui_helpers.cancel"),
+                                        animationAsset = "lottie/save_file.json",
                                         onConfirm = {
                                             val stamp = SimpleDateFormat(
                                                 "yyyyMMdd_HHmmss",
@@ -181,6 +182,7 @@ fun SettingsScreen(
                                         message = viewModel.tr("profile_page.import_confirmation_message"),
                                         confirmLabel = viewModel.tr("ui_helpers.confirm"),
                                         cancelLabel = viewModel.tr("ui_helpers.cancel"),
+                                        animationAsset = "lottie/load_file.json",
                                         onConfirm = {
                                             importLauncher.launch(
                                                 arrayOf(
@@ -200,7 +202,7 @@ fun SettingsScreen(
             }
 
             item {
-                Spacer(Modifier.height(8.dp))
+                Spacer(Modifier.height(16.dp))
                 SectionHeading(viewModel.tr("settings_screen.about_section"))
             }
             item {

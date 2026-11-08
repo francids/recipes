@@ -130,6 +130,7 @@ fun RecipeDetailScreen(
                                         confirmLabel = viewModel.tr("recipe_screen.delete_button"),
                                         cancelLabel = viewModel.tr("recipe_screen.cancel_button"),
                                         destructive = true,
+                                        animationAsset = "lottie/delete.json",
                                         onConfirm = {
                                             viewModel.deleteRecipe(recipe, onFinished = onBack)
                                         },

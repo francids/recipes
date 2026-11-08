@@ -96,6 +96,7 @@ fun AddRecipeScreen(
                     confirmLabel = viewModel.tr("ui_helpers.confirm"),
                     cancelLabel = viewModel.tr("ui_helpers.cancel"),
                     destructive = true,
+                    animationAsset = "lottie/back.json",
                     onConfirm = {
                         viewModel.resetDraft()
                         onBack()
@@ -130,11 +131,13 @@ fun AddRecipeScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = stepTitles[currentStep],
                 style = MaterialTheme.typography.displayMedium.copy(fontWeight = FontWeight.Bold),
                 color = palette.textPrimary,
+                textAlign = TextAlign.Center,
             )
             Text(
                 text = viewModel.tr(
@@ -144,6 +147,7 @@ fun AddRecipeScreen(
                 ),
                 style = MaterialTheme.typography.bodyLarge,
                 color = palette.textTertiary,
+                textAlign = TextAlign.Center,
             )
         }
 

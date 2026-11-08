@@ -55,6 +55,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
@@ -296,6 +297,9 @@ private fun GridRecipeCard(recipe: Recipe, onClick: () -> Unit) {
                             Color.Black.copy(alpha = 0.70f),
                             Color.Transparent,
                         ),
+                        startY = 0f,
+                        endY = Float.POSITIVE_INFINITY,
+                        tileMode = androidx.compose.ui.graphics.TileMode.Clamp,
                     ),
                 )
                 .padding(8.dp),
@@ -303,7 +307,7 @@ private fun GridRecipeCard(recipe: Recipe, onClick: () -> Unit) {
             Text(
                 text = recipe.title,
                 style = MaterialTheme.typography.displayMedium.copy(
-                    fontSize = MaterialTheme.typography.displayMedium.fontSize,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                 ),
                 color = Color.White,
@@ -440,7 +444,7 @@ fun SectionTitle(text: String) {
                 .width(2.dp)
                 .height(20.dp)
                 .clip(CardShape)
-                .background(palette.primary),
+                .background(palette.textTertiary),
         )
         Spacer(Modifier.width(10.dp))
         Text(
@@ -560,7 +564,7 @@ fun ModernTextField(
                 unfocusedContainerColor = palette.surface,
                 disabledContainerColor = palette.surface,
                 focusedBorderColor = palette.primary,
-                unfocusedBorderColor = palette.border,
+                unfocusedBorderColor = palette.textPrimary.copy(alpha = 0.50f),
                 disabledBorderColor = palette.border,
             ),
         )

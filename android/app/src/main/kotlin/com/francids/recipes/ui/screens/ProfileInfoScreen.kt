@@ -189,6 +189,7 @@ fun ProfileInfoScreen(
                                     confirmLabel = viewModel.tr("profile_info_screen.delete"),
                                     cancelLabel = viewModel.tr("profile_info_screen.cancel"),
                                     destructive = true,
+                                    animationAsset = "lottie/delete.json",
                                     onConfirm = {
                                         viewModel.deleteAccount(onFinished = onBack)
                                     },

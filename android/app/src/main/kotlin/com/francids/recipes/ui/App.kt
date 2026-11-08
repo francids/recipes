@@ -20,22 +20,23 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.outlined.HelpOutline
-import androidx.compose.material.icons.outlined.WarningAmber
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.ui.graphics.Color
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.font.FontWeight
@@ -44,6 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.core.view.WindowCompat
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -102,9 +106,11 @@ fun RecipesApp(viewModel: AppViewModel) {
             }
         }
         val snackbarHostState = remember { SnackbarHostState() }
+        var lastMessageIsError by remember { mutableStateOf(false) }
 
         LaunchedEffect(viewModel.message) {
             val current = viewModel.message ?: return@LaunchedEffect
+            lastMessageIsError = current.isError
             snackbarHostState.showSnackbar(current.text)
             viewModel.consumeMessage()
         }
@@ -223,13 +229,31 @@ fun RecipesApp(viewModel: AppViewModel) {
                     .align(Alignment.BottomCenter)
                     .padding(start = 16.dp, end = 16.dp, bottom = 104.dp),
             ) { data ->
-                Snackbar(
-                    snackbarData = data,
-                    shape = RoundedCornerShape(10.dp),
-                    containerColor = palette.snackbarBackground,
-                    contentColor = palette.snackbarText,
-                    actionColor = DeepOrange,
-                )
+                Row(
+                    modifier = Modifier
+                        .background(palette.snackbarBackground, RoundedCornerShape(10.dp))
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        imageVector = if (lastMessageIsError) {
+                            Icons.Outlined.ErrorOutline
+                        } else {
+                            Icons.Filled.CheckCircle
+                        },
+                        contentDescription = null,
+                        tint = if (lastMessageIsError) Color(0xFFFF5252) else Color(0xFF4CAF50),
+                        modifier = Modifier.size(20.dp),
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = data.visuals.message,
+                        style = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.Medium,
+                        ),
+                        color = palette.snackbarText,
+                    )
+                }
             }
         }
 
@@ -246,28 +270,26 @@ fun RecipesApp(viewModel: AppViewModel) {
 @Composable
 private fun LoadingDialog(request: LoadingRequest) {
     val palette = AppTheme.palette
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.Asset(request.animationAsset),
+    )
     Dialog(
         onDismissRequest = {},
         properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth(0.85f)
+                .fillMaxWidth(0.8f)
                 .background(palette.surface, RoundedCornerShape(16.dp))
                 .border(0.5.dp, palette.border, RoundedCornerShape(16.dp))
                 .padding(16.dp),
             contentAlignment = Alignment.Center,
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Box(
-                    modifier = Modifier.size(96.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(48.dp),
-                        color = DeepOrange,
-                    )
-                }
+                LottieAnimation(
+                    composition = composition,
+                    modifier = Modifier.size(120.dp),
+                )
                 Spacer(Modifier.height(16.dp))
                 Text(
                     text = request.title,
@@ -292,27 +314,24 @@ private fun LoadingDialog(request: LoadingRequest) {
 @Composable
 private fun ConfirmationDialog(request: ConfirmRequest, onDismiss: () -> Unit) {
     val palette = AppTheme.palette
+    val composition by rememberLottieComposition(
+        LottieCompositionSpec.Asset(request.animationAsset),
+    )
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth(0.85f)
+                .fillMaxWidth(0.8f)
                 .background(palette.surface, RoundedCornerShape(16.dp))
                 .border(0.5.dp, palette.border, RoundedCornerShape(16.dp))
                 .padding(16.dp),
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Icon(
-                    imageVector = if (request.destructive) {
-                        Icons.Outlined.WarningAmber
-                    } else {
-                        Icons.AutoMirrored.Outlined.HelpOutline
-                    },
-                    contentDescription = null,
-                    tint = if (request.destructive) Color.Red else DeepOrange,
-                    modifier = Modifier.size(64.dp),
+                LottieAnimation(
+                    composition = composition,
+                    modifier = Modifier.size(120.dp),
                 )
                 Spacer(Modifier.height(16.dp))
                 Text(

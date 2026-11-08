@@ -83,10 +83,11 @@ Montserrat, con la escala original:
 - Contraste de texto comprobado sobre blanco, `#FAFAFA`, `#1E1E1E` y `#121212`.
 - El texto no depende de tamaños fijos de contenedores.
 
-## Diferencias técnicas inevitables
+## Animaciones y comportamiento
 
-- Las animaciones Lottie originales se sustituyen por iconos/progreso nativos.
-- El reordenado por arrastre de ingredientes se implementa con gesto de pulsación larga.
+- Se reutilizan los archivos Lottie originales (`profile`, `alert`, `delete`, `exit`, `back`,
+  `save_file`, `load_file`, `sync` y `loading`) en perfil y diálogos.
+- El reordenado de ingredientes y pasos se hace manteniendo pulsada la manija de arrastre.
 - Las transiciones de página se aproximan con fundidos cortos.
 - La lógica, persistencia, API, enlaces profundos y funcionalidad se mantienen.
 

@@ -4,7 +4,6 @@ package com.francids.recipes.ui.screens
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -23,15 +22,20 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
@@ -68,6 +72,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -79,15 +84,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.francids.recipes.R
+import androidx.compose.ui.unit.sp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.francids.recipes.data.SortOption
 import com.francids.recipes.data.ViewOption
 import com.francids.recipes.ui.AppViewModel
@@ -116,6 +126,7 @@ fun HomeScreen(
     val palette = AppTheme.palette
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
     var menuExpanded by remember { mutableStateOf(false) }
+    var recipesAtTop by remember { mutableStateOf(true) }
     val statusBarTop = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
     val titles = listOf(
         viewModel.tr("inicial_screen.title"),
@@ -127,6 +138,7 @@ fun HomeScreen(
             0 -> RecipesPage(
                 viewModel = viewModel,
                 onOpenRecipe = onOpenRecipe,
+                onAtTopChanged = { recipesAtTop = it },
                 modifier = Modifier.padding(top = statusBarTop + 64.dp),
             )
 
@@ -149,35 +161,43 @@ fun HomeScreen(
             menuContentDescription = viewModel.tr("inicial_screen.menu_tooltip"),
             onReload = { viewModel.refreshRecipes() },
             onOpenSettings = onOpenSettings,
-            showBorder = selectedTab == 1,
+            showBorder = selectedTab == 1 || recipesAtTop,
+            solidBackground = selectedTab == 1,
         )
 
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .height(140.dp)
-                .background(
-                    Brush.verticalGradient(
-                        colors = listOf(
-                            palette.background.copy(alpha = 0f),
-                            palette.background.copy(alpha = 0.55f),
-                            palette.background,
+        if (selectedTab == 0) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .height(140.dp)
+                    .background(
+                        Brush.verticalGradient(
+                            0f to palette.background.copy(alpha = 0f),
+                            0.1f to palette.background.copy(alpha = 0.07f),
+                            0.2f to palette.background.copy(alpha = 0.14f),
+                            0.3f to palette.background.copy(alpha = 0.21f),
+                            0.4f to palette.background.copy(alpha = 0.28f),
+                            0.5f to palette.background.copy(alpha = 0.42f),
+                            0.6f to palette.background.copy(alpha = 0.56f),
+                            0.7f to palette.background.copy(alpha = 0.70f),
+                            0.8f to palette.background.copy(alpha = 0.82f),
+                            1f to palette.background,
                         ),
                     ),
-                ),
-        )
+            )
+        }
 
         BoxWithConstraints(
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .padding(start = 20.dp, end = 20.dp, bottom = 32.dp),
+                .fillMaxWidth(),
         ) {
             val pillWidth = maxWidth * 0.6f
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp, bottom = 48.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 FloatingTabBar(
@@ -211,19 +231,32 @@ private fun HomeTopBar(
     onReload: () -> Unit,
     onOpenSettings: () -> Unit,
     showBorder: Boolean,
+    solidBackground: Boolean,
 ) {
     val palette = AppTheme.palette
+    val density = LocalDensity.current
+    val titleShadow = Shadow(
+        color = palette.background.copy(
+            alpha = if (palette.isDark) 0.59f else 0.39f,
+        ),
+        offset = with(density) { Offset(15.dp.toPx(), 15.dp.toPx()) },
+        blurRadius = with(density) { 32.dp.toPx() },
+    )
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(
-                Brush.verticalGradient(
-                    colors = listOf(
-                        palette.background,
-                        palette.background.copy(alpha = 0.30f),
-                        palette.background.copy(alpha = 0f),
-                    ),
-                ),
+            .then(
+                if (solidBackground) {
+                    Modifier.background(palette.background)
+                } else {
+                    Modifier.background(
+                        Brush.verticalGradient(
+                            0f to palette.background,
+                            0.6f to palette.background.copy(alpha = 0.30f),
+                            1f to palette.background.copy(alpha = 0f),
+                        ),
+                    )
+                },
             ),
     ) {
         Spacer(Modifier.windowInsetsTopHeight(WindowInsets.statusBars))
@@ -238,6 +271,7 @@ private fun HomeTopBar(
                 text = title,
                 style = MaterialTheme.typography.displaySmall.copy(
                     fontWeight = FontWeight.Bold,
+                    shadow = titleShadow,
                 ),
                 color = palette.textPrimary,
                 maxLines = 1,
@@ -258,7 +292,7 @@ private fun HomeTopBar(
                     shape = RoundedCornerShape(10.dp),
                     containerColor = palette.popup,
                     tonalElevation = 0.dp,
-                    shadowElevation = 4.dp,
+                    shadowElevation = 2.dp,
                     border = BorderStroke(0.5.dp, palette.border),
                 ) {
                     MenuRow(
@@ -305,9 +339,9 @@ private fun MenuRow(icon: ImageVector, text: String, onClick: () -> Unit) {
             imageVector = icon,
             contentDescription = null,
             tint = palette.textPrimary,
-            modifier = Modifier.size(20.dp),
+            modifier = Modifier.size(24.dp),
         )
-        Spacer(Modifier.width(12.dp))
+        Spacer(Modifier.width(8.dp))
         Text(
             text = text,
             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Medium),
@@ -324,17 +358,26 @@ private fun FloatingTabBar(
     modifier: Modifier = Modifier,
 ) {
     val palette = AppTheme.palette
+    val navBorder = if (palette.isDark) Color(0x19FFFFFF) else Color(0x19000000)
     Box(
         modifier = modifier
             .shadow(
                 elevation = 8.dp,
                 shape = RoundedCornerShape(10.dp),
-                ambientColor = palette.shadow,
-                spotColor = palette.shadow,
+                ambientColor = if (palette.isDark) {
+                    Color.Black.copy(alpha = 0.30f)
+                } else {
+                    DeepOrange.copy(alpha = 0.30f)
+                },
+                spotColor = if (palette.isDark) {
+                    Color.Black.copy(alpha = 0.30f)
+                } else {
+                    DeepOrange.copy(alpha = 0.30f)
+                },
             )
             .clip(RoundedCornerShape(10.dp))
             .background(palette.navBackground)
-            .border(0.5.dp, palette.border, RoundedCornerShape(10.dp))
+            .border(0.5.dp, navBorder, RoundedCornerShape(10.dp))
             .padding(4.dp),
     ) {
         Row(modifier = Modifier.fillMaxSize()) {
@@ -365,14 +408,14 @@ private fun TabItem(
     modifier: Modifier = Modifier,
 ) {
     val palette = AppTheme.palette
-    Row(
+    Column(
         modifier = modifier
             .fillMaxHeight()
             .clip(RoundedCornerShape(6.dp))
             .background(if (selected) palette.primary else Color.Transparent)
             .clickable(onClick = onClick),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
     ) {
         Icon(
             imageVector = icon,
@@ -380,10 +423,13 @@ private fun TabItem(
             tint = if (selected) Color.White else palette.textTertiary,
             modifier = Modifier.size(20.dp),
         )
-        Spacer(Modifier.width(6.dp))
+        Spacer(Modifier.height(4.dp))
         Text(
             text = title,
-            style = MaterialTheme.typography.labelMedium,
+            style = MaterialTheme.typography.labelMedium.copy(
+                fontSize = 12.sp,
+                fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+            ),
             color = if (selected) Color.White else palette.textTertiary,
             maxLines = 1,
         )
@@ -415,11 +461,23 @@ private fun PressableFab(onClick: () -> Unit, contentDescription: String) {
 private fun RecipesPage(
     viewModel: AppViewModel,
     onOpenRecipe: (String) -> Unit,
+    onAtTopChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val palette = AppTheme.palette
     var sortOption by rememberSaveable { mutableStateOf(SortOption.NONE) }
     var showFavoritesOnly by rememberSaveable { mutableStateOf(false) }
+    val navigationBottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    val listState = rememberLazyListState()
+    val gridState = rememberLazyGridState()
+    val isAtTop = if (viewModel.viewOption == ViewOption.GRID) {
+        gridState.firstVisibleItemIndex == 0 && gridState.firstVisibleItemScrollOffset == 0
+    } else {
+        listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset == 0
+    }
+    LaunchedEffect(isAtTop, viewModel.recipes.isEmpty()) {
+        onAtTopChanged(viewModel.recipes.isEmpty() || isAtTop)
+    }
 
     val displayedRecipes = remember(viewModel.recipes, viewModel.favorites, sortOption, showFavoritesOnly) {
         val filtered = if (showFavoritesOnly) {
@@ -434,83 +492,46 @@ private fun RecipesPage(
         }
     }
 
-    Column(modifier = modifier.fillMaxSize()) {
-        if (viewModel.recipes.isNotEmpty()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                if (!viewModel.isLoggedIn) {
-                    AppChip(
-                        text = viewModel.tr("recipes_page.favorites_filter"),
-                        selected = showFavoritesOnly,
-                        onClick = { showFavoritesOnly = !showFavoritesOnly },
-                        leadingIcon = Icons.Outlined.FavoriteBorder,
-                    )
-                }
-                AppChip(
-                    text = when (sortOption) {
-                        SortOption.TITLE -> viewModel.tr("recipes_page.sort_title")
-                        SortOption.DURATION -> viewModel.tr("recipes_page.sort_duration")
-                        SortOption.NONE -> viewModel.tr("recipes_page.sort_by_label")
-                    },
-                    selected = sortOption != SortOption.NONE,
-                    onClick = {
-                        sortOption = when (sortOption) {
-                            SortOption.NONE -> SortOption.TITLE
-                            SortOption.TITLE -> SortOption.DURATION
-                            SortOption.DURATION -> SortOption.NONE
-                        }
-                    },
-                    leadingIcon = if (sortOption == SortOption.DURATION) {
-                        Icons.Outlined.Schedule
-                    } else {
-                        Icons.AutoMirrored.Outlined.Sort
-                    },
-                )
-                AppChip(
-                    text = if (viewModel.viewOption == ViewOption.LIST) {
-                        viewModel.tr("recipes_page.view_list")
-                    } else {
-                        viewModel.tr("recipes_page.view_grid")
-                    },
-                    selected = true,
-                    onClick = viewModel::toggleViewOption,
-                    leadingIcon = if (viewModel.viewOption == ViewOption.LIST) {
-                        Icons.AutoMirrored.Filled.List
-                    } else {
-                        Icons.Filled.GridView
-                    },
-                )
-            }
-        }
-
-        if (viewModel.recipes.isEmpty()) {
-            EmptyState(
+    Box(modifier = modifier.fillMaxSize()) {
+        when {
+            viewModel.recipes.isEmpty() -> EmptyState(
                 text = viewModel.tr("inicial_screen.empty_list"),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxSize(),
             )
-        } else if (displayedRecipes.isEmpty()) {
-            EmptyState(
+
+            displayedRecipes.isEmpty() -> EmptyState(
                 text = viewModel.tr("recipes_page.no_favorites"),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.fillMaxSize(),
             )
-        } else if (viewModel.viewOption == ViewOption.GRID) {
-            LazyVerticalGrid(
+
+            viewModel.viewOption == ViewOption.GRID -> LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
-                modifier = Modifier.weight(1f),
+                state = gridState,
+                modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(
                     start = 16.dp,
                     end = 16.dp,
                     top = 8.dp,
-                    bottom = 140.dp,
+                    bottom = 96.dp + navigationBottom,
                 ),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    RecipeFilterRow(
+                        viewModel = viewModel,
+                        sortOption = sortOption,
+                        showFavoritesOnly = showFavoritesOnly,
+                        onToggleFavorites = { showFavoritesOnly = !showFavoritesOnly },
+                        onCycleSort = {
+                            sortOption = when (sortOption) {
+                                SortOption.NONE -> SortOption.TITLE
+                                SortOption.TITLE -> SortOption.DURATION
+                                SortOption.DURATION -> SortOption.NONE
+                            }
+                        },
+                    )
+                }
                 items(displayedRecipes, key = { it.id }) { recipe ->
                     RecipeCard(
                         recipe = recipe,
@@ -519,17 +540,33 @@ private fun RecipesPage(
                     )
                 }
             }
-        } else {
-            LazyColumn(
-                modifier = Modifier.weight(1f),
+
+            else -> LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(
                     start = 16.dp,
                     end = 16.dp,
                     top = 8.dp,
-                    bottom = 140.dp,
+                    bottom = 100.dp + navigationBottom,
                 ),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
+                item {
+                    RecipeFilterRow(
+                        viewModel = viewModel,
+                        sortOption = sortOption,
+                        showFavoritesOnly = showFavoritesOnly,
+                        onToggleFavorites = { showFavoritesOnly = !showFavoritesOnly },
+                        onCycleSort = {
+                            sortOption = when (sortOption) {
+                                SortOption.NONE -> SortOption.TITLE
+                                SortOption.TITLE -> SortOption.DURATION
+                                SortOption.DURATION -> SortOption.NONE
+                            }
+                        },
+                    )
+                }
                 items(displayedRecipes, key = { it.id }) { recipe ->
                     RecipeCard(
                         recipe = recipe,
@@ -539,6 +576,60 @@ private fun RecipesPage(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun RecipeFilterRow(
+    viewModel: AppViewModel,
+    sortOption: SortOption,
+    showFavoritesOnly: Boolean,
+    onToggleFavorites: () -> Unit,
+    onCycleSort: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState())
+            .padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        if (!viewModel.isLoggedIn) {
+            AppChip(
+                text = viewModel.tr("recipes_page.favorites_filter"),
+                selected = showFavoritesOnly,
+                onClick = onToggleFavorites,
+                leadingIcon = Icons.Outlined.FavoriteBorder,
+            )
+        }
+        AppChip(
+            text = when (sortOption) {
+                SortOption.TITLE -> viewModel.tr("recipes_page.sort_title")
+                SortOption.DURATION -> viewModel.tr("recipes_page.sort_duration")
+                SortOption.NONE -> viewModel.tr("recipes_page.sort_by_label")
+            },
+            selected = sortOption != SortOption.NONE,
+            onClick = onCycleSort,
+            leadingIcon = if (sortOption == SortOption.DURATION) {
+                Icons.Outlined.Schedule
+            } else {
+                Icons.AutoMirrored.Outlined.Sort
+            },
+        )
+        AppChip(
+            text = if (viewModel.viewOption == ViewOption.LIST) {
+                viewModel.tr("recipes_page.view_list")
+            } else {
+                viewModel.tr("recipes_page.view_grid")
+            },
+            selected = true,
+            onClick = viewModel::toggleViewOption,
+            leadingIcon = if (viewModel.viewOption == ViewOption.LIST) {
+                Icons.AutoMirrored.Filled.List
+            } else {
+                Icons.Filled.GridView
+            },
+        )
     }
 }
 
@@ -553,6 +644,10 @@ private fun ProfilePage(
 ) {
     val palette = AppTheme.palette
     val user = viewModel.user
+    val navigationBottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+    val profileComposition by rememberLottieComposition(
+        LottieCompositionSpec.Asset("lottie/profile.json"),
+    )
     if (user == null) {
         Column(
             modifier = modifier
@@ -561,9 +656,8 @@ private fun ProfilePage(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
-            Image(
-                painter = painterResource(R.drawable.recipe_logo),
-                contentDescription = null,
+            LottieAnimation(
+                composition = profileComposition,
                 modifier = Modifier.size(80.dp),
             )
             Spacer(Modifier.height(24.dp))
@@ -592,7 +686,12 @@ private fun ProfilePage(
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 140.dp),
+        contentPadding = PaddingValues(
+            start = 16.dp,
+            end = 16.dp,
+            top = 8.dp,
+            bottom = 100.dp + navigationBottom,
+        ),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         item {
@@ -723,6 +822,7 @@ private fun ProfilePage(
                                 confirmLabel = viewModel.tr("ui_helpers.confirm"),
                                 cancelLabel = viewModel.tr("ui_helpers.cancel"),
                                 destructive = true,
+                                animationAsset = "lottie/exit.json",
                                 onConfirm = { viewModel.signOut() },
                             ),
                         )

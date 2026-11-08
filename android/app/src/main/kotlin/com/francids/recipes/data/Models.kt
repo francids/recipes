@@ -134,10 +134,15 @@ data class ConfirmRequest(
     val confirmLabel: String,
     val cancelLabel: String,
     val destructive: Boolean = false,
+    val animationAsset: String = "lottie/alert.json",
     val onConfirm: () -> Unit,
 )
 
-data class LoadingRequest(val title: String, val message: String)
+data class LoadingRequest(
+    val title: String,
+    val message: String,
+    val animationAsset: String = "lottie/loading.json",
+)
 
 sealed interface DeepLinkTarget {
     data class LocalRecipe(val recipeId: String) : DeepLinkTarget
