@@ -12,7 +12,7 @@ dirigir la atención y agrupar información. En Recipes se aplican así:
 | Principio | Decisión de diseño |
 | --- | --- |
 | **Jerarquía** | Títulos con estilos `*Emphasized`; cuerpo con estilos M3 de lectura. La acción principal de cada pantalla es única. |
-| **Color** | Paleta completa generada desde el naranja de marca (`#FF5722`) con acentos teal y azul. Se usan pares `on*` sobre `*Container` para garantizar contraste. |
+| **Color** | Paleta completa generada desde el naranja de marca (`#FF5722`) con el algoritmo oficial `SchemeFidelity`. Los roles secundarios y terciarios se derivan del mismo color fuente. Se usan pares `on*` sobre `*Container` para garantizar contraste. |
 | **Contención** | Tarjetas tonales (`surfaceContainerLow`) con radios grandes, en lugar de bordes y sombras fuertes. |
 | **Forma** | Escala expresiva: 8/12/16/24/32 dp. Las tarjetas principales usan 24–32 dp; los controles usan la forma dinámica de los componentes M3. |
 | **Movimiento** | `MotionScheme.expressive()` global; transiciones de pasos con especificaciones de efectos del tema; morphing nativo de botones, toolbar y loading indicator. |
@@ -34,19 +34,33 @@ dirigir la atención y agrupar información. En Recipes se aplican así:
 
 ## Color y contraste
 
-La paleta se generó con `material-color-utilities` a partir del color de marca y se
-revisaron los ratios de contraste de los pares principales:
+### Origen exacto de la paleta
+
+- Color fuente de marca: `#FF5722`.
+- Librería: `@material/material-color-utilities`.
+- Esquema: `SchemeFidelity` (el modo de fidelidad de marca de Material Theme Builder).
+- Nivel de contraste: `0.0`.
+- Se generaron los roles claros y oscuros desde ese único color fuente, sin reemplazar
+  manualmente secondary/tertiary por colores ajenos a la paleta.
+
+```text
+source      #FF5722
+algorithm   SchemeFidelity
+contrast    0.0
+```
+
+La paleta se revisó con los ratios de contraste de los pares principales:
 
 | Par | Ratio |
 | --- | --- |
-| `onPrimaryContainer` / `primaryContainer` (claro) | 5.72:1 |
-| `onSecondaryContainer` / `secondaryContainer` (claro) | 5.81:1 |
-| `onTertiaryContainer` / `tertiaryContainer` (claro) | 5.80:1 |
-| `onPrimaryContainer` / `primaryContainer` (oscuro) | 5.21:1 |
-| `onSecondaryContainer` / `secondaryContainer` (oscuro) | 5.23:1 |
-| `onTertiaryContainer` / `tertiaryContainer` (oscuro) | 5.22:1 |
-| `onSurfaceVariant` / `surface` (claro) | 8.86:1 |
-| `onSurface` / `surface` (oscuro) | 15.89:1 |
+| `onPrimaryContainer` / `primaryContainer` (claro) | 4.54:1 |
+| `onSecondaryContainer` / `secondaryContainer` (claro) | 4.57:1 |
+| `onTertiaryContainer` / `tertiaryContainer` (claro) | 4.56:1 |
+| `onPrimaryContainer` / `primaryContainer` (oscuro) | 4.54:1 |
+| `onSecondaryContainer` / `secondaryContainer` (oscuro) | 4.57:1 |
+| `onTertiaryContainer` / `tertiaryContainer` (oscuro) | 4.55:1 |
+| `onSurfaceVariant` / `surface` (claro) | 8.94:1 |
+| `onSurface` / `surface` (oscuro) | 14.32:1 |
 
 Todos los pares superan el mínimo AA de 4.5:1 para texto normal.
 
