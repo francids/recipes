@@ -10,7 +10,6 @@ import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -28,15 +28,12 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.QrCode2
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Switch
+import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -54,7 +51,11 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.francids.recipes.ui.AppViewModel
+import com.francids.recipes.ui.components.AppCard
+import com.francids.recipes.ui.components.AppDivider
 import com.francids.recipes.ui.components.SettingsRow
+import com.francids.recipes.ui.theme.AppTheme
+import com.francids.recipes.ui.theme.DeepOrange
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
@@ -79,9 +80,10 @@ fun LanguageSheet(
     viewModel: AppViewModel,
     onDismiss: () -> Unit,
 ) {
+    val palette = AppTheme.palette
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        containerColor = palette.surface,
     ) {
         Column(
             modifier = Modifier
@@ -92,57 +94,55 @@ fun LanguageSheet(
         ) {
             Text(
                 text = viewModel.tr("settings_screen.language"),
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(start = 4.dp, bottom = 12.dp),
+                style = MaterialTheme.typography.displayMedium,
+                color = palette.textPrimary,
+                modifier = Modifier.padding(start = 2.dp, bottom = 16.dp),
             )
 
-            languages.forEach { language ->
-                val selected = viewModel.language == language.code
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(MaterialTheme.shapes.large)
-                        .background(
-                            if (selected) {
-                                MaterialTheme.colorScheme.secondaryContainer
-                            } else {
-                                MaterialTheme.colorScheme.surfaceContainerLow
-                            },
-                        )
-                        .selectable(
-                            selected = selected,
-                            role = Role.RadioButton,
-                            onClick = {
-                                viewModel.changeLanguage(language.code)
-                                onDismiss()
-                            },
-                        )
-                        .padding(horizontal = 8.dp, vertical = 6.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    RadioButton(
-                        selected = selected,
-                        onClick = null,
-                    )
-                    Text(
-                        text = flagEmoji(language.flagCode),
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(horizontal = 8.dp),
-                    )
-                    Text(
-                        text = language.name,
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
-                        color = if (selected) {
-                            MaterialTheme.colorScheme.onSecondaryContainer
-                        } else {
-                            MaterialTheme.colorScheme.onSurface
-                        },
-                    )
+            AppCard(modifier = Modifier.fillMaxWidth()) {
+                Column {
+                    languages.forEachIndexed { index, language ->
+                        val selected = viewModel.language == language.code
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .selectable(
+                                    selected = selected,
+                                    role = Role.RadioButton,
+                                    onClick = {
+                                        viewModel.changeLanguage(language.code)
+                                        onDismiss()
+                                    },
+                                )
+                                .padding(horizontal = 8.dp, vertical = 4.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            RadioButton(
+                                selected = selected,
+                                onClick = null,
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = DeepOrange,
+                                    unselectedColor = palette.textTertiary,
+                                ),
+                            )
+                            Text(
+                                text = flagEmoji(language.flagCode),
+                                style = MaterialTheme.typography.bodyLarge,
+                                modifier = Modifier.padding(horizontal = 8.dp),
+                            )
+                            Text(
+                                text = language.name,
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = if (selected) FontWeight.Medium else FontWeight.Normal,
+                                color = palette.textPrimary,
+                            )
+                        }
+                        if (index < languages.lastIndex) {
+                            AppDivider()
+                        }
+                    }
                 }
-                Spacer(Modifier.height(4.dp))
             }
-
         }
     }
 }
@@ -153,6 +153,7 @@ fun ShareRecipeSheet(
     recipeId: String,
     onDismiss: () -> Unit,
 ) {
+    val palette = AppTheme.palette
     var showQr by remember { mutableStateOf(false) }
     val isPublic = viewModel.isRecipePublic(recipeId)
     val shareUrl = remember(recipeId, viewModel.recipes) { viewModel.generateShareUrl(recipeId) }
@@ -160,7 +161,7 @@ fun ShareRecipeSheet(
 
     ModalBottomSheet(
         onDismissRequest = onDismiss,
-        containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
+        containerColor = palette.surface,
     ) {
         Column(
             modifier = Modifier
@@ -172,18 +173,23 @@ fun ShareRecipeSheet(
             if (showQr) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     IconButton(onClick = { showQr = false }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = null,
+                            tint = palette.textPrimary,
+                        )
                     }
                     Text(
                         text = viewModel.tr("recipe_screen.qr_code"),
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.displayMedium,
+                        color = palette.textPrimary,
                     )
                 }
                 Text(
                     text = viewModel.tr("recipe_screen.qr_code_description"),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(start = 4.dp),
+                    color = palette.textSecondary,
+                    modifier = Modifier.padding(start = 2.dp),
                 )
                 Spacer(Modifier.height(16.dp))
                 QrCode(
@@ -195,8 +201,9 @@ fun ShareRecipeSheet(
 
             Text(
                 text = viewModel.tr("recipe_screen.share_recipe"),
-                style = MaterialTheme.typography.headlineSmall,
-                modifier = Modifier.padding(start = 4.dp),
+                style = MaterialTheme.typography.displayMedium,
+                color = palette.textPrimary,
+                modifier = Modifier.padding(start = 2.dp),
             )
             Spacer(Modifier.height(8.dp))
             Text(
@@ -206,18 +213,12 @@ fun ShareRecipeSheet(
                     viewModel.tr("recipe_screen.share_description")
                 },
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(start = 4.dp),
+                color = palette.textSecondary,
+                modifier = Modifier.padding(start = 2.dp),
             )
             Spacer(Modifier.height(16.dp))
 
-            Card(
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer,
-                ),
-                shape = MaterialTheme.shapes.large,
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-            ) {
+            AppCard(modifier = Modifier.fillMaxWidth()) {
                 Column {
                     SettingsRow(
                         icon = if (isPublic) Icons.Outlined.Public else Icons.Outlined.Lock,
@@ -227,8 +228,13 @@ fun ShareRecipeSheet(
                         } else {
                             viewModel.tr("recipe_screen.make_public_description")
                         },
+                        onClick = if (!viewModel.isShareLoading(recipeId)) {
+                            { viewModel.setRecipePublic(recipeId, !isPublic) }
+                        } else {
+                            null
+                        },
                         trailing = {
-                            Switch(
+                            AppSwitch(
                                 checked = isPublic,
                                 enabled = !viewModel.isShareLoading(recipeId),
                                 onCheckedChange = {
@@ -239,7 +245,7 @@ fun ShareRecipeSheet(
                     )
 
                     if (isPublic) {
-                        SheetDivider()
+                        AppDivider()
                         SettingsRow(
                             icon = Icons.Outlined.QrCode2,
                             title = viewModel.tr("recipe_screen.generate_qr"),
@@ -247,7 +253,7 @@ fun ShareRecipeSheet(
                             onClick = { showQr = true },
                             showChevron = true,
                         )
-                        SheetDivider()
+                        AppDivider()
                         SettingsRow(
                             icon = Icons.Outlined.Share,
                             title = viewModel.tr("recipe_screen.share"),
@@ -260,27 +266,17 @@ fun ShareRecipeSheet(
                                 context.startActivity(Intent.createChooser(intent, null))
                             },
                             showChevron = true,
-                            iconContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                            iconContentColor = MaterialTheme.colorScheme.onTertiaryContainer,
                         )
                     }
                 }
             }
-
         }
     }
 }
 
 @Composable
-private fun SheetDivider() {
-    HorizontalDivider(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
-    )
-}
-
-@Composable
 private fun QrCode(url: String, contentDescription: String) {
+    val palette = AppTheme.palette
     val context = LocalContext.current
     val bitmap = remember(url) { generateQrBitmap(url, 900) }
 
@@ -302,17 +298,11 @@ private fun QrCode(url: String, contentDescription: String) {
         }
     }
 
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainer,
-        ),
-        shape = MaterialTheme.shapes.large,
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-    ) {
+    AppCard(modifier = Modifier.fillMaxWidth()) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp),
+                .padding(20.dp),
             contentAlignment = Alignment.Center,
         ) {
             if (bitmap != null) {
@@ -321,15 +311,16 @@ private fun QrCode(url: String, contentDescription: String) {
                     contentDescription = contentDescription,
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
-                        .size(260.dp)
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(androidx.compose.ui.graphics.Color.White)
-                        .padding(8.dp),
+                        .size(240.dp)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(palette.surface)
+                        .padding(12.dp),
                 )
             } else {
                 Text(
                     text = contentDescription,
                     style = MaterialTheme.typography.bodyMedium,
+                    color = palette.textSecondary,
                 )
             }
         }
@@ -347,7 +338,7 @@ private fun generateQrBitmap(content: String, size: Int): Bitmap? {
         val width = matrix.width
         val height = matrix.height
         val pixels = IntArray(width * height)
-        val foreground = AndroidColor.rgb(139, 35, 0)
+        val foreground = AndroidColor.rgb(234, 88, 12)
         val background = AndroidColor.WHITE
         for (y in 0 until height) {
             for (x in 0 until width) {

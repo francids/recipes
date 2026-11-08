@@ -1,16 +1,15 @@
-@file:OptIn(androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class)
-
 package com.francids.recipes.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MotionScheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -20,112 +19,123 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.francids.recipes.R
 
+val DeepOrange = Color(0xFFFF5722)
+
 /**
- * Material 3 Expressive palette generated from the Recipes brand orange (#FF5722)
- * with the official material-color-utilities SchemeFidelity algorithm.
+ * Custom palette recovered from the original Flutter app. These are intentionally
+ * plain brand/neutral values rather than Material tonal roles.
  */
-private val BrandOrange = Color(0xFFFF5722)
+@Immutable
+data class AppPalette(
+    val isDark: Boolean,
+    val background: Color,
+    val surface: Color,
+    val card: Color,
+    val popup: Color,
+    val navBackground: Color,
+    val border: Color,
+    val shadow: Color,
+    val primary: Color,
+    val onPrimary: Color,
+    val textPrimary: Color,
+    val textSecondary: Color,
+    val textTertiary: Color,
+    val divider: Color,
+    val chipBackground: Color,
+    val chipSelected: Color,
+    val snackbarBackground: Color,
+    val snackbarText: Color,
+    val imagePlaceholder: Color,
+    val imagePlaceholderIcon: Color,
+)
+
+private val LightPalette = AppPalette(
+    isDark = false,
+    background = Color.White,
+    surface = Color.White,
+    card = Color(0xFFFAFAFA),
+    popup = Color.White,
+    navBackground = Color.White,
+    border = Color(0x42000000),
+    shadow = Color(0x1F000000),
+    primary = DeepOrange,
+    onPrimary = Color.White,
+    textPrimary = Color.Black,
+    textSecondary = Color(0xE6000000),
+    textTertiary = Color(0x8A000000),
+    divider = Color(0x18000000),
+    chipBackground = Color(0xFFF5F5F5),
+    chipSelected = Color(0x33FF5722),
+    snackbarBackground = Color(0xFF323232),
+    snackbarText = Color.White,
+    imagePlaceholder = Color(0xFFE0E0E0),
+    imagePlaceholderIcon = Color(0xFF757575),
+)
+
+private val DarkPalette = AppPalette(
+    isDark = true,
+    background = Color(0xFF121212),
+    surface = Color(0xFF1E1E1E),
+    card = Color(0xFF2A2A2A),
+    popup = Color(0xFF2A2A2A),
+    navBackground = Color(0xFF1E1E1E),
+    border = Color(0x4DFFFFFF),
+    shadow = Color(0x42000000),
+    primary = DeepOrange,
+    onPrimary = Color.White,
+    textPrimary = Color.White,
+    textSecondary = Color(0xE1FFFFFF),
+    textTertiary = Color(0x99FFFFFF),
+    divider = Color(0x18FFFFFF),
+    chipBackground = Color(0xFF2A2A2A),
+    chipSelected = Color(0x33FF5722),
+    snackbarBackground = Color(0xFF2A2A2A),
+    snackbarText = Color.White,
+    imagePlaceholder = Color(0xFF424242),
+    imagePlaceholderIcon = Color(0xFF9E9E9E),
+)
+
+val LocalAppPalette = staticCompositionLocalOf { LightPalette }
+
+object AppTheme {
+    val palette: AppPalette
+        @Composable get() = LocalAppPalette.current
+}
 
 private val LightColors = lightColorScheme(
-    primary = Color(0xFFB02F00),
+    primary = DeepOrange,
     onPrimary = Color.White,
-    primaryContainer = BrandOrange,
-    onPrimaryContainer = Color(0xFF541200),
-    inversePrimary = Color(0xFFFFB5A0),
-    secondary = Color(0xFF9F4125),
+    primaryContainer = DeepOrange,
+    onPrimaryContainer = Color.White,
+    secondary = DeepOrange,
     onSecondary = Color.White,
-    secondaryContainer = Color(0xFFFC8866),
-    onSecondaryContainer = Color(0xFF722107),
-    tertiary = Color(0xFF00628C),
-    onTertiary = Color.White,
-    tertiaryContainer = Color(0xFF007CAF),
-    onTertiaryContainer = Color(0xFFFCFCFF),
-    background = Color(0xFFFFF8F6),
-    onBackground = Color(0xFF271813),
-    surface = Color(0xFFFFF8F6),
-    onSurface = Color(0xFF271813),
-    surfaceVariant = Color(0xFFFFDBD1),
-    onSurfaceVariant = Color(0xFF5B4039),
-    surfaceTint = Color(0xFFB02F00),
-    inverseSurface = Color(0xFF3E2C27),
-    inverseOnSurface = Color(0xFFFFEDE8),
-    error = Color(0xFFBA1A1A),
+    background = Color.White,
+    onBackground = Color.Black,
+    surface = Color.White,
+    onSurface = Color.Black,
+    surfaceVariant = Color(0xFFF5F5F5),
+    onSurfaceVariant = Color(0x8A000000),
+    outline = Color(0x42000000),
+    error = Color.Red,
     onError = Color.White,
-    errorContainer = Color(0xFFFFDAD6),
-    onErrorContainer = Color(0xFF93000A),
-    outline = Color(0xFF907067),
-    outlineVariant = Color(0xFFE4BEB4),
-    scrim = Color.Black,
-    surfaceBright = Color(0xFFFFF8F6),
-    surfaceContainer = Color(0xFFFFE9E4),
-    surfaceContainerHigh = Color(0xFFFFE2DA),
-    surfaceContainerHighest = Color(0xFFFADCD4),
-    surfaceContainerLow = Color(0xFFFFF1ED),
-    surfaceContainerLowest = Color.White,
-    surfaceDim = Color(0xFFF1D4CC),
-    primaryFixed = Color(0xFFFFDBD1),
-    primaryFixedDim = Color(0xFFFFB5A0),
-    onPrimaryFixed = Color(0xFF3B0900),
-    onPrimaryFixedVariant = Color(0xFF862200),
-    secondaryFixed = Color(0xFFFFDBD1),
-    secondaryFixedDim = Color(0xFFFFB5A0),
-    onSecondaryFixed = Color(0xFF3B0900),
-    onSecondaryFixedVariant = Color(0xFF7F2A10),
-    tertiaryFixed = Color(0xFFC8E6FF),
-    tertiaryFixedDim = Color(0xFF86CFFF),
-    onTertiaryFixed = Color(0xFF001E2E),
-    onTertiaryFixedVariant = Color(0xFF004C6D),
 )
 
 private val DarkColors = darkColorScheme(
-    primary = Color(0xFFFFB5A0),
-    onPrimary = Color(0xFF5F1500),
-    primaryContainer = BrandOrange,
-    onPrimaryContainer = Color(0xFF541200),
-    inversePrimary = Color(0xFFB02F00),
-    secondary = Color(0xFFFFB5A0),
-    onSecondary = Color(0xFF5F1500),
-    secondaryContainer = Color(0xFF7F2A10),
-    onSecondaryContainer = Color(0xFFFF9B7E),
-    tertiary = Color(0xFF86CFFF),
-    onTertiary = Color(0xFF00344C),
-    tertiaryContainer = Color(0xFF019AD8),
-    onTertiaryContainer = Color(0xFF002D42),
-    background = Color(0xFF1E100C),
-    onBackground = Color(0xFFFADCD4),
-    surface = Color(0xFF1E100C),
-    onSurface = Color(0xFFFADCD4),
-    surfaceVariant = Color(0xFF5B4039),
-    onSurfaceVariant = Color(0xFFE4BEB4),
-    surfaceTint = Color(0xFFFFB5A0),
-    inverseSurface = Color(0xFFFADCD4),
-    inverseOnSurface = Color(0xFF3E2C27),
-    error = Color(0xFFFFB4AB),
-    onError = Color(0xFF690005),
-    errorContainer = Color(0xFF93000A),
-    onErrorContainer = Color(0xFFFFDAD6),
-    outline = Color(0xFFAB8980),
-    outlineVariant = Color(0xFF5B4039),
-    scrim = Color.Black,
-    surfaceBright = Color(0xFF483530),
-    surfaceContainer = Color(0xFF2C1C17),
-    surfaceContainerHigh = Color(0xFF372621),
-    surfaceContainerHighest = Color(0xFF43302B),
-    surfaceContainerLow = Color(0xFF271813),
-    surfaceContainerLowest = Color(0xFF180B07),
-    surfaceDim = Color(0xFF1E100C),
-    primaryFixed = Color(0xFFFFDBD1),
-    primaryFixedDim = Color(0xFFFFB5A0),
-    onPrimaryFixed = Color(0xFF3B0900),
-    onPrimaryFixedVariant = Color(0xFF862200),
-    secondaryFixed = Color(0xFFFFDBD1),
-    secondaryFixedDim = Color(0xFFFFB5A0),
-    onSecondaryFixed = Color(0xFF3B0900),
-    onSecondaryFixedVariant = Color(0xFF7F2A10),
-    tertiaryFixed = Color(0xFFC8E6FF),
-    tertiaryFixedDim = Color(0xFF86CFFF),
-    onTertiaryFixed = Color(0xFF001E2E),
-    onTertiaryFixedVariant = Color(0xFF004C6D),
+    primary = DeepOrange,
+    onPrimary = Color.White,
+    primaryContainer = DeepOrange,
+    onPrimaryContainer = Color.White,
+    secondary = DeepOrange,
+    onSecondary = Color.White,
+    background = Color(0xFF121212),
+    onBackground = Color.White,
+    surface = Color(0xFF1E1E1E),
+    onSurface = Color.White,
+    surfaceVariant = Color(0xFF2A2A2A),
+    onSurfaceVariant = Color(0x99FFFFFF),
+    outline = Color(0x4DFFFFFF),
+    error = Color.Red,
+    onError = Color.White,
 )
 
 private val Montserrat = FontFamily(
@@ -135,61 +145,41 @@ private val Montserrat = FontFamily(
     Font(R.font.montserrat_bold, FontWeight.Bold),
 )
 
-private fun textStyle(
+private fun style(
     size: Int,
     lineHeight: Int,
     weight: FontWeight,
-    letterSpacing: Double = 0.0,
 ) = TextStyle(
     fontFamily = Montserrat,
     fontSize = size.sp,
     lineHeight = lineHeight.sp,
     fontWeight = weight,
-    letterSpacing = letterSpacing.sp,
 )
 
-private fun emphasized(style: TextStyle, weight: FontWeight = FontWeight.Bold) =
-    style.copy(fontWeight = weight, letterSpacing = (-0.25).sp)
-
 private val AppTypography = Typography(
-    displayLarge = textStyle(57, 64, FontWeight.SemiBold),
-    displayMedium = textStyle(45, 52, FontWeight.SemiBold),
-    displaySmall = textStyle(36, 44, FontWeight.SemiBold),
-    headlineLarge = textStyle(32, 40, FontWeight.SemiBold),
-    headlineMedium = textStyle(28, 36, FontWeight.SemiBold),
-    headlineSmall = textStyle(24, 32, FontWeight.SemiBold),
-    titleLarge = textStyle(22, 28, FontWeight.SemiBold),
-    titleMedium = textStyle(16, 24, FontWeight.SemiBold),
-    titleSmall = textStyle(14, 20, FontWeight.Medium),
-    bodyLarge = textStyle(16, 24, FontWeight.Normal),
-    bodyMedium = textStyle(14, 20, FontWeight.Normal),
-    bodySmall = textStyle(12, 16, FontWeight.Normal),
-    labelLarge = textStyle(14, 20, FontWeight.SemiBold),
-    labelMedium = textStyle(12, 16, FontWeight.Medium),
-    labelSmall = textStyle(11, 16, FontWeight.Medium),
-    displayLargeEmphasized = emphasized(textStyle(57, 64, FontWeight.SemiBold)),
-    displayMediumEmphasized = emphasized(textStyle(45, 52, FontWeight.SemiBold)),
-    displaySmallEmphasized = emphasized(textStyle(36, 44, FontWeight.SemiBold)),
-    headlineLargeEmphasized = emphasized(textStyle(32, 40, FontWeight.SemiBold)),
-    headlineMediumEmphasized = emphasized(textStyle(28, 36, FontWeight.SemiBold)),
-    headlineSmallEmphasized = emphasized(textStyle(24, 32, FontWeight.SemiBold)),
-    titleLargeEmphasized = emphasized(textStyle(22, 28, FontWeight.SemiBold)),
-    titleMediumEmphasized = emphasized(textStyle(16, 24, FontWeight.SemiBold)),
-    titleSmallEmphasized = emphasized(textStyle(14, 20, FontWeight.Medium)),
-    bodyLargeEmphasized = emphasized(textStyle(16, 24, FontWeight.Medium), FontWeight.Medium),
-    bodyMediumEmphasized = emphasized(textStyle(14, 20, FontWeight.Medium), FontWeight.Medium),
-    bodySmallEmphasized = emphasized(textStyle(12, 16, FontWeight.Medium), FontWeight.Medium),
-    labelLargeEmphasized = emphasized(textStyle(14, 20, FontWeight.SemiBold)),
-    labelMediumEmphasized = emphasized(textStyle(12, 16, FontWeight.Medium)),
-    labelSmallEmphasized = emphasized(textStyle(11, 16, FontWeight.Medium)),
+    displayLarge = style(28, 34, FontWeight.SemiBold),
+    displayMedium = style(20, 26, FontWeight.Medium),
+    displaySmall = style(24, 30, FontWeight.SemiBold),
+    headlineLarge = style(24, 30, FontWeight.SemiBold),
+    headlineMedium = style(20, 26, FontWeight.Medium),
+    headlineSmall = style(18, 24, FontWeight.SemiBold),
+    titleLarge = style(18, 24, FontWeight.SemiBold),
+    titleMedium = style(16, 22, FontWeight.Medium),
+    titleSmall = style(14, 20, FontWeight.Medium),
+    bodyLarge = style(16, 22, FontWeight.Medium),
+    bodyMedium = style(14, 20, FontWeight.Normal),
+    bodySmall = style(12, 16, FontWeight.Normal),
+    labelLarge = style(14, 20, FontWeight.Medium),
+    labelMedium = style(12, 16, FontWeight.Normal),
+    labelSmall = style(11, 16, FontWeight.Normal),
 )
 
 private val AppShapes = Shapes(
-    extraSmall = RoundedCornerShape(8.dp),
-    small = RoundedCornerShape(12.dp),
-    medium = RoundedCornerShape(16.dp),
-    large = RoundedCornerShape(24.dp),
-    extraLarge = RoundedCornerShape(32.dp),
+    extraSmall = RoundedCornerShape(6.dp),
+    small = RoundedCornerShape(8.dp),
+    medium = RoundedCornerShape(10.dp),
+    large = RoundedCornerShape(12.dp),
+    extraLarge = RoundedCornerShape(16.dp),
 )
 
 @Composable
@@ -199,13 +189,14 @@ fun RecipesTheme(
     content: @Composable () -> Unit,
 ) {
     val useDarkTheme = if (followSystemTheme) isSystemInDarkTheme() else darkTheme
-    MaterialTheme(
-        colorScheme = if (useDarkTheme) DarkColors else LightColors,
-        typography = AppTypography,
-        shapes = AppShapes,
-        motionScheme = MotionScheme.expressive(),
-        content = content,
-    )
+    androidx.compose.runtime.CompositionLocalProvider(
+        LocalAppPalette provides if (useDarkTheme) DarkPalette else LightPalette,
+    ) {
+        MaterialTheme(
+            colorScheme = if (useDarkTheme) DarkColors else LightColors,
+            typography = AppTypography,
+            shapes = AppShapes,
+            content = content,
+        )
+    }
 }
-
-val BrandOrangeColor: Color = BrandOrange

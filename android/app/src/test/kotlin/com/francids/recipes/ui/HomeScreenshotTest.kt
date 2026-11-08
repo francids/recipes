@@ -6,6 +6,7 @@ import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
@@ -40,6 +41,7 @@ class HomeScreenshotTest {
                     onAddRecipe = {},
                     onOpenSettings = {},
                     onOpenRecipe = {},
+                    onOpenFavorites = {},
                     onOpenProfileInfo = {},
                     onOpenPublicSearch = {},
                     onOpenSharedRecipes = {},
@@ -96,6 +98,7 @@ class HomeScreenshotTest {
                     onAddRecipe = {},
                     onOpenSettings = {},
                     onOpenRecipe = {},
+                    onOpenFavorites = {},
                     onOpenProfileInfo = {},
                     onOpenPublicSearch = {},
                     onOpenSharedRecipes = {},
@@ -122,6 +125,7 @@ class HomeScreenshotTest {
                     onAddRecipe = {},
                     onOpenSettings = {},
                     onOpenRecipe = {},
+                    onOpenFavorites = {},
                     onOpenProfileInfo = {},
                     onOpenPublicSearch = {},
                     onOpenSharedRecipes = {},
@@ -138,6 +142,83 @@ class HomeScreenshotTest {
     }
 
     @Test
+    fun homeRendersGridCollection() {
+        val application = ApplicationProvider.getApplicationContext<Application>()
+        val store = LocalStore(application)
+        store.saveRecipes(
+            listOf(
+                Recipe(
+                    id = "1",
+                    title = "Sopa de tomate",
+                    description = "Una sopa sencilla y caliente.",
+                    ingredients = listOf("tomate"),
+                    directions = listOf("Cocinar"),
+                    preparationTime = 1800,
+                ),
+                Recipe(
+                    id = "2",
+                    title = "Tortilla de patatas",
+                    description = "Receta tradicional.",
+                    ingredients = listOf("patata", "huevo"),
+                    directions = listOf("Freír"),
+                    preparationTime = 2400,
+                ),
+            ),
+        )
+        val viewModel = AppViewModel(application)
+        viewModel.toggleViewOption()
+
+        composeRule.setContent {
+            RecipesTheme(darkTheme = false, followSystemTheme = false) {
+                HomeScreen(
+                    viewModel = viewModel,
+                    onAddRecipe = {},
+                    onOpenSettings = {},
+                    onOpenRecipe = {},
+                    onOpenFavorites = {},
+                    onOpenProfileInfo = {},
+                    onOpenPublicSearch = {},
+                    onOpenSharedRecipes = {},
+                )
+            }
+        }
+
+        composeRule.waitForIdle()
+        val bitmap = composeRule.onRoot().captureToImage().asAndroidBitmap()
+        val output = File("build/reports/screenshots/home_grid.png")
+        output.parentFile?.mkdirs()
+        output.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+    }
+
+    @Test
+    fun profileSignedOutRenders() {
+        val application = ApplicationProvider.getApplicationContext<Application>()
+        val viewModel = AppViewModel(application)
+
+        composeRule.setContent {
+            RecipesTheme(darkTheme = false, followSystemTheme = false) {
+                HomeScreen(
+                    viewModel = viewModel,
+                    onAddRecipe = {},
+                    onOpenSettings = {},
+                    onOpenRecipe = {},
+                    onOpenFavorites = {},
+                    onOpenProfileInfo = {},
+                    onOpenPublicSearch = {},
+                    onOpenSharedRecipes = {},
+                )
+            }
+        }
+
+        composeRule.onNodeWithText("Profile").performClick()
+        composeRule.waitForIdle()
+        val bitmap = composeRule.onRoot().captureToImage().asAndroidBitmap()
+        val output = File("build/reports/screenshots/profile_signed_out.png")
+        output.parentFile?.mkdirs()
+        output.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+    }
+
+    @Test
     fun homeRendersInDarkTheme() {
         val application = ApplicationProvider.getApplicationContext<Application>()
         val viewModel = AppViewModel(application)
@@ -149,6 +230,7 @@ class HomeScreenshotTest {
                     onAddRecipe = {},
                     onOpenSettings = {},
                     onOpenRecipe = {},
+                    onOpenFavorites = {},
                     onOpenProfileInfo = {},
                     onOpenPublicSearch = {},
                     onOpenSharedRecipes = {},

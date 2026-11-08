@@ -1,7 +1,7 @@
-@file:OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
-
 package com.francids.recipes.ui.screens
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,8 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.CheckCircle
@@ -27,13 +27,8 @@ import androidx.compose.material.icons.outlined.Error
 import androidx.compose.material.icons.outlined.Fingerprint
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Schedule
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,8 +41,14 @@ import androidx.compose.ui.unit.dp
 import com.francids.recipes.data.AppUser
 import com.francids.recipes.data.ConfirmRequest
 import com.francids.recipes.ui.AppViewModel
+import com.francids.recipes.ui.components.AppCard
+import com.francids.recipes.ui.components.AppDivider
+import com.francids.recipes.ui.components.BackTopBar
 import com.francids.recipes.ui.components.EmptyState
 import com.francids.recipes.ui.components.RecipeImage
+import com.francids.recipes.ui.components.SectionHeading
+import com.francids.recipes.ui.theme.AppTheme
+import com.francids.recipes.ui.theme.DeepOrange
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -58,123 +59,126 @@ fun ProfileInfoScreen(
     viewModel: AppViewModel,
     onBack: () -> Unit,
 ) {
+    val palette = AppTheme.palette
     val user = viewModel.user
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            BackTopBar(
-                title = viewModel.tr("profile_info_screen.title"),
-                onBack = onBack,
-            )
-        },
-    ) { padding ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(palette.background),
+    ) {
+        BackTopBar(
+            title = viewModel.tr("profile_info_screen.title"),
+            onBack = onBack,
+        )
+
         if (user == null) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(padding),
-            ) {
-                EmptyState(
-                    title = viewModel.tr("profile_info_screen.not_signed_in"),
-                    message = viewModel.tr("profile_info_screen.sign_in_to_view"),
-                    icon = Icons.Outlined.Error,
-                )
-            }
-            return@Scaffold
+            EmptyState(
+                text = viewModel.tr("profile_info_screen.not_signed_in"),
+                modifier = Modifier.weight(1f),
+            )
+            return@Column
         }
 
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
-            contentPadding = PaddingValues(16.dp),
+                .padding(horizontal = 16.dp),
+            contentPadding = PaddingValues(vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             item { ProfileAvatar(user) }
 
             item {
-                SectionLabel(viewModel.tr("profile_info_screen.personal_info"))
+                SectionHeading(viewModel.tr("profile_info_screen.personal_info"))
             }
             item {
-                InfoCard {
-                    InfoRow(
-                        title = viewModel.tr("profile_info_screen.display_name"),
-                        value = user.name.ifBlank {
-                            viewModel.tr("profile_info_screen.not_available")
-                        },
-                        icon = Icons.Outlined.Person,
-                    )
-                    CardDivider()
-                    InfoRow(
-                        title = viewModel.tr("profile_info_screen.email"),
-                        value = user.email.ifBlank {
-                            viewModel.tr("profile_info_screen.not_available")
-                        },
-                        icon = Icons.Outlined.Email,
-                    )
-                    CardDivider()
-                    InfoRow(
-                        title = viewModel.tr("profile_info_screen.user_id"),
-                        value = user.id,
-                        icon = Icons.Outlined.Fingerprint,
-                    )
+                AppCard(modifier = Modifier.fillMaxWidth()) {
+                    Column {
+                        InfoRow(
+                            title = viewModel.tr("profile_info_screen.display_name"),
+                            value = user.name.ifBlank {
+                                viewModel.tr("profile_info_screen.not_available")
+                            },
+                            icon = Icons.Outlined.Person,
+                        )
+                        AppDivider()
+                        InfoRow(
+                            title = viewModel.tr("profile_info_screen.email"),
+                            value = user.email.ifBlank {
+                                viewModel.tr("profile_info_screen.not_available")
+                            },
+                            icon = Icons.Outlined.Email,
+                        )
+                        AppDivider()
+                        InfoRow(
+                            title = viewModel.tr("profile_info_screen.user_id"),
+                            value = user.id,
+                            icon = Icons.Outlined.Fingerprint,
+                        )
+                    }
                 }
             }
 
             item {
-                SectionLabel(viewModel.tr("profile_info_screen.account_details"))
+                SectionHeading(viewModel.tr("profile_info_screen.account_details"))
             }
             item {
-                InfoCard {
-                    InfoRow(
-                        title = viewModel.tr("profile_info_screen.email_verified"),
-                        value = if (user.emailVerification) {
-                            viewModel.tr("profile_info_screen.verified")
-                        } else {
-                            viewModel.tr("profile_info_screen.not_verified")
-                        },
-                        icon = if (user.emailVerification) {
-                            Icons.Outlined.CheckCircle
-                        } else {
-                            Icons.Outlined.Error
-                        },
-                        iconContainerColor = if (user.emailVerification) {
-                            MaterialTheme.colorScheme.secondaryContainer
-                        } else {
-                            MaterialTheme.colorScheme.errorContainer
-                        },
-                        iconContentColor = if (user.emailVerification) {
-                            MaterialTheme.colorScheme.onSecondaryContainer
-                        } else {
-                            MaterialTheme.colorScheme.onErrorContainer
-                        },
-                    )
-                    CardDivider()
-                    InfoRow(
-                        title = viewModel.tr("profile_info_screen.account_created"),
-                        value = formatRelativeDate(user.registration, viewModel),
-                        icon = Icons.Outlined.CalendarMonth,
-                    )
-                    CardDivider()
-                    InfoRow(
-                        title = viewModel.tr("profile_info_screen.last_sign_in"),
-                        value = formatRelativeDate(user.accessedAt, viewModel),
-                        icon = Icons.Outlined.Schedule,
-                    )
+                AppCard(modifier = Modifier.fillMaxWidth()) {
+                    Column {
+                        InfoRow(
+                            title = viewModel.tr("profile_info_screen.email_verified"),
+                            value = if (user.emailVerification) {
+                                viewModel.tr("profile_info_screen.verified")
+                            } else {
+                                viewModel.tr("profile_info_screen.not_verified")
+                            },
+                            icon = if (user.emailVerification) {
+                                Icons.Outlined.CheckCircle
+                            } else {
+                                Icons.Outlined.Error
+                            },
+                            valueColor = if (user.emailVerification) {
+                                Color(0xFF4CAF50)
+                            } else {
+                                Color(0xFFFF9800)
+                            },
+                        )
+                        AppDivider()
+                        InfoRow(
+                            title = viewModel.tr("profile_info_screen.account_created"),
+                            value = formatRelativeDate(user.registration, viewModel),
+                            icon = Icons.Outlined.CalendarMonth,
+                        )
+                        AppDivider()
+                        InfoRow(
+                            title = viewModel.tr("profile_info_screen.last_sign_in"),
+                            value = formatRelativeDate(user.accessedAt, viewModel),
+                            icon = Icons.Outlined.Schedule,
+                        )
+                    }
                 }
             }
 
             item {
-                SectionLabel(
+                Text(
                     text = viewModel.tr("profile_info_screen.danger_zone"),
-                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.displayMedium,
+                    color = Color.Red,
+                    modifier = Modifier.padding(start = 2.dp),
                 )
             }
             item {
-                Card(
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clip(MaterialTheme.shapes.medium)
+                        .background(Color.Red.copy(alpha = 0.10f))
+                        .border(
+                            width = 0.5.dp,
+                            color = Color.Red.copy(alpha = 0.30f),
+                            shape = MaterialTheme.shapes.medium,
+                        )
                         .clickable {
                             viewModel.showConfirmation(
                                 ConfirmRequest(
@@ -191,43 +195,38 @@ fun ProfileInfoScreen(
                                 ),
                             )
                         },
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer,
-                        contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                    ),
-                    shape = MaterialTheme.shapes.large,
-                    elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
                 ) {
                     Row(
                         modifier = Modifier.padding(16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Surface(
-                            shape = CircleShape,
-                            color = MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.12f),
-                            contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                            modifier = Modifier.size(40.dp),
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Icon(
-                                    Icons.Filled.Delete,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(20.dp),
-                                )
-                            }
-                        }
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = null,
+                            tint = Color.Red,
+                            modifier = Modifier.size(24.dp),
+                        )
                         Spacer(Modifier.width(16.dp))
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                viewModel.tr("profile_info_screen.delete_account"),
-                                style = MaterialTheme.typography.titleMediumEmphasized,
+                                text = viewModel.tr("profile_info_screen.delete_account"),
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                ),
+                                color = Color.Red,
                             )
                             Spacer(Modifier.height(2.dp))
                             Text(
-                                viewModel.tr("profile_info_screen.delete_account_warning"),
+                                text = viewModel.tr("profile_info_screen.delete_account_warning"),
                                 style = MaterialTheme.typography.bodySmall,
+                                color = Color.Red.copy(alpha = 0.70f),
                             )
                         }
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                            contentDescription = null,
+                            tint = Color.Red,
+                        )
                     }
                 }
             }
@@ -244,65 +243,29 @@ private fun ProfileAvatar(user: AppUser) {
             .padding(vertical = 8.dp),
         contentAlignment = Alignment.Center,
     ) {
-        Surface(
-            shape = CircleShape,
-            color = MaterialTheme.colorScheme.primaryContainer,
-            modifier = Modifier.size(136.dp),
+        Box(
+            modifier = Modifier
+                .size(126.dp)
+                .clip(CircleShape)
+                .border(2.dp, AppTheme.palette.border, CircleShape)
+                .background(DeepOrange.copy(alpha = 0.10f)),
+            contentAlignment = Alignment.Center,
         ) {
-            Box(
-                modifier = Modifier
-                    .padding(6.dp)
-                    .clip(CircleShape),
-                contentAlignment = Alignment.Center,
-            ) {
-                if (user.picture.isNullOrBlank()) {
-                    Surface(
-                        shape = CircleShape,
-                        color = MaterialTheme.colorScheme.surface,
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                Icons.Outlined.Person,
-                                contentDescription = null,
-                                modifier = Modifier.size(64.dp),
-                                tint = MaterialTheme.colorScheme.primary,
-                            )
-                        }
-                    }
-                } else {
-                    RecipeImage(
-                        path = user.picture,
-                        contentDescription = user.name,
-                        modifier = Modifier.fillMaxSize(),
-                    )
-                }
+            if (user.picture.isNullOrBlank()) {
+                Icon(
+                    Icons.Outlined.Person,
+                    contentDescription = null,
+                    tint = DeepOrange,
+                    modifier = Modifier.size(60.dp),
+                )
+            } else {
+                RecipeImage(
+                    path = user.picture,
+                    contentDescription = user.name,
+                    modifier = Modifier.fillMaxSize(),
+                )
             }
         }
-    }
-}
-
-@Composable
-private fun SectionLabel(text: String, color: Color = MaterialTheme.colorScheme.onBackground) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleLargeEmphasized,
-        color = color,
-        modifier = Modifier.padding(start = 4.dp, top = 4.dp),
-    )
-}
-
-@Composable
-private fun InfoCard(content: @Composable () -> Unit) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceContainerLow,
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        shape = MaterialTheme.shapes.large,
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        Column { content() }
     }
 }
 
@@ -311,51 +274,36 @@ private fun InfoRow(
     title: String,
     value: String,
     icon: ImageVector,
-    iconContainerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
-    iconContentColor: Color = MaterialTheme.colorScheme.onSecondaryContainer,
+    valueColor: Color? = null,
 ) {
+    val palette = AppTheme.palette
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Surface(
-            shape = CircleShape,
-            color = iconContainerColor,
-            contentColor = iconContentColor,
-            modifier = Modifier.size(40.dp),
-        ) {
-            Box(contentAlignment = Alignment.Center) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp),
-                )
-            }
-        }
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = DeepOrange,
+            modifier = Modifier.size(24.dp),
+        )
         Spacer(Modifier.width(16.dp))
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = title,
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.bodyLarge,
+                color = palette.textPrimary,
             )
             Spacer(Modifier.height(2.dp))
             Text(
                 text = value,
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = valueColor ?: palette.textTertiary,
             )
         }
     }
-}
-
-@Composable
-private fun CardDivider() {
-    HorizontalDivider(
-        modifier = Modifier.padding(horizontal = 16.dp),
-        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
-    )
 }
 
 private fun formatRelativeDate(raw: String, viewModel: AppViewModel): String {

@@ -34,6 +34,7 @@ class HomeScreenComposeTest {
                     onAddRecipe = {},
                     onOpenSettings = {},
                     onOpenRecipe = {},
+                    onOpenFavorites = {},
                     onOpenProfileInfo = {},
                     onOpenPublicSearch = {},
                     onOpenSharedRecipes = {},
@@ -44,7 +45,7 @@ class HomeScreenComposeTest {
         composeRule.waitForIdle()
         composeRule.onNodeWithContentDescription("Options").assertExists()
         composeRule.onAllNodesWithText("Recipes").assertCountEquals(2)
-        composeRule.onAllNodesWithText("Add recipe").assertCountEquals(1)
+        composeRule.onNodeWithContentDescription("Add recipe").assertExists()
 
         composeRule.onNodeWithContentDescription("Options").performClick()
         composeRule.onNodeWithText("Reload recipes").assertExists()

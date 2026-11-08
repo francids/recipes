@@ -1,13 +1,11 @@
-@file:OptIn(androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class)
-
 package com.francids.recipes.ui
 
 import android.app.Activity
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,41 +14,48 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.ErrorOutline
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ContainedLoadingIndicator
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
+import androidx.compose.material.icons.outlined.WarningAmber
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import androidx.core.view.WindowCompat
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import androidx.core.view.WindowCompat
 import com.francids.recipes.data.ConfirmRequest
 import com.francids.recipes.data.DeepLinkTarget
 import com.francids.recipes.data.LoadingRequest
+import com.francids.recipes.ui.components.PrimaryButton
+import com.francids.recipes.ui.components.SecondaryButton
 import com.francids.recipes.ui.screens.AddRecipeScreen
+import com.francids.recipes.ui.screens.FavoritesScreen
 import com.francids.recipes.ui.screens.HomeScreen
 import com.francids.recipes.ui.screens.ProfileInfoScreen
 import com.francids.recipes.ui.screens.PublicSearchScreen
@@ -58,6 +63,8 @@ import com.francids.recipes.ui.screens.RecipeDetailScreen
 import com.francids.recipes.ui.screens.SettingsScreen
 import com.francids.recipes.ui.screens.SharedRecipeScreen
 import com.francids.recipes.ui.screens.SharedRecipesScreen
+import com.francids.recipes.ui.theme.AppTheme
+import com.francids.recipes.ui.theme.DeepOrange
 import com.francids.recipes.ui.theme.RecipesTheme
 
 object Routes {
@@ -65,6 +72,7 @@ object Routes {
     const val ADD = "add"
     const val SETTINGS = "settings"
     const val PROFILE_INFO = "profile-info"
+    const val FAVORITES = "favorites"
     const val SHARED_RECIPES = "shared-recipes"
     const val PUBLIC_SEARCH = "public-search"
     const val SHARED_RECIPE = "shared-recipe"
@@ -79,8 +87,8 @@ fun RecipesApp(viewModel: AppViewModel) {
         darkTheme = viewModel.darkTheme,
         followSystemTheme = viewModel.followSystemTheme,
     ) {
+        val palette = AppTheme.palette
         val navController = rememberNavController()
-        val motionScheme = MaterialTheme.motionScheme
         val isDarkTheme = if (viewModel.followSystemTheme) isSystemInDarkTheme()
         else viewModel.darkTheme
         val view = LocalView.current
@@ -120,39 +128,15 @@ fun RecipesApp(viewModel: AppViewModel) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
+                .background(palette.background),
         ) {
             NavHost(
                 navController = navController,
                 startDestination = Routes.HOME,
-                enterTransition = {
-                    fadeIn(animationSpec = motionScheme.fastEffectsSpec()) +
-                        scaleIn(
-                            initialScale = 0.97f,
-                            animationSpec = motionScheme.fastSpatialSpec(),
-                        )
-                },
-                exitTransition = {
-                    fadeOut(animationSpec = motionScheme.fastEffectsSpec()) +
-                        scaleOut(
-                            targetScale = 1.02f,
-                            animationSpec = motionScheme.fastSpatialSpec(),
-                        )
-                },
-                popEnterTransition = {
-                    fadeIn(animationSpec = motionScheme.fastEffectsSpec()) +
-                        scaleIn(
-                            initialScale = 1.02f,
-                            animationSpec = motionScheme.fastSpatialSpec(),
-                        )
-                },
-                popExitTransition = {
-                    fadeOut(animationSpec = motionScheme.fastEffectsSpec()) +
-                        scaleOut(
-                            targetScale = 0.97f,
-                            animationSpec = motionScheme.fastSpatialSpec(),
-                        )
-                },
+                enterTransition = { fadeIn(tween(180)) },
+                exitTransition = { fadeOut(tween(120)) },
+                popEnterTransition = { fadeIn(tween(180)) },
+                popExitTransition = { fadeOut(tween(120)) },
             ) {
                 composable(Routes.HOME) {
                     HomeScreen(
@@ -160,6 +144,7 @@ fun RecipesApp(viewModel: AppViewModel) {
                         onAddRecipe = { navController.navigate(Routes.ADD) },
                         onOpenSettings = { navController.navigate(Routes.SETTINGS) },
                         onOpenRecipe = { id -> navController.navigate(Routes.recipe(id)) },
+                        onOpenFavorites = { navController.navigate(Routes.FAVORITES) },
                         onOpenProfileInfo = { navController.navigate(Routes.PROFILE_INFO) },
                         onOpenPublicSearch = { navController.navigate(Routes.PUBLIC_SEARCH) },
                         onOpenSharedRecipes = { navController.navigate(Routes.SHARED_RECIPES) },
@@ -197,6 +182,14 @@ fun RecipesApp(viewModel: AppViewModel) {
                     )
                 }
 
+                composable(Routes.FAVORITES) {
+                    FavoritesScreen(
+                        viewModel = viewModel,
+                        onBack = { navController.popBackStack() },
+                        onOpenRecipe = { id -> navController.navigate(Routes.recipe(id)) },
+                    )
+                }
+
                 composable(Routes.SHARED_RECIPES) {
                     SharedRecipesScreen(
                         viewModel = viewModel,
@@ -229,7 +222,15 @@ fun RecipesApp(viewModel: AppViewModel) {
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(start = 16.dp, end = 16.dp, bottom = 104.dp),
-            )
+            ) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    shape = RoundedCornerShape(10.dp),
+                    containerColor = palette.snackbarBackground,
+                    contentColor = palette.snackbarText,
+                    actionColor = DeepOrange,
+                )
+            }
         }
 
         viewModel.loading?.let { LoadingDialog(it) }
@@ -244,33 +245,43 @@ fun RecipesApp(viewModel: AppViewModel) {
 
 @Composable
 private fun LoadingDialog(request: LoadingRequest) {
-    Dialog(onDismissRequest = {}) {
-        Surface(
-            shape = MaterialTheme.shapes.large,
-            tonalElevation = 8.dp,
-            shadowElevation = 8.dp,
+    val palette = AppTheme.palette
+    Dialog(
+        onDismissRequest = {},
+        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.85f)
+                .background(palette.surface, RoundedCornerShape(16.dp))
+                .border(0.5.dp, palette.border, RoundedCornerShape(16.dp))
+                .padding(16.dp),
+            contentAlignment = Alignment.Center,
         ) {
-            Column(
-                modifier = Modifier.padding(24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                ContainedLoadingIndicator(
-                    modifier = Modifier.size(64.dp),
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    indicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
-                Spacer(Modifier.size(20.dp))
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Box(
+                    modifier = Modifier.size(96.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(48.dp),
+                        color = DeepOrange,
+                    )
+                }
+                Spacer(Modifier.height(16.dp))
                 Text(
-                    request.title,
-                    style = MaterialTheme.typography.titleLargeEmphasized,
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    text = request.title,
+                    style = MaterialTheme.typography.displayMedium,
+                    color = palette.textPrimary,
+                    textAlign = TextAlign.Center,
                 )
                 if (request.message.isNotBlank()) {
-                    Spacer(Modifier.size(8.dp))
+                    Spacer(Modifier.height(12.dp))
                     Text(
-                        request.message,
+                        text = request.message,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = palette.textSecondary,
+                        textAlign = TextAlign.Center,
                     )
                 }
             }
@@ -280,65 +291,65 @@ private fun LoadingDialog(request: LoadingRequest) {
 
 @Composable
 private fun ConfirmationDialog(request: ConfirmRequest, onDismiss: () -> Unit) {
-    val accentContainer = if (request.destructive) {
-        MaterialTheme.colorScheme.errorContainer
-    } else {
-        MaterialTheme.colorScheme.primaryContainer
-    }
-    val accentContent = if (request.destructive) {
-        MaterialTheme.colorScheme.onErrorContainer
-    } else {
-        MaterialTheme.colorScheme.onPrimaryContainer
-    }
-
-    AlertDialog(
+    val palette = AppTheme.palette
+    Dialog(
         onDismissRequest = onDismiss,
-        icon = {
-            Surface(
-                shape = androidx.compose.foundation.shape.CircleShape,
-                color = accentContainer,
-                contentColor = accentContent,
-            ) {
+        properties = DialogProperties(dismissOnBackPress = true, dismissOnClickOutside = true),
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.85f)
+                .background(palette.surface, RoundedCornerShape(16.dp))
+                .border(0.5.dp, palette.border, RoundedCornerShape(16.dp))
+                .padding(16.dp),
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
-                    imageVector = Icons.Outlined.ErrorOutline,
+                    imageVector = if (request.destructive) {
+                        Icons.Outlined.WarningAmber
+                    } else {
+                        Icons.AutoMirrored.Outlined.HelpOutline
+                    },
                     contentDescription = null,
-                    modifier = Modifier.padding(14.dp).size(28.dp),
+                    tint = if (request.destructive) Color.Red else DeepOrange,
+                    modifier = Modifier.size(64.dp),
                 )
-            }
-        },
-        title = {
-            Text(
-                request.title,
-                style = MaterialTheme.typography.headlineSmall,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-            )
-        },
-        text = {
-            Text(
-                request.message,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-            )
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onDismiss()
-                    request.onConfirm()
-                },
-            ) {
+                Spacer(Modifier.height(16.dp))
                 Text(
-                    request.confirmLabel,
-                    color = if (request.destructive) MaterialTheme.colorScheme.error
-                    else MaterialTheme.colorScheme.primary,
+                    text = request.title,
+                    style = MaterialTheme.typography.displayMedium,
+                    color = palette.textPrimary,
+                    textAlign = TextAlign.Center,
                 )
+                Spacer(Modifier.height(16.dp))
+                Text(
+                    text = request.message,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = palette.textSecondary,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(Modifier.height(24.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    SecondaryButton(
+                        onClick = onDismiss,
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Text(request.cancelLabel)
+                    }
+                    PrimaryButton(
+                        onClick = {
+                            onDismiss()
+                            request.onConfirm()
+                        },
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Text(request.confirmLabel, fontWeight = FontWeight.SemiBold)
+                    }
+                }
             }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) { Text(request.cancelLabel) }
-        },
-        shape = MaterialTheme.shapes.extraLarge,
-        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-    )
+        }
+    }
 }

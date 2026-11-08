@@ -1,140 +1,112 @@
-# Diseño: Material 3 Expressive
+# Diseño: port nativo del diseño original
 
-La interfaz de Recipes se ha rediseñado siguiendo **Material 3 Expressive**. La app usa
-`androidx.compose.material3:material3:1.5.0-rc01` con Compose BOM `2026.09.00`,
-`MotionScheme.expressive()` y los componentes expresivos experimentales de Material 3.
+La interfaz se ha reconstruido tomando como referencia el diseño original de la app Flutter
+(commit `b9b3dbf`) y reescribiendo su implementación en Kotlin/Jetpack Compose. No se usa el
+lenguaje visual de Material 3 Expressive ni sus roles tonales como base del diseño.
 
-## Principios aplicados
+## Referencia original
 
-Material 3 Expressive utiliza color, tamaño, forma, contención y movimiento para
-dirigir la atención y agrupar información. En Recipes se aplican así:
+- Tema: `lib/recipes_app_theme.dart`
+- Pantalla principal: `lib/views/screens/inicial_screen.dart`
+- Tarjetas: `lib/views/widgets/recipe_card.dart`
+- Detalle: `lib/views/widgets/common_recipe_view.dart`
+- Formularios: `lib/views/widgets/form_field.dart`
+- Perfil y ajustes: `lib/views/screens/profile_page.dart`, `settings_screen.dart`
+- Diálogos: `lib/views/widgets/ui_helpers.dart`
 
-| Principio | Decisión de diseño |
+## Fundamentos visuales
+
+### Color
+
+| Rol | Valor |
 | --- | --- |
-| **Jerarquía** | Títulos con estilos `*Emphasized`; cuerpo con estilos M3 de lectura. La acción principal de cada pantalla es única. |
-| **Color** | Paleta completa generada desde el naranja de marca (`#FF5722`) con el algoritmo oficial `SchemeFidelity`. Los roles secundarios y terciarios se derivan del mismo color fuente. Se usan pares `on*` sobre `*Container` para garantizar contraste. |
-| **Contención** | Tarjetas tonales (`surfaceContainerLow`) con radios grandes, en lugar de bordes y sombras fuertes. |
-| **Forma** | Escala expresiva: 8/12/16/24/32 dp. Las tarjetas principales usan 24–32 dp; los controles usan la forma dinámica de los componentes M3. |
-| **Movimiento** | `MotionScheme.expressive()` global; transiciones de pasos con especificaciones de efectos del tema; morphing nativo de botones, toolbar y loading indicator. |
-| **Tipografía** | Montserrat con escala M3 completa y variantes enfatizadas para títulos, secciones y acciones. |
-| **Adaptabilidad** | Rejilla adaptativa (`GridCells.Adaptive(160.dp)`), contenido con scroll y navegación compacta. |
+| Marca / acento | `#FF5722` |
+| Fondo claro | `#FFFFFF` |
+| Superficie oscura | `#1E1E1E` |
+| Fondo oscuro | `#121212` |
+| Tarjeta clara | `#FAFAFA` |
+| Tarjeta oscura | `#2A2A2A` |
+| Borde claro | negro al 26 % |
+| Borde oscuro | blanco al 30 % |
+| Chip claro | `#F5F5F5` |
+| Chip oscuro | `#2A2A2A` |
 
-## Componentes expresivos utilizados
+No se utilizan `primaryContainer`, `secondaryContainer`, `tertiaryContainer` ni superficies
+tonales de Material como sistema principal. Los colores se declaran de forma explícita en
+`AppPalette`.
 
-- **LargeFlexibleTopAppBar**: cabecera principal con título grande que colapsa al hacer scroll.
-- **ShortNavigationBar** con tres destinos: Recetas, Favoritos y Perfil.
-- **MediumExtendedFloatingActionButton** para la acción principal “Añadir receta”.
-- **ButtonGroup** con botones toggle para ordenar y cambiar entre lista/rejilla. Incluye
-  morphing de forma y overflow automático.
-- **HorizontalFloatingToolbar** en el detalle de receta para favorito, compartir y eliminar.
-- **LinearWavyProgressIndicator** para el progreso del asistente de alta de receta.
-- **ContainedLoadingIndicator** para estados de carga y diálogos de progreso.
-- **DropdownMenuPopup**, **DropdownMenuGroup** y **DropdownMenuItem** con shapes de grupo para el menú expresivo.
-- **ModalBottomSheet** para idioma y compartición, con filas seleccionables y QR; se cierran por gesto, botón atrás o toque fuera, sin acciones de cancelar redundantes.
-- **MotionScheme.expressive()** aplicado a todos los componentes M3.
+### Tipografía
 
-## Color y contraste
+Montserrat, con la escala original:
 
-### Origen exacto de la paleta
+- `28 sp` semibold: título de receta.
+- `24 sp` bold: título de pantalla.
+- `20 sp` medium: títulos de sección, tarjetas y AppBar secundaria.
+- `16 sp` medium: cuerpo principal.
+- `14 sp` regular: cuerpo secundario.
+- `12 sp` regular: texto auxiliar.
+- `14 sp` medium: etiquetas de chips y botones.
 
-- Color fuente de marca: `#FF5722`.
-- Librería: `@material/material-color-utilities`.
-- Esquema: `SchemeFidelity` (el modo de fidelidad de marca de Material Theme Builder).
-- Nivel de contraste: `0.0`.
-- Se generaron los roles claros y oscuros desde ese único color fuente, sin reemplazar
-  manualmente secondary/tertiary por colores ajenos a la paleta.
+### Forma y profundidad
 
-```text
-source      #FF5722
-algorithm   SchemeFidelity
-contrast    0.0
-```
+- Tarjetas, chips, botones y FAB: radio `10 dp`.
+- Campos de texto: radio `12 dp`.
+- Diálogos: radio `16 dp`.
+- Tarjetas con borde de `0.5 dp` y sombra suave.
+- Sin elevaciones tonales ni contenedores M3.
 
-La paleta se revisó con los ratios de contraste de los pares principales:
+## Componentes
 
-| Par | Ratio |
-| --- | --- |
-| `onPrimaryContainer` / `primaryContainer` (claro) | 4.54:1 |
-| `onSecondaryContainer` / `secondaryContainer` (claro) | 4.57:1 |
-| `onTertiaryContainer` / `tertiaryContainer` (claro) | 4.56:1 |
-| `onPrimaryContainer` / `primaryContainer` (oscuro) | 4.54:1 |
-| `onSecondaryContainer` / `secondaryContainer` (oscuro) | 4.57:1 |
-| `onTertiaryContainer` / `tertiaryContainer` (oscuro) | 4.55:1 |
-| `onSurfaceVariant` / `surface` (claro) | 8.94:1 |
-| `onSurface` / `surface` (oscuro) | 14.32:1 |
+- **AppBar personalizada** de 64 dp con borde inferior y fondo transparente/blanco.
+- **Navegación inferior flotante** en píldora del 60 % del ancho, con indicador naranja.
+- **FAB** naranja de radio 10 dp con animación de escala al pulsar.
+- **Tarjetas de receta** con borde, sombra, imagen de 80×80 en lista y portada con degradado en rejilla.
+- **Chips** claros con borde y selección naranja translúcida.
+- **Campos de texto** rellenos sobre la superficie, borde de 0.5 dp y foco naranja de 2 dp.
+- **Diálogos** con icono, título, mensaje y botones Cancelar/Confirmar.
+- **Bottom sheets** sin botón de cancelar redundante; se cierran por gesto, fondo o atrás.
+- **Menú** popup blanco/oscuro con borde y filas icono + texto, como el `showMenu` original.
 
-Todos los pares superan el mínimo AA de 4.5:1 para texto normal.
+## Layout
 
-## Tipografía
+- Márgenes laterales de 16 dp.
+- Separación de 12 dp entre tarjetas y de 8 dp entre chips.
+- Contenido inferior con 140 dp para no quedar bajo la píldora/FAB.
+- Barra de estado y navegación respetadas con `WindowInsets`.
+- Lista de recetas en una columna o rejilla de dos columnas, como en Flutter.
 
-Se usa la escala M3 completa con Montserrat:
+## Accesibilidad
 
-- `headlineLarge` / `headlineLargeEmphasized`: títulos principales.
-- `headlineSmall`: títulos de pasos y hojas.
-- `titleLarge` / `titleLargeEmphasized`: secciones y cabeceras de tarjetas.
-- `titleMedium` / `titleMediumEmphasized`: títulos de receta y filas.
-- `bodyLarge`: contenido de recetas y descripciones.
-- `bodyMedium` / `bodySmall`: texto secundario.
-- `labelLarge` / `labelMedium`: botones, chips y metadatos.
+- Objetivos táctiles de al menos 48 dp.
+- `contentDescription` en acciones.
+- Filas de idioma con semántica `Role.RadioButton`.
+- Contraste de texto comprobado sobre blanco, `#FAFAFA`, `#1E1E1E` y `#121212`.
+- El texto no depende de tamaños fijos de contenedores.
 
-Las variantes enfatizadas usan mayor peso y tracking negativo para crear momentos
-editoriales sin romper la legibilidad ni la escala.
+## Diferencias técnicas inevitables
 
-## Layout y accesibilidad
-
-- Márgenes de pantalla de 16–20 dp; separación vertical de 12–24 dp; padding de
-  contenido de 16 dp.
-- Objetivos táctiles de al menos 48 dp en botones, icon buttons, filas y navegación.
-- `Scaffold`, `navigationBarsPadding()` e `imePadding()` respetan barras del sistema,
-  gestos y teclado.
-- El snackbar se muestra por encima de la navegación inferior.
-- Contenido desplazable con padding inferior para que FAB/toolbar no tapen la última fila.
-- Todos los iconos interactivos tienen `contentDescription`; los decorativos usan `null`.
-- Las filas de idioma usan semántica `Role.RadioButton` y estado seleccionado.
-- Se evitan combinaciones de color de bajo contraste y textos menores de 11 sp.
-- La rejilla de recetas usa columnas adaptativas para teléfonos, plegables y tablets.
-
-## Decisiones deliberadas
-
-- No se usa color dinámico por defecto: se prioriza la identidad de marca y un contraste
-  predecible. La estructura del tema permite añadirlo más adelante.
-- No se usa motion decorativo continuo. El movimiento se reserva para cambios de estado,
-  navegación, carga y morphing de controles.
-- Las tarjetas no acumulan borde + sombra + elevación tonal al mismo tiempo.
-- La acción destructiva (eliminar cuenta/receta) usa `errorContainer` y confirmación explícita.
-- Las pantallas mantienen una sola acción primaria visible; el resto se agrupa en toolbar,
-  menú o bottom sheet.
+- Las animaciones Lottie originales se sustituyen por iconos/progreso nativos.
+- El reordenado por arrastre de ingredientes se implementa con gesto de pulsación larga.
+- Las transiciones de página se aproximan con fundidos cortos.
+- La lógica, persistencia, API, enlaces profundos y funcionalidad se mantienen.
 
 ## Validación visual
-
-Las pruebas de Robolectric renderizan las pantallas principales con gráficos nativos y guardan
-capturas para revisar jerarquía, espaciado, estados y contraste:
 
 ```sh
 cd android
 ./gradlew :app:testDebugUnitTest --tests '*ScreenshotTest*'
 ```
 
-Las capturas quedan en:
+Las capturas se guardan en `android/app/build/reports/screenshots/`:
 
 ```text
-android/app/build/reports/screenshots/
-├── home.png
-├── home_with_recipes.png
-├── home_menu.png
-├── home_dark.png
-├── add_recipe.png
-├── recipe_detail.png
-└── settings.png
+home.png
+home_with_recipes.png
+home_grid.png
+home_menu.png
+home_dark.png
+profile_signed_out.png
+add_recipe.png
+recipe_detail.png
+settings.png
 ```
-
-Además, `HomeScreenComposeTest` comprueba que la navegación, el menú y la acción principal
-están presentes en el árbol de accesibilidad.
-
-## Referencias
-
-- Material Design 3, *Start building with Material 3 Expressive*: <https://m3.material.io/blog/building-with-m3-expressive>
-- Material Design 3, componentes expresivos: <https://m3.material.io/components>
-- Android Developers, *Material Design 3 in Compose*: <https://developer.android.com/develop/ui/compose/designsystems/material3>
-- Android Developers, *Compose Material 3 release notes*: <https://developer.android.com/jetpack/androidx/releases/compose-material3>
-- Google Design, *Expressive Design: Google's UX Research*: <https://design.google/library/expressive-material-design-google-research>
