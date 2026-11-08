@@ -50,8 +50,9 @@ import androidx.compose.material3.ButtonGroup
 import androidx.compose.material3.ButtonGroupDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuGroup
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.DropdownMenuPopup
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -129,30 +130,60 @@ fun HomeScreen(
                                 contentDescription = viewModel.tr("inicial_screen.menu_tooltip"),
                             )
                         }
-                        DropdownMenu(
+                        DropdownMenuPopup(
                             expanded = menuExpanded,
                             onDismissRequest = { menuExpanded = false },
                         ) {
-                            DropdownMenuItem(
-                                text = { Text(viewModel.tr("inicial_screen.menu_item_reload")) },
-                                leadingIcon = {
-                                    Icon(Icons.Outlined.Refresh, contentDescription = null)
-                                },
-                                onClick = {
-                                    menuExpanded = false
-                                    viewModel.refreshRecipes()
-                                },
-                            )
-                            DropdownMenuItem(
-                                text = { Text(viewModel.tr("inicial_screen.menu_item_settings")) },
-                                leadingIcon = {
-                                    Icon(Icons.Outlined.Settings, contentDescription = null)
-                                },
-                                onClick = {
-                                    menuExpanded = false
-                                    onOpenSettings()
-                                },
-                            )
+                            DropdownMenuGroup(
+                                shapes = androidx.compose.material3.MenuDefaults.groupShape(
+                                    index = 0,
+                                    count = 1,
+                                ),
+                            ) {
+                                val itemCount = 2
+                                DropdownMenuItem(
+                                    onClick = {
+                                        menuExpanded = false
+                                        viewModel.refreshRecipes()
+                                    },
+                                    text = {
+                                        Text(viewModel.tr("inicial_screen.menu_item_reload"))
+                                    },
+                                    shape = androidx.compose.material3.MenuDefaults
+                                        .itemShape(index = 0, count = itemCount)
+                                        .shape,
+                                    leadingIcon = {
+                                        Icon(
+                                            Icons.Outlined.Refresh,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(
+                                                androidx.compose.material3.MenuDefaults.LeadingIconSize,
+                                            ),
+                                        )
+                                    },
+                                )
+                                DropdownMenuItem(
+                                    onClick = {
+                                        menuExpanded = false
+                                        onOpenSettings()
+                                    },
+                                    text = {
+                                        Text(viewModel.tr("inicial_screen.menu_item_settings"))
+                                    },
+                                    shape = androidx.compose.material3.MenuDefaults
+                                        .itemShape(index = 1, count = itemCount)
+                                        .shape,
+                                    leadingIcon = {
+                                        Icon(
+                                            Icons.Outlined.Settings,
+                                            contentDescription = null,
+                                            modifier = Modifier.size(
+                                                androidx.compose.material3.MenuDefaults.LeadingIconSize,
+                                            ),
+                                        )
+                                    },
+                                )
+                            }
                         }
                     }
                 },

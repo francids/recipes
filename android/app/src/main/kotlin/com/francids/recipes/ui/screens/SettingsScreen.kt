@@ -98,16 +98,6 @@ fun SettingsScreen(
                                 onCheckedChange = viewModel::updateDarkTheme,
                             )
                         },
-                        iconContainerColor = if (viewModel.followSystemTheme) {
-                            MaterialTheme.colorScheme.surfaceContainerHighest
-                        } else {
-                            MaterialTheme.colorScheme.primaryContainer
-                        },
-                        iconContentColor = if (viewModel.followSystemTheme) {
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        } else {
-                            MaterialTheme.colorScheme.onPrimaryContainer
-                        },
                     )
                     HorizontalCardDivider()
                     SettingsRow(
@@ -120,8 +110,6 @@ fun SettingsScreen(
                                 onCheckedChange = viewModel::updateFollowSystemTheme,
                             )
                         },
-                        iconContainerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                        iconContentColor = MaterialTheme.colorScheme.onTertiaryContainer,
                     )
                 }
             }

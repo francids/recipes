@@ -38,7 +38,6 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -144,10 +143,6 @@ fun LanguageSheet(
                 Spacer(Modifier.height(4.dp))
             }
 
-            Spacer(Modifier.height(12.dp))
-            TextButton(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) {
-                Text(viewModel.tr("ui_helpers.cancel"))
-            }
         }
     }
 }
@@ -195,10 +190,6 @@ fun ShareRecipeSheet(
                     url = shareUrl,
                     contentDescription = viewModel.tr("recipe_screen.qr_code"),
                 )
-                Spacer(Modifier.height(16.dp))
-                TextButton(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) {
-                    Text(viewModel.tr("ui_helpers.cancel"))
-                }
                 return@Column
             }
 
@@ -276,10 +267,6 @@ fun ShareRecipeSheet(
                 }
             }
 
-            Spacer(Modifier.height(16.dp))
-            TextButton(onClick = onDismiss, modifier = Modifier.fillMaxWidth()) {
-                Text(viewModel.tr("ui_helpers.cancel"))
-            }
         }
     }
 }

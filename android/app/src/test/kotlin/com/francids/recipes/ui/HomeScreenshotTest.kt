@@ -5,7 +5,9 @@ import android.graphics.Bitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.test.captureToImage
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onRoot
+import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import com.francids.recipes.data.LocalStore
 import com.francids.recipes.data.Recipe
@@ -104,6 +106,33 @@ class HomeScreenshotTest {
         composeRule.waitForIdle()
         val bitmap = composeRule.onRoot().captureToImage().asAndroidBitmap()
         val output = File("build/reports/screenshots/home_with_recipes.png")
+        output.parentFile?.mkdirs()
+        output.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+    }
+
+    @Test
+    fun homeMenuRendersWithExpressiveGrouping() {
+        val application = ApplicationProvider.getApplicationContext<Application>()
+        val viewModel = AppViewModel(application)
+
+        composeRule.setContent {
+            RecipesTheme(darkTheme = false, followSystemTheme = false) {
+                HomeScreen(
+                    viewModel = viewModel,
+                    onAddRecipe = {},
+                    onOpenSettings = {},
+                    onOpenRecipe = {},
+                    onOpenProfileInfo = {},
+                    onOpenPublicSearch = {},
+                    onOpenSharedRecipes = {},
+                )
+            }
+        }
+
+        composeRule.onNodeWithContentDescription("Options").performClick()
+        composeRule.waitForIdle()
+        val bitmap = composeRule.onRoot().captureToImage().asAndroidBitmap()
+        val output = File("build/reports/screenshots/home_menu.png")
         output.parentFile?.mkdirs()
         output.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
     }

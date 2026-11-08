@@ -29,7 +29,8 @@ dirigir la atención y agrupar información. En Recipes se aplican así:
 - **HorizontalFloatingToolbar** en el detalle de receta para favorito, compartir y eliminar.
 - **LinearWavyProgressIndicator** para el progreso del asistente de alta de receta.
 - **ContainedLoadingIndicator** para estados de carga y diálogos de progreso.
-- **ModalBottomSheet** para idioma y compartición, con filas seleccionables y QR.
+- **DropdownMenuPopup**, **DropdownMenuGroup** y **DropdownMenuItem** con shapes de grupo para el menú expresivo.
+- **ModalBottomSheet** para idioma y compartición, con filas seleccionables y QR; se cierran por gesto, botón atrás o toque fuera, sin acciones de cancelar redundantes.
 - **MotionScheme.expressive()** aplicado a todos los componentes M3.
 
 ## Color y contraste
@@ -120,6 +121,7 @@ Las capturas quedan en:
 android/app/build/reports/screenshots/
 ├── home.png
 ├── home_with_recipes.png
+├── home_menu.png
 ├── home_dark.png
 ├── add_recipe.png
 ├── recipe_detail.png

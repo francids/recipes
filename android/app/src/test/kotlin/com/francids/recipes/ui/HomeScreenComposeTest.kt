@@ -5,6 +5,8 @@ import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ApplicationProvider
 import com.francids.recipes.ui.screens.HomeScreen
 import com.francids.recipes.ui.theme.RecipesTheme
@@ -43,5 +45,9 @@ class HomeScreenComposeTest {
         composeRule.onNodeWithContentDescription("Options").assertExists()
         composeRule.onAllNodesWithText("Recipes").assertCountEquals(2)
         composeRule.onAllNodesWithText("Add recipe").assertCountEquals(1)
+
+        composeRule.onNodeWithContentDescription("Options").performClick()
+        composeRule.onNodeWithText("Reload recipes").assertExists()
+        composeRule.onNodeWithText("Settings").assertExists()
     }
 }
