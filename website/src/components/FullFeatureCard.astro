@@ -3,16 +3,21 @@ import type Feature from "../interfaces/feature";
 
 interface Props {
   feature: Feature;
+  reverse?: boolean;
 }
 
-const { feature } = Astro.props;
+const { feature, reverse = false } = Astro.props;
+
+const borderSide = reverse ? "sm:border-r" : "sm:border-l";
 ---
 
 <div
-  class="flex flex-col sm:flex-row w-full rounded-lg border border-orange-200 bg-orange-50/30 dark:border-main/40 dark:bg-zinc-800/40 overflow-hidden"
+  class={`flex flex-col ${
+    reverse ? "sm:flex-row-reverse" : "sm:flex-row"
+  } w-full rounded-lg border border-orange-200 bg-orange-50/30 dark:border-main/40 dark:bg-zinc-800/40 overflow-hidden`}
 >
   <div
-    class="flex flex-col justify-center items-start flex-1 p-6 lg:p-8 text-left"
+    class="flex flex-1 flex-col justify-center items-start p-6 lg:p-8 text-left"
   >
     <h3
       class="text-lg sm:text-xl font-semibold mb-2 text-zinc-900 dark:text-zinc-100"
@@ -26,7 +31,7 @@ const { feature } = Astro.props;
     </p>
   </div>
   <div
-    class="w-full sm:w-52 md:w-56 xl:w-64 shrink-0 aspect-square border-t sm:border-t-0 sm:border-l border-orange-200 dark:border-main/40 overflow-hidden select-none"
+    class={`w-full sm:w-52 md:w-56 xl:w-64 shrink-0 aspect-square border-t sm:border-t-0 ${borderSide} border-orange-200 dark:border-main/40 overflow-hidden select-none`}
   >
     <img
       src={typeof feature.lightImage === "string"
